@@ -14,7 +14,7 @@ import {
   Chip,
 } from '@mui/material';
 import { useAdmin } from '../hooks/useAdmin';
-import backgroundImage from '../assets/images/lvl 94.jpg';
+import backgroundImage from '../assets/images/lvl94.png';
 import backgroundAudio from '../assets/audio/King\'s Curfew.mp3';
 
 export default function SessionManagement() {
