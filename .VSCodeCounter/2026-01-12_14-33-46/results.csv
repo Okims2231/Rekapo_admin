@@ -1,0 +1,28 @@
+"filename", "language", "JavaScript JSX", "JavaScript", "PostCSS", "comment", "blank", "total"
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\App.jsx", "JavaScript JSX", 66, 0, 0, 0, 3, 69
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\components\AdminProvider.jsx", "JavaScript JSX", 44, 0, 0, 5, 9, 58
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\components\ProtectedRoute.jsx", "JavaScript JSX", 14, 0, 0, 0, 5, 19
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\components\dashboard\a.jsx", "JavaScript JSX", 0, 0, 0, 0, 1, 1
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\components\sessionManagement\a.jsx", "JavaScript JSX", 0, 0, 0, 0, 1, 1
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\components\userManagement\a.jsx", "JavaScript JSX", 0, 0, 0, 0, 1, 1
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\contexts\AdminContext.js", "JavaScript", 0, 2, 0, 0, 2, 4
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\contexts\AuthContext.jsx", "JavaScript JSX", 64, 0, 0, 1, 10, 75
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\data\sessions.js", "JavaScript", 0, 5, 0, 0, 1, 6
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\data\systemStatistics.js", "JavaScript", 0, 7, 0, 0, 1, 8
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\data\users.js", "JavaScript", 0, 5, 0, 0, 1, 6
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\hooks\useAdmin.js", "JavaScript", 0, 7, 0, 0, 2, 9
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\hooks\useAuth.js", "JavaScript", 0, 10, 0, 0, 3, 13
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\index.css", "PostCSS", 0, 0, 14, 0, 3, 17
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\main.jsx", "JavaScript JSX", 9, 0, 0, 0, 2, 11
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\AdminInterface.jsx", "JavaScript JSX", 409, 0, 0, 10, 25, 444
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\AuthCallback.jsx", "JavaScript JSX", 31, 0, 0, 0, 6, 37
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\Dashboard.jsx", "JavaScript JSX", 171, 0, 0, 0, 11, 182
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\Login.jsx", "JavaScript JSX", 178, 0, 0, 7, 16, 201
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\SessionManagement.jsx", "JavaScript JSX", 398, 0, 0, 6, 24, 428
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\SystemStatistics.jsx", "JavaScript JSX", 37, 0, 0, 0, 5, 42
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\UserManagement.jsx", "JavaScript JSX", 660, 0, 0, 20, 29, 709
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\services\authService.js", "JavaScript", 0, 72, 0, 23, 13, 108
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\services\sessionService.js", "JavaScript", 0, 95, 0, 20, 13, 128
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\services\statisticsService.js", "JavaScript", 0, 112, 0, 23, 14, 149
+"c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\services\userService.js", "JavaScript", 0, 84, 0, 20, 13, 117
+"Total", "-", 2081, 399, 14, 135, 214, 2843

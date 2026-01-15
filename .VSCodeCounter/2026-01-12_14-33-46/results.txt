@@ -1,0 +1,63 @@
+Date : 2026-01-12 14:33:46
+Directory : c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src
+Total : 26 files,  2494 codes, 135 comments, 214 blanks, all 2843 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| JavaScript JSX |         15 |      2,081 |         49 |        148 |      2,278 |
+| JavaScript     |         10 |        399 |         86 |         63 |        548 |
+| PostCSS        |          1 |         14 |          0 |          3 |         17 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                  | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                     |         26 |      2,494 |        135 |        214 |      2,843 |
+| . (Files)                                                                             |          3 |         89 |          0 |          8 |         97 |
+| components                                                                            |          5 |         58 |          5 |         17 |         80 |
+| components (Files)                                                                    |          2 |         58 |          5 |         14 |         77 |
+| components\dashboard                                                                  |          1 |          0 |          0 |          1 |          1 |
+| components\sessionManagement                                                          |          1 |          0 |          0 |          1 |          1 |
+| components\userManagement                                                             |          1 |          0 |          0 |          1 |          1 |
+| contexts                                                                              |          2 |         66 |          1 |         12 |         79 |
+| data                                                                                  |          3 |         17 |          0 |          3 |         20 |
+| hooks                                                                                 |          2 |         17 |          0 |          5 |         22 |
+| pages                                                                                 |          7 |      1,884 |         43 |        116 |      2,043 |
+| services                                                                              |          4 |        363 |         86 |         53 |        502 |
++---------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                              | language       | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\App.jsx                            | JavaScript JSX |         66 |          0 |          3 |         69 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\components\AdminProvider.jsx       | JavaScript JSX |         44 |          5 |          9 |         58 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\components\ProtectedRoute.jsx      | JavaScript JSX |         14 |          0 |          5 |         19 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\components\dashboard\a.jsx         | JavaScript JSX |          0 |          0 |          1 |          1 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\components\sessionManagement\a.jsx | JavaScript JSX |          0 |          0 |          1 |          1 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\components\userManagement\a.jsx    | JavaScript JSX |          0 |          0 |          1 |          1 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\contexts\AdminContext.js           | JavaScript     |          2 |          0 |          2 |          4 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\contexts\AuthContext.jsx           | JavaScript JSX |         64 |          1 |         10 |         75 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\data\sessions.js                   | JavaScript     |          5 |          0 |          1 |          6 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\data\systemStatistics.js           | JavaScript     |          7 |          0 |          1 |          8 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\data\users.js                      | JavaScript     |          5 |          0 |          1 |          6 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\hooks\useAdmin.js                  | JavaScript     |          7 |          0 |          2 |          9 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\hooks\useAuth.js                   | JavaScript     |         10 |          0 |          3 |         13 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\index.css                          | PostCSS        |         14 |          0 |          3 |         17 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\main.jsx                           | JavaScript JSX |          9 |          0 |          2 |         11 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\AdminInterface.jsx           | JavaScript JSX |        409 |         10 |         25 |        444 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\AuthCallback.jsx             | JavaScript JSX |         31 |          0 |          6 |         37 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\Dashboard.jsx                | JavaScript JSX |        171 |          0 |         11 |        182 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\Login.jsx                    | JavaScript JSX |        178 |          7 |         16 |        201 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\SessionManagement.jsx        | JavaScript JSX |        398 |          6 |         24 |        428 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\SystemStatistics.jsx         | JavaScript JSX |         37 |          0 |          5 |         42 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\pages\UserManagement.jsx           | JavaScript JSX |        660 |         20 |         29 |        709 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\services\authService.js            | JavaScript     |         72 |         23 |         13 |        108 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\services\sessionService.js         | JavaScript     |         95 |         20 |         13 |        128 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\services\statisticsService.js      | JavaScript     |        112 |         23 |         14 |        149 |
+| c:\Users\MICHAEL\Documents\GitHub\Rekapo_admin\src\services\userService.js            | JavaScript     |         84 |         20 |         13 |        117 |
+| Total                                                                                 |                |      2,494 |        135 |        214 |      2,843 |
++---------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+

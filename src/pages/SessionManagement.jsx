@@ -12,36 +12,44 @@ import {
   Button,
   Typography,
   Chip,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
-import { useAdmin } from '../hooks/useAdmin';
+import { sessionService } from '../services/sessionService';
 import backgroundImage from '../assets/images/lvl94.png';
 import backgroundAudio from '../assets/audio/King\'s Curfew.mp3';
 
 export default function SessionManagement() {
-  const { querySessions, deleteSession, getSessionMetadata } = useAdmin();
+  const [sessions, setSessions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [query, setQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalSessions, setTotalSessions] = useState(0);
   const [selectedSession, setSelectedSession] = useState(null);
   const [confirmMsg, setConfirmMsg] = useState('');
   const audioRef = useRef(null);
   const [showClickPrompt] = useState(true);
+  const pageSize = 10;
 
   // Auto-play background music
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.3; // Set volume to 30%
+      audioRef.current.volume = 0.3;
       audioRef.current.play().catch(err => {
         console.log('Auto-play prevented:', err);
       });
     }
 
-    // Add click handler to play audio on first user interaction
     const handleFirstClick = () => {
       if (audioRef.current && audioRef.current.paused) {
         audioRef.current.play().catch(err => {
           console.log('Audio play failed:', err);
         });
       }
-      // Remove listener after first click
       document.removeEventListener('click', handleFirstClick);
     };
 
@@ -52,18 +60,72 @@ export default function SessionManagement() {
     };
   }, []);
 
-  const sessions = querySessions(query);
+  // Fetch sessions
+  useEffect(() => {
+    fetchSessions();
+  }, [page, statusFilter]);
 
-  const handleDelete = (id) => {
-    deleteSession(id);
-    setConfirmMsg('Session deleted successfully.');
-    setSelectedSession(null);
-    setTimeout(() => setConfirmMsg(''), 2000);
+  const fetchSessions = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await sessionService.getSessions(
+        page,
+        pageSize,
+        query || null,
+        statusFilter || null
+      );
+      setSessions(data.sessions || []);
+      setTotalSessions(data.total || 0);
+    } catch (err) {
+      setError(err.message);
+      console.error('Error fetching sessions:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleShowMetadata = (session) => {
-    const md = getSessionMetadata(session.id);
-    setSelectedSession({ ...session, metadata: md });
+  const handleSearch = (e) => {
+    setQuery(e.target.value);
+    setPage(1);
+  };
+
+  const handleStatusChange = (e) => {
+    setStatusFilter(e.target.value);
+    setPage(1);
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this session?')) {
+      try {
+        await sessionService.deleteSession(id, 'Deleted by admin');
+        setConfirmMsg('Session deleted successfully.');
+        fetchSessions();
+        setSelectedSession(null);
+        setTimeout(() => setConfirmMsg(''), 2000);
+      } catch (err) {
+        setConfirmMsg(`Error: ${err.message}`);
+        setTimeout(() => setConfirmMsg(''), 3000);
+      }
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'recording':
+        return 'rgba(76, 175, 80, 0.8)';
+      case 'completed':
+        return 'rgba(33, 150, 243, 0.8)';
+      case 'failed':
+        return 'rgba(244, 67, 54, 0.8)';
+      default:
+        return 'rgba(158, 158, 158, 0.8)';
+    }
+  };
+
+  const formatDateTime = (dateString) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleString();
   };
 
   return (
@@ -107,28 +169,61 @@ export default function SessionManagement() {
         <Typography variant="h4" sx={{ marginBottom: 3, color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 2px 6px rgba(0,0,0,0.6)' }}>
           Session Management
         </Typography>
-        
-        <TextField
-          placeholder="Search sessions by user id or device..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          fullWidth
-          sx={{ 
-            marginBottom: 3,
-            '& .MuiOutlinedInput-root': {
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-              color: '#ffffff',
-              fontFamily: 'Verdana, sans-serif',
-              '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
-              '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.5)' },
-              '&.Mui-focused fieldset': { borderColor: 'rgba(255, 255, 255, 0.7)' }
-            },
-            '& .MuiInputBase-input::placeholder': { color: '#999', opacity: 1 }
-          }}
-        />
 
+        {error && (
+          <Typography sx={{ marginBottom: 2, color: '#f44336', fontFamily: 'Verdana, sans-serif', fontWeight: 500 }}>
+            Error: {error}
+          </Typography>
+        )}
+
+        <Box sx={{ display: 'flex', gap: 2, marginBottom: 3, flexWrap: 'wrap' }}>
+          <TextField
+            placeholder="Search by user ID or session title..."
+            value={query}
+            onChange={handleSearch}
+            sx={{ 
+              flex: 1,
+              minWidth: '200px',
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                color: '#ffffff',
+                fontFamily: 'Verdana, sans-serif',
+                '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+                '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+                '&.Mui-focused fieldset': { borderColor: 'rgba(255, 255, 255, 0.7)' }
+              },
+              '& .MuiInputBase-input::placeholder': { color: '#999', opacity: 1 }
+            }}
+          />
+
+          <FormControl sx={{ minWidth: '150px' }}>
+            <InputLabel sx={{ color: '#ffffff' }}>Status</InputLabel>
+            <Select
+              value={statusFilter}
+              onChange={handleStatusChange}
+              label="Status"
+              sx={{
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                color: '#ffffff',
+                fontFamily: 'Verdana, sans-serif',
+                '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+                '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.7)' },
+                '& .MuiSvgIcon-root': { color: '#ffffff' }
+              }}
+            >
+              <MenuItem value="">All Statuses</MenuItem>
+              <MenuItem value="recording">Recording</MenuItem>
+              <MenuItem value="completed">Completed</MenuItem>
+              <MenuItem value="failed">Failed</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        
         {confirmMsg && (
           <Typography sx={{ marginBottom: 2, color: '#4caf50', fontFamily: 'Verdana, sans-serif', fontWeight: 500, textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>
             {confirmMsg}
@@ -141,15 +236,23 @@ export default function SessionManagement() {
               <TableRow>
                 <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Session ID</TableCell>
                 <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>User ID</TableCell>
-                <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Device</TableCell>
-                <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Last Active</TableCell>
+                <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Title</TableCell>
+                <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Start Time</TableCell>
+                <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>End Time</TableCell>
+                <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Status</TableCell>
                 <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {sessions.length === 0 ? (
+              {loading ? (
                 <TableRow>
-                  <TableCell colSpan={5} align="center" sx={{ padding: 4, color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                  <TableCell colSpan={7} align="center" sx={{ padding: 4, color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>
+                    Loading sessions...
+                  </TableCell>
+                </TableRow>
+              ) : sessions.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} align="center" sx={{ padding: 4, color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                     No sessions found.
                   </TableCell>
                 </TableRow>
@@ -157,29 +260,25 @@ export default function SessionManagement() {
                 sessions.map(s => (
                   <TableRow key={s.id} sx={{ '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' } }}>
                     <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>{s.id}</TableCell>
-                    <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>{s.userId}</TableCell>
-                    <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>{s.device}</TableCell>
-                    <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>{s.lastActive}</TableCell>
+                    <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>{s.user_id}</TableCell>
+                    <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>{s.session_title}</TableCell>
+                    <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)', fontSize: '0.85rem' }}>{formatDateTime(s.start_time)}</TableCell>
+                    <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)', fontSize: '0.85rem' }}>{formatDateTime(s.end_time)}</TableCell>
+                    <TableCell sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                      <Chip 
+                        label={s.status} 
+                        size="small"
+                        sx={{
+                          backgroundColor: getStatusColor(s.status),
+                          color: '#ffffff',
+                          fontFamily: 'Verdana, sans-serif',
+                          fontWeight: 600,
+                          backdropFilter: 'blur(8px)',
+                        }}
+                      />
+                    </TableCell>
                     <TableCell align="center" sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                      <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-                        <Chip 
-                          label="Metadata" 
-                          onClick={() => handleShowMetadata(s)} 
-                          size="small"
-                          sx={{
-                            backgroundColor: 'rgba(33, 150, 243, 0.8)',
-                            color: '#ffffff',
-                            fontFamily: 'Verdana, sans-serif',
-                            backdropFilter: 'blur(8px)',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s ease',
-                            '&:hover': {
-                              backgroundColor: 'rgba(33, 150, 243, 1)',
-                              transform: 'translateY(-2px)',
-                              boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
-                            }
-                          }}
-                        />
+                      <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
                         <Chip 
                           label="Delete" 
                           onClick={() => handleDelete(s.id)} 
@@ -207,6 +306,45 @@ export default function SessionManagement() {
           </Table>
         </TableContainer>
 
+        {/* Pagination */}
+        {sessions.length > 0 && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, marginTop: 3 }}>
+            <Button
+              onClick={() => setPage(Math.max(1, page - 1))}
+              disabled={page === 1}
+              sx={{
+                backgroundColor: page === 1 ? 'rgba(158, 158, 158, 0.5)' : 'rgba(76, 175, 80, 0.8)',
+                color: '#ffffff',
+                fontFamily: 'Verdana, sans-serif',
+                cursor: page === 1 ? 'not-allowed' : 'pointer',
+                '&:hover': {
+                  backgroundColor: page === 1 ? 'rgba(158, 158, 158, 0.5)' : 'rgba(76, 175, 80, 1)',
+                }
+              }}
+            >
+              Previous
+            </Button>
+            <Typography sx={{ padding: '8px 16px', fontWeight: 'bold', color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>
+              Page {page} of {Math.ceil(totalSessions / pageSize)}
+            </Typography>
+            <Button
+              onClick={() => setPage(page + 1)}
+              disabled={page * pageSize >= totalSessions}
+              sx={{
+                backgroundColor: page * pageSize >= totalSessions ? 'rgba(158, 158, 158, 0.5)' : 'rgba(76, 175, 80, 0.8)',
+                color: '#ffffff',
+                fontFamily: 'Verdana, sans-serif',
+                cursor: page * pageSize >= totalSessions ? 'not-allowed' : 'pointer',
+                '&:hover': {
+                  backgroundColor: page * pageSize >= totalSessions ? 'rgba(158, 158, 158, 0.5)' : 'rgba(76, 175, 80, 1)',
+                }
+              }}
+            >
+              Next
+            </Button>
+          </Box>
+        )}
+
         {selectedSession && (
           <Box sx={{ 
             marginTop: 3, 
@@ -217,9 +355,9 @@ export default function SessionManagement() {
             borderRadius: 2,
             border: '1px solid rgba(255, 255, 255, 0.2)'
           }}>
-            <Typography sx={{ fontWeight: 700, color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 1, textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>Session Metadata:</Typography>
-            <Box component="pre" sx={{ margin: 0, color: '#ffffff', fontFamily: 'monospace', fontSize: '0.9rem', whiteSpace: 'pre-wrap' }}>
-              {selectedSession.metadata}
+            <Typography sx={{ fontWeight: 700, color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 1, textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>Session Details:</Typography>
+            <Box component="pre" sx={{ margin: 0, color: '#ffffff', fontFamily: 'monospace', fontSize: '0.85rem', whiteSpace: 'pre-wrap', overflow: 'auto' }}>
+              {JSON.stringify(selectedSession, null, 2)}
             </Box>
             <Button 
               onClick={() => setSelectedSession(null)} 

@@ -2,16 +2,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAdmin } from '../hooks/useAdmin';
 import useAuth from '../hooks/useAuth';
+import { statisticsService } from '../services/statisticsService';
 import backgroundImage from '../assets/images/lvl fun!.jpg';
 import backgroundAudio from '../assets/audio/Escape The Backrooms OST - Fun (You Day!) (Filtered Version).mp3';
 
 export default function AdminInterface() {
-  const { queryStatistics } = useAdmin();
-  // use auth context to logout properly (clears tokens, server session)
   const { logout } = useAuth();
-  const stats = queryStatistics();
   const audioRef = useRef(null);
   const [showClickPrompt, setShowClickPrompt] = useState(true);
+  const [statistics, setStatistics] = useState(null);
+  const [loadingStats, setLoadingStats] = useState(true);
 
   // Auto-play background music
   useEffect(() => {
@@ -38,6 +38,25 @@ export default function AdminInterface() {
     return () => {
       document.removeEventListener('click', handleFirstClick);
     };
+  }, []);
+
+  // Fetch latest statistics
+  useEffect(() => {
+    const fetchLatestStatistics = async () => {
+      try {
+        setLoadingStats(true);
+        const data = await statisticsService.getStatistics(1, 1);
+        if (data.statistics && data.statistics.length > 0) {
+          setStatistics(data.statistics[0]);
+        }
+      } catch (err) {
+        console.error('Error fetching statistics:', err);
+      } finally {
+        setLoadingStats(false);
+      }
+    };
+
+    fetchLatestStatistics();
   }, []);
 
   const handleLogout = async () => {
@@ -183,6 +202,37 @@ export default function AdminInterface() {
           </div>
 
           <div style={{ display: 'flex', gap: 8 }}>
+            <Link to="/dashboard">
+              <button 
+                style={{ 
+                  padding: '8px 12px', 
+                  borderRadius: 8, 
+                  border: '1px solid rgba(34, 197, 94, 0.3)', 
+                  background: 'rgba(34, 197, 94, 0.15)', 
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  cursor: 'pointer',
+                  color: '#ffffff',
+                  fontFamily: 'Verdana, sans-serif',
+                  fontWeight: 500,
+                  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(34, 197, 94, 0.25)';
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(34, 197, 94, 0.15)';
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'none';
+                }}
+              >
+                📊 Statistics
+              </button>
+            </Link>
+
             <Link to="/users">
               <button 
                 style={{ 
@@ -311,7 +361,24 @@ export default function AdminInterface() {
                 e.currentTarget.style.boxShadow = '0 6px 18px rgba(15,23,42,0.06)';
               }}
             >
-              <div style={statNumber}>{stats.totalUsers}</div>
+              <div style={statNumber}>{statistics?.stat_date || 'N/A'}</div>
+              <div style={statLabel}>Statistics Date</div>
+            </div>
+
+            <div 
+              style={statBoxStyles}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(194, 190, 190, 0.2)';
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(15,23,42,0.15)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(194, 190, 190, 0.1)';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 6px 18px rgba(15,23,42,0.06)';
+              }}
+            >
+              <div style={statNumber}>{statistics?.total_users ?? 'N/A'}</div>
               <div style={statLabel}>Total Users</div>
             </div>
 
@@ -328,8 +395,8 @@ export default function AdminInterface() {
                 e.currentTarget.style.boxShadow = '0 6px 18px rgba(15,23,42,0.06)';
               }}
             >
-              <div style={statNumber}>{stats.activeSessions}</div>
-              <div style={statLabel}>Active Sessions</div>
+              <div style={statNumber}>{statistics?.active_users ?? 'N/A'}</div>
+              <div style={statLabel}>Active Users</div>
             </div>
 
             <div 
@@ -345,8 +412,8 @@ export default function AdminInterface() {
                 e.currentTarget.style.boxShadow = '0 6px 18px rgba(15,23,42,0.06)';
               }}
             >
-              <div style={statNumber}>{stats.lastLogin}</div>
-              <div style={statLabel}>Last Login</div>
+              <div style={statNumber}>{statistics?.total_sessions ?? 'N/A'}</div>
+              <div style={statLabel}>Total Sessions</div>
             </div>
 
             <div 
@@ -362,8 +429,8 @@ export default function AdminInterface() {
                 e.currentTarget.style.boxShadow = '0 6px 18px rgba(15,23,42,0.06)';
               }}
             >
-              <div style={statNumber}>{stats.systemLoad}</div>
-              <div style={statLabel}>System Load</div>
+              <div style={statNumber}>{statistics?.average_session_duration ? statistics.average_session_duration.toFixed(2) : 'N/A'}</div>
+              <div style={statLabel}>Avg Duration (min)</div>
             </div>
           </div>
 
