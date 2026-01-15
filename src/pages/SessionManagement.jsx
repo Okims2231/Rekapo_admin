@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -14,16 +15,33 @@ import {
   Chip,
 } from '@mui/material';
 import { useAdmin } from '../hooks/useAdmin';
+import useAuth from '../hooks/useAuth';
 import backgroundImage from '../assets/images/lvl94.png';
 import backgroundAudio from '../assets/audio/King\'s Curfew.mp3';
 
 export default function SessionManagement() {
   const { querySessions, deleteSession, getSessionMetadata } = useAdmin();
+  const { logout } = useAuth();
   const [query, setQuery] = useState('');
   const [selectedSession, setSelectedSession] = useState(null);
   const [confirmMsg, setConfirmMsg] = useState('');
   const audioRef = useRef(null);
   const [showClickPrompt] = useState(true);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch {
+      console.warn('Logout API failed; clearing token locally');
+      try {
+        localStorage.removeItem('adminToken');
+      } catch (ex) {
+        console.warn('Failed to clear token:', ex);
+      }
+    } finally {
+      window.location.assign('/login');
+    }
+  };
 
   // Auto-play background music
   useEffect(() => {
@@ -92,6 +110,131 @@ export default function SessionManagement() {
         <source src={backgroundAudio} type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
+
+      {/* Header with Navigation */}
+      <Box sx={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1, marginBottom: 3 }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 12,
+          marginBottom: 16,
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          padding: '20px',
+          borderRadius: '10px'
+        }}>
+          <div>
+            <h1 style={{
+              margin: 0,
+              color: '#ffffffff',
+              textShadow: '0 2px 6px rgba(0,0,0,0.6)',
+              fontFamily: 'Verdana, sans-serif'
+            }}>Session Management</h1>
+            <div style={{
+              color: '#cacacaff',
+              marginTop: 6,
+              textShadow: '0 1px 3px rgba(0,0,0,0.4)',
+              fontFamily: 'Verdana, sans-serif'
+            }}>Monitor and manage active sessions</div>
+          </div>
+
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Link to="/users">
+              <button
+                style={{
+                  padding: '8px 12px',
+                  borderRadius: 8,
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  cursor: 'pointer',
+                  color: '#ffffff',
+                  fontFamily: 'Verdana, sans-serif',
+                  fontWeight: 500,
+                  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.25)';
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.15)';
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'none';
+                }}
+              >
+                User Management
+              </button>
+            </Link>
+
+            <Link to="/">
+              <button
+                style={{
+                  padding: '8px 12px',
+                  borderRadius: 8,
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  cursor: 'pointer',
+                  color: '#ffffff',
+                  fontFamily: 'Verdana, sans-serif',
+                  fontWeight: 500,
+                  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.25)';
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.15)';
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'none';
+                }}
+              >
+                Admin Dashboard
+              </button>
+            </Link>
+
+            <button
+              onClick={handleLogout}
+              style={{
+                padding: '8px 12px',
+                borderRadius: 8,
+                border: '1px solid rgba(239, 68, 68, 0.5)',
+                background: 'rgba(239, 68, 68, 0.8)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                color: '#fff',
+                cursor: 'pointer',
+                fontFamily: 'Verdana, sans-serif',
+                fontWeight: 500,
+                textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(239, 68, 68, 1)';
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(239, 68, 68, 0.8)';
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = 'none';
+              }}
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </Box>
 
       <Card sx={{ 
         maxWidth: 1200, 
