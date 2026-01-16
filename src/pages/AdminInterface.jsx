@@ -5,6 +5,8 @@ import useAuth from '../hooks/useAuth';
 import { statisticsService } from '../services/statisticsService';
 import backgroundImage from '../assets/images/lvl fun!.jpg';
 import backgroundAudio from '../assets/audio/Escape The Backrooms OST - Fun (You Day!) (Filtered Version).mp3';
+import LevelFun from '../components/AdminFeatures/LevelFun';
+import PartyEntities from '../components/AdminFeatures/PartyEntities';
 
 export default function AdminInterface() {
   const { logout } = useAuth();
@@ -144,6 +146,12 @@ export default function AdminInterface() {
         <source src={backgroundAudio} type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
+
+      {/* Level Fun Component */}
+      <LevelFun />
+
+      {/* Party Entities Component */}
+      <PartyEntities />
 
       {/* Click Prompt */}
       {showClickPrompt && (
