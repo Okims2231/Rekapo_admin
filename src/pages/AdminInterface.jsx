@@ -83,17 +83,17 @@ export default function AdminInterface() {
     alignItems: 'center', 
     gap: 12, 
     marginBottom: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    backdropFilter: 'blur(10px)',
-    WebkitBackdropFilter: 'blur(10px)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backdropFilter: 'blur(8px)',
+    WebkitBackdropFilter: 'blur(8px)',
     padding: '20px',
-    borderRadius: '10px'
+    borderRadius: '20px'
   };
   const cardStyles = { 
-    background: 'rgba(255, 255, 255, 0.1)', 
-    backdropFilter: 'blur(10px)',
-    WebkitBackdropFilter: 'blur(10px)',
-    borderRadius: 10, 
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backdropFilter: 'blur(8px)',
+    WebkitBackdropFilter: 'blur(8px)',
+    borderRadius: '20px',
     padding: 20, 
     boxShadow: '0 6px 18px rgba(15,23,42,0.06)' 
   };
@@ -206,11 +206,11 @@ export default function AdminInterface() {
               <button 
                 style={{ 
                   padding: '8px 12px', 
-                  borderRadius: 8, 
-                  border: '1px solid rgba(34, 197, 94, 0.3)', 
+                  borderRadius: '20px', 
+                  border: 'none', 
                   background: 'rgba(34, 197, 94, 0.15)', 
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackdropFilter: 'blur(10px)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
                   cursor: 'pointer',
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
@@ -237,11 +237,11 @@ export default function AdminInterface() {
               <button 
                 style={{ 
                   padding: '8px 12px', 
-                  borderRadius: 8, 
-                  border: '1px solid rgba(255, 255, 255, 0.3)', 
+                  borderRadius: '20px', 
+                  border: 'none', 
                   background: 'rgba(255, 255, 255, 0.15)', 
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackdropFilter: 'blur(10px)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
                   cursor: 'pointer',
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
@@ -268,11 +268,11 @@ export default function AdminInterface() {
               <button 
                 style={{ 
                   padding: '8px 12px', 
-                  borderRadius: 8, 
-                  border: '1px solid rgba(255, 255, 255, 0.3)', 
+                  borderRadius: '20px', 
+                  border: 'none', 
                   background: 'rgba(255, 255, 255, 0.15)', 
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackdropFilter: 'blur(10px)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
                   cursor: 'pointer',
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
@@ -299,11 +299,11 @@ export default function AdminInterface() {
               onClick={handleLogout} 
               style={{ 
                 padding: '8px 12px', 
-                borderRadius: 8, 
-                border: '1px solid rgba(239, 68, 68, 0.5)', 
+                borderRadius: '20px', 
+                border: 'none', 
                 background: 'rgba(239, 68, 68, 0.8)', 
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
                 color: '#fff', 
                 cursor: 'pointer',
                 fontFamily: 'Verdana, sans-serif',

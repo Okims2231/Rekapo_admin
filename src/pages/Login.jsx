@@ -5,7 +5,8 @@ import useAuth from '../hooks/useAuth';
 import authService from '../services/authService';
 import backgroundImage from '../assets/images/lvl0.jpg';
 import backgroundAudio from '../assets/audio/Fallen Down - Toby Fox.mp3';
-import TheBackrooms from '../components/LoginFeatures/TheBackrooms';
+import TheBackrooms from '../components/AdminFeatures/TheBackrooms';
+import MEG from '../components/AdminFeatures/MEG';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -103,6 +104,9 @@ export default function Login() {
     >
       {/* The Backrooms Component */}
       <TheBackrooms />
+
+      {/* M.E.G Component */}
+      <MEG />
 
       {/* Background Audio */}
       <audio 
