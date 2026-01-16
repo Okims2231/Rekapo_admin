@@ -157,13 +157,12 @@ export default function Login() {
         position: 'relative', 
         zIndex: 1,
         boxShadow: 'none',
-        border: '1px solid rgba(0, 0, 0, 0.2)',
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)'
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
       }}>
         <Typography variant="h4" component="h1" sx={{ marginBottom: 2, textAlign: 'center', color: '#ffffffff' }}>
-          Admin Login
+          M.E.G Admin
         </Typography>
 
         {error && (
@@ -190,9 +189,9 @@ export default function Login() {
 
         <Typography
           variant="body2"
-          sx={{ marginTop: 2, textAlign: 'center', color: '#ffffffff' }}
+          sx={{ marginTop: 2, textAlign: 'center', color: '#ffffffff', fontFamily: 'Verdana, sans-serif' }}
         >
-          Only authorized admin users can access this system.
+          Only authorized M.E.G personel can access this admin panel.
         </Typography>
       </Card>
     </Box>
