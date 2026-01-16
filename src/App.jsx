@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
+import SystemStatistics from './pages/SystemStatistics';
 import UserManagement from './pages/UserManagement';
 import SessionManagement from './pages/SessionManagement';
 import Login from './pages/Login';
 import AuthCallback from './pages/AuthCallback';
 import AdminInterface from './pages/AdminInterface';
-import SystemStatistics from './pages/SystemStatistics';
+import Stats from './pages/Stats';
 import { AdminProvider } from './components/AdminProvider';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -22,7 +22,7 @@ function App() {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <SystemStatistics />
                 </ProtectedRoute>
               }
             />
@@ -52,6 +52,14 @@ function App() {
             />
             <Route
               path="/"
+              element={
+                <ProtectedRoute>
+                  <SystemStatistics />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
               element={
                 <ProtectedRoute>
                   <AdminInterface />

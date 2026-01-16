@@ -209,32 +209,35 @@ export default function AdminInterface() {
               fontFamily: 'Verdana, sans-serif' }}>Overview & quick actions</div>
           </div>
 
-          <div style={{ display: 'flex', gap: 8 }}>
-            <Link to="/dashboard">
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <Link to="/">
               <button 
                 style={{ 
-                  padding: '8px 12px', 
-                  borderRadius: '20px', 
-                  border: 'none', 
-                  background: 'rgba(34, 197, 94, 0.15)', 
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
+                  padding: '10px 20px', 
+                  borderRadius: '25px', 
+                  border: '2px solid rgba(255, 255, 255, 0.2)', 
+                  background: 'rgba(255, 255, 255, 0.1)', 
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
                   cursor: 'pointer',
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
-                  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                  fontSize: '14px',
+                  textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = 'rgba(34, 197, 94, 0.25)';
-                  e.target.style.transform = 'translateY(-2px)';
-                  e.target.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+                  e.target.style.background = 'rgba(255, 255, 255, 0.25)';
+                  e.target.style.transform = 'translateY(-3px)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(255,255,255,0.3)';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.4)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = 'rgba(34, 197, 94, 0.15)';
+                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
                   e.target.style.transform = 'translateY(0)';
                   e.target.style.boxShadow = 'none';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
                 }}
               >
                 📊 Statistics
@@ -244,93 +247,122 @@ export default function AdminInterface() {
             <Link to="/users">
               <button 
                 style={{ 
-                  padding: '8px 12px', 
-                  borderRadius: '20px', 
-                  border: 'none', 
-                  background: 'rgba(255, 255, 255, 0.15)', 
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
+                  padding: '10px 20px', 
+                  borderRadius: '25px', 
+                  border: '2px solid rgba(255, 255, 255, 0.2)', 
+                  background: 'rgba(255, 255, 255, 0.1)', 
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
                   cursor: 'pointer',
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
-                  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                  fontSize: '14px',
+                  textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.background = 'rgba(255, 255, 255, 0.25)';
-                  e.target.style.transform = 'translateY(-2px)';
-                  e.target.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+                  e.target.style.transform = 'translateY(-3px)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(255,255,255,0.3)';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.4)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = 'rgba(255, 255, 255, 0.15)';
+                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
                   e.target.style.transform = 'translateY(0)';
                   e.target.style.boxShadow = 'none';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
                 }}
               >
-                User Management
+                👥 Users
               </button>
             </Link>
 
             <Link to="/sessions">
               <button 
                 style={{ 
-                  padding: '8px 12px', 
-                  borderRadius: '20px', 
-                  border: 'none', 
-                  background: 'rgba(255, 255, 255, 0.15)', 
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
+                  padding: '10px 20px', 
+                  borderRadius: '25px', 
+                  border: '2px solid rgba(255, 255, 255, 0.2)', 
+                  background: 'rgba(255, 255, 255, 0.1)', 
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
                   cursor: 'pointer',
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
-                  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                  fontSize: '14px',
+                  textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.background = 'rgba(255, 255, 255, 0.25)';
-                  e.target.style.transform = 'translateY(-2px)';
-                  e.target.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+                  e.target.style.transform = 'translateY(-3px)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(255,255,255,0.3)';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.4)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = 'rgba(255, 255, 255, 0.15)';
+                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
                   e.target.style.transform = 'translateY(0)';
                   e.target.style.boxShadow = 'none';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
                 }}
               >
-                Session Management
+                🎮 Sessions
               </button>
             </Link>
 
             <button 
-              onClick={handleLogout} 
               style={{ 
-                padding: '8px 12px', 
-                borderRadius: '20px', 
-                border: 'none', 
-                background: 'rgba(239, 68, 68, 0.8)', 
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                color: '#fff', 
-                cursor: 'pointer',
+                padding: '10px 20px', 
+                borderRadius: '25px', 
+                border: '2px solid rgba(249, 115, 22, 0.6)', 
+                background: 'linear-gradient(135deg, rgba(249, 115, 22, 0.9), rgba(234, 88, 12, 0.9))', 
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                cursor: 'default',
+                color: '#ffffff',
                 fontFamily: 'Verdana, sans-serif',
-                fontWeight: 500,
-                textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                fontWeight: 600,
+                fontSize: '14px',
+                textShadow: '0 2px 4px rgba(0,0,0,0.4)',
+                boxShadow: '0 4px 15px rgba(249, 115, 22, 0.4)',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              🏠 Dashboard
+            </button>
+
+            <button 
+              onClick={handleLogout}
+              style={{ 
+                padding: '10px 20px', 
+                borderRadius: '25px', 
+                border: '2px solid rgba(239, 68, 68, 0.6)', 
+                background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9))', 
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                cursor: 'pointer',
+                color: '#ffffff',
+                fontFamily: 'Verdana, sans-serif',
+                fontWeight: 600,
+                fontSize: '14px',
+                textShadow: '0 2px 4px rgba(0,0,0,0.4)',
+                boxShadow: '0 4px 15px rgba(239, 68, 68, 0.4)',
                 transition: 'all 0.3s ease'
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(239, 68, 68, 1)';
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.4)';
+                e.target.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 1), rgba(220, 38, 38, 1))';
+                e.target.style.transform = 'translateY(-3px)';
+                e.target.style.boxShadow = '0 6px 20px rgba(239, 68, 68, 0.6)';
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(239, 68, 68, 0.8)';
+                e.target.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9))';
                 e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = 'none';
+                e.target.style.boxShadow = '0 4px 15px rgba(239, 68, 68, 0.4)';
               }}
             >
-              Logout
+              🚪 Logout
             </button>
           </div>
         </div>
