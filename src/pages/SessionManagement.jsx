@@ -22,6 +22,8 @@ import { sessionService } from '../services/sessionService';
 import useAuth from '../hooks/useAuth';
 import backgroundImage from '../assets/images/lvl94.png';
 import backgroundAudio from '../assets/audio/King\'s Curfew.mp3';
+import Level94 from '../components/AdminFeatures/Level94';
+import AnimatedEntities from '../components/AdminFeatures/AnimatedEntities';
 
 export default function SessionManagement() {
   const [sessions, setSessions] = useState([]);
@@ -36,6 +38,8 @@ export default function SessionManagement() {
   const [confirmMsg, setConfirmMsg] = useState('');
   const audioRef = useRef(null);
   const [showClickPrompt] = useState(true);
+  const [showLevel94Popup, setShowLevel94Popup] = useState(false);
+  const [showAnimatedEntitiesPopup, setShowAnimatedEntitiesPopup] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -188,6 +192,82 @@ export default function SessionManagement() {
         Your browser does not support the audio element.
       </audio>
 
+      {/* Level 94 Button - Fixed Upper Right */}
+      <button 
+        onClick={() => setShowLevel94Popup(true)}
+        style={{ 
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 1000,
+          padding: '10px 20px', 
+          borderRadius: '20px', 
+          border: '2px solid rgba(255, 255, 255, 0.2)', 
+          background: 'rgba(255, 255, 255, 0.1)', 
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          cursor: 'pointer',
+          color: '#ffffff',
+          fontFamily: 'Verdana, sans-serif',
+          fontWeight: 500,
+          fontSize: '14px',
+          textShadow: '0 1px 2px rgba(0,0,0,0.4)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'rgba(255, 255, 255, 0.25)';
+          e.target.style.transform = 'translateY(-3px)';
+          e.target.style.boxShadow = '0 6px 20px rgba(255,255,255,0.3)';
+          e.target.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+          e.target.style.transform = 'translateY(0)';
+          e.target.style.boxShadow = 'none';
+          e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+        }}
+      >
+        Level 94
+      </button>
+
+      {/* Animated Entities Button - Fixed Upper Left */}
+      <button 
+        onClick={() => setShowAnimatedEntitiesPopup(true)}
+        style={{ 
+          position: 'fixed',
+          top: '20px',
+          left: '20px',
+          zIndex: 1000,
+          padding: '10px 20px', 
+          borderRadius: '20px', 
+          border: '2px solid rgba(255, 255, 255, 0.2)', 
+          background: 'rgba(255, 255, 255, 0.1)', 
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          cursor: 'pointer',
+          color: '#ffffff',
+          fontFamily: 'Verdana, sans-serif',
+          fontWeight: 500,
+          fontSize: '14px',
+          textShadow: '0 1px 2px rgba(0,0,0,0.4)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'rgba(255, 255, 255, 0.25)';
+          e.target.style.transform = 'translateY(-3px)';
+          e.target.style.boxShadow = '0 6px 20px rgba(255,255,255,0.3)';
+          e.target.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+          e.target.style.transform = 'translateY(0)';
+          e.target.style.boxShadow = 'none';
+          e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+        }}
+      >
+        Entities
+      </button>
+
       {/* Header with Navigation */}
       <Box sx={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1, marginBottom: 3 }}>
         <div style={{
@@ -290,8 +370,8 @@ export default function SessionManagement() {
               style={{
                 padding: '10px 20px',
                 borderRadius: '25px',
-                border: '2px solid rgba(168, 85, 247, 0.6)',
-                background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.9), rgba(139, 92, 246, 0.9))',
+                border: '2px solid rgba(255, 255, 255, 0.4)',
+                background: 'rgba(255, 255, 255, 0.2)',
                 backdropFilter: 'blur(10px)',
                 WebkitBackdropFilter: 'blur(10px)',
                 cursor: 'default',
@@ -300,7 +380,7 @@ export default function SessionManagement() {
                 fontWeight: 600,
                 fontSize: '14px',
                 textShadow: '0 2px 4px rgba(0,0,0,0.4)',
-                boxShadow: '0 4px 15px rgba(168, 85, 247, 0.4)',
+                boxShadow: '0 4px 15px rgba(255, 255, 255, 0.2)',
                 transition: 'all 0.3s ease'
               }}
             >
@@ -644,6 +724,18 @@ export default function SessionManagement() {
         </Box>
       )}
       </Box>
+
+      {/* Level 94 Popup */}
+      <Level94
+        isOpen={showLevel94Popup}
+        onClose={() => setShowLevel94Popup(false)}
+      />
+
+      {/* Animated Entities Popup */}
+      <AnimatedEntities
+        isOpen={showAnimatedEntitiesPopup}
+        onClose={() => setShowAnimatedEntitiesPopup(false)}
+      />
     </>
   );
 }

@@ -34,7 +34,7 @@ export default function PoolRoomEntities({ isOpen, onClose }) {
   Glitchtons attack by jumping out of the water and grabbing you, dealing damage over time until they are removed. They can be removed by using a flashlight or any light source, as they are afraid of light. They can also be stunned temporarily by splashing water on them, allowing you to escape.`;
 
   const weepingAngelDescription = `The Weeping Angels of the Still Water is a porcelain-skinned entity that remains a frozen statue only as long as it is watched. The moment a wanderer blinks, it moves with silent, ripple-less speed to close the distance. Upon contact, it kills by instantly vacuuming all heat and moisture from the victim, leaving behind a dry, crumbling husk in the lukewarm water.
-  It's already too late if you see one, just lay down and close your eyes. Never open them again.`;
+  It's already too late if you see one, just lay down, close your eyes, and accept the cold embrace of death.`;
 
   if (!isOpen) return null;
 
@@ -109,7 +109,7 @@ export default function PoolRoomEntities({ isOpen, onClose }) {
               variant="h6"
               sx={titleStyles}
             >
-              The Skin Stealer
+              The Skin Stealers
             </Typography>
 
             <Typography
@@ -177,7 +177,7 @@ export default function PoolRoomEntities({ isOpen, onClose }) {
               variant="h6"
               sx={titleStyles}
             >
-              The Weeping Angels of the Still Water
+              The Weeping Angels
             </Typography>
 
             <Typography
