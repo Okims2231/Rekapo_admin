@@ -1,5 +1,6 @@
 import flytraphuman from '../../assets/images/flytraphuman.jpg';
 import flytraphuman2 from '../../assets/images/flytraphuman2.jpg';
+import megLogo from '../../assets/images/M.E.G logo.jpg';
 
 export default function FlytrapHumanoid({ isOpen, onClose }) {
   const loreText = `The Flytrap Humanoid has the characteristic of being territorial since any element within their range can alarm them. It is rumored that it is "connected" with the environment and can "sense" any kind of movement at a far distance.
@@ -115,6 +116,19 @@ It is able to blend in with the environment. Because of this, it can be hard to 
               }}
             />
           </div>
+
+          <div
+            style={{
+              backgroundImage: `url(${megLogo})`,
+              backgroundSize: 'contain',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              borderRadius: '6px',
+              width: '350px',
+              height: '120px',
+              minWidth: '300px',
+            }}
+          />
         </div>
       </div>
     </div>
