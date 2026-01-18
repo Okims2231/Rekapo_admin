@@ -4,6 +4,7 @@ import { statisticsService } from '../services/statisticsService';
 import useAuth from '../hooks/useAuth';
 import backgroundImage from '../assets/images/lvl807.jpg';
 import backgroundAudio from '../assets/audio/lvl807.mp3';
+import CalculationPopup from '../components/popups/CalculationPopup';
 import '../index.css';
 
 export default function SystemStatistics() {
@@ -14,6 +15,7 @@ export default function SystemStatistics() {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [showClickPrompt, setShowClickPrompt] = useState(true);
+  const [popup, setPopup] = useState({ isOpen: false, message: '', type: 'success' });
   const pageSize = 10;
 
   // Auto-play background music
@@ -75,9 +77,17 @@ export default function SystemStatistics() {
       const today = new Date().toISOString().split('T')[0];
       await statisticsService.calculateStatistics(today);
       await fetchStatistics();
-      alert('Statistics calculated successfully for today!');
+      setPopup({ 
+        isOpen: true, 
+        message: 'Statistics calculated successfully for today!', 
+        type: 'success' 
+      });
     } catch (err) {
-      alert(`Error calculating statistics: ${err.message}`);
+      setPopup({ 
+        isOpen: true, 
+        message: `Error calculating statistics: ${err.message}`, 
+        type: 'error' 
+      });
     }
   };
 
@@ -86,9 +96,17 @@ export default function SystemStatistics() {
       try {
         await statisticsService.deleteStatistics(statId);
         await fetchStatistics();
-        alert('Statistic deleted successfully!');
+        setPopup({ 
+          isOpen: true, 
+          message: 'Statistic deleted successfully!', 
+          type: 'success' 
+        });
       } catch (err) {
-        alert(`Error deleting statistic: ${err.message}`);
+        setPopup({ 
+          isOpen: true, 
+          message: `Error deleting statistic: ${err.message}`, 
+          type: 'error' 
+        });
       }
     }
   };
@@ -114,21 +132,23 @@ export default function SystemStatistics() {
     alignItems: 'center', 
     gap: 12, 
     marginBottom: 16,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    backdropFilter: 'blur(8px)',
-    WebkitBackdropFilter: 'blur(8px)',
+    backgroundColor: 'rgba(50, 70, 50, 0.25)',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
     padding: '20px',
-    borderRadius: '20px'
+    borderRadius: '20px',
+    border: '1px solid rgba(100, 150, 100, 0.2)'
   };
 
   const cardStyles = { 
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    backdropFilter: 'blur(8px)',
-    WebkitBackdropFilter: 'blur(8px)',
+    backgroundColor: 'rgba(60, 80, 60, 0.2)',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
     borderRadius: '20px',
     padding: 20, 
     boxShadow: '0 6px 18px rgba(15,23,42,0.06)',
-    marginBottom: 16
+    marginBottom: 16,
+    border: '1px solid rgba(120, 160, 100, 0.15)'
   };
 
   if (loading) {
@@ -259,8 +279,8 @@ export default function SystemStatistics() {
               style={{ 
                 padding: '10px 20px', 
                 borderRadius: '25px', 
-                border: '2px solid rgba(59, 130, 246, 0.6)', 
-                background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(37, 99, 235, 0.9))', 
+                border: '2px solid rgba(100, 180, 90, 0.6)', 
+                background: 'linear-gradient(135deg, rgba(100, 180, 90, 0.9), rgba(80, 160, 70, 0.9))', 
                 backdropFilter: 'blur(10px)',
                 WebkitBackdropFilter: 'blur(10px)',
                 cursor: 'default',
@@ -269,7 +289,7 @@ export default function SystemStatistics() {
                 fontWeight: 600,
                 fontSize: '14px',
                 textShadow: '0 2px 4px rgba(0,0,0,0.4)',
-                boxShadow: '0 4px 15px rgba(59, 130, 246, 0.4)',
+                boxShadow: '0 4px 15px rgba(100, 180, 90, 0.4)',
                 transition: 'all 0.3s ease'
               }}
             >
@@ -442,7 +462,7 @@ export default function SystemStatistics() {
                 padding: '10px 20px',
                 borderRadius: '20px',
                 border: 'none',
-                background: 'rgba(59, 130, 246, 0.8)',
+                background: 'rgba(100, 180, 90, 0.8)',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
                 color: '#ffffff',
@@ -453,12 +473,12 @@ export default function SystemStatistics() {
                 transition: 'all 0.3s ease'
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(59, 130, 246, 1)';
+                e.target.style.background = 'rgba(100, 180, 90, 1)';
                 e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.4)';
+                e.target.style.boxShadow = '0 4px 12px rgba(100, 180, 90, 0.4)';
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(59, 130, 246, 0.8)';
+                e.target.style.background = 'rgba(100, 180, 90, 0.8)';
                 e.target.style.transform = 'translateY(0)';
                 e.target.style.boxShadow = 'none';
               }}
@@ -738,6 +758,14 @@ export default function SystemStatistics() {
           </div>
         )}
       </div>
+
+      {/* Calculation Popup */}
+      <CalculationPopup
+        message={popup.message}
+        type={popup.type}
+        isOpen={popup.isOpen}
+        onClose={() => setPopup({ ...popup, isOpen: false })}
+      />
     </div>
   );
 }
