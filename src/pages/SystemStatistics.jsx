@@ -6,6 +6,7 @@ import backgroundImage from '../assets/images/lvl807.jpg';
 import backgroundAudio from '../assets/audio/lvl807.mp3';
 import CalculationPopup from '../components/popups/CalculationPopup';
 import Lvl807 from '../components/AdminFeatures/lvl807';
+import FlytrapHumanoid from '../components/AdminFeatures/FlytrapHumanoid';
 import '../index.css';
 
 export default function SystemStatistics() {
@@ -18,6 +19,7 @@ export default function SystemStatistics() {
   const [showClickPrompt, setShowClickPrompt] = useState(true);
   const [popup, setPopup] = useState({ isOpen: false, message: '', type: 'success' });
   const [showLorePopup, setShowLorePopup] = useState(false);
+  const [showFlytrapPopup, setShowFlytrapPopup] = useState(false);
   const pageSize = 10;
 
   // Auto-play background music
@@ -247,6 +249,38 @@ export default function SystemStatistics() {
         }}
       >
         Level 807 Lore
+      </button>
+
+      {/* Flytrap Humanoid Button - Fixed Upper Left */}
+      <button 
+        onClick={() => setShowFlytrapPopup(true)}
+        style={{ 
+          position: 'fixed',
+          top: '20px',
+          left: '20px',
+          zIndex: 1000,
+          padding: '10px 20px', 
+          borderRadius: '20px', 
+          border: '1px solid rgba(120, 160, 100, 0.4)', 
+          background: 'rgba(60, 80, 60, 0.5)', 
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          cursor: 'pointer',
+          color: '#ffffff',
+          fontFamily: 'Verdana, sans-serif',
+          fontWeight: 500,
+          fontSize: '14px',
+          textShadow: '0 1px 2px rgba(0,0,0,0.4)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'rgba(60, 80, 60, 0.8)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'rgba(60, 80, 60, 0.5)';
+        }}
+      >
+        Flytrap Humanoid
       </button>
 
       {/* Click Prompt */}
@@ -805,6 +839,12 @@ export default function SystemStatistics() {
       <Lvl807
         isOpen={showLorePopup}
         onClose={() => setShowLorePopup(false)}
+      />
+
+      {/* Flytrap Humanoid Popup */}
+      <FlytrapHumanoid
+        isOpen={showFlytrapPopup}
+        onClose={() => setShowFlytrapPopup(false)}
       />
     </div>
   );

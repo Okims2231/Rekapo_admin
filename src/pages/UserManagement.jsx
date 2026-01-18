@@ -37,7 +37,7 @@ import {
 } from '@mui/icons-material';
 import userService from '../services/userService';
 import { useAuth } from '../hooks/useAuth';
-import backgroundImage from '../assets/images/poolrooms.jpg';
+import backgroundImage from '../assets/images/poolrooms1.jpg';
 import backgroundAudio from '../assets/audio/daisy bell.mp3';
 
 export default function UserManagement() {
@@ -221,7 +221,7 @@ export default function UserManagement() {
           alignItems: 'center',
           gap: 12,
           marginBottom: 16,
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          backgroundColor: 'rgba(20, 15, 10, 0.85)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
           padding: '20px',
@@ -248,8 +248,8 @@ export default function UserManagement() {
                 style={{
                   padding: '10px 20px',
                   borderRadius: '25px',
-                  border: '2px solid rgba(255, 255, 255, 0.2)',
-                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '2px solid rgba(80, 70, 60, 0.5)',
+                  background: 'rgba(40, 35, 30, 0.8)',
                   backdropFilter: 'blur(10px)',
                   WebkitBackdropFilter: 'blur(10px)',
                   cursor: 'pointer',
@@ -261,16 +261,16 @@ export default function UserManagement() {
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = 'rgba(255, 255, 255, 0.25)';
+                  e.target.style.background = 'rgba(60, 50, 40, 0.9)';
                   e.target.style.transform = 'translateY(-3px)';
-                  e.target.style.boxShadow = '0 6px 20px rgba(255,255,255,0.3)';
-                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
+                  e.target.style.borderColor = 'rgba(100, 85, 70, 0.7)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.target.style.background = 'rgba(40, 35, 30, 0.8)';
                   e.target.style.transform = 'translateY(0)';
                   e.target.style.boxShadow = 'none';
-                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                  e.target.style.borderColor = 'rgba(80, 70, 60, 0.5)';
                 }}
               >
                 Statistics
@@ -281,8 +281,8 @@ export default function UserManagement() {
               style={{
                 padding: '10px 20px',
                 borderRadius: '25px',
-                border: '2px solid rgba(34, 197, 94, 0.6)',
-                background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(22, 163, 74, 0.9))',
+                border: '2px solid rgba(13, 71, 161, 0.6)',
+                background: 'linear-gradient(135deg, rgba(13, 71, 161, 0.9), rgba(21, 101, 192, 0.9))',
                 backdropFilter: 'blur(10px)',
                 WebkitBackdropFilter: 'blur(10px)',
                 cursor: 'default',
@@ -291,7 +291,7 @@ export default function UserManagement() {
                 fontWeight: 600,
                 fontSize: '14px',
                 textShadow: '0 2px 4px rgba(0,0,0,0.4)',
-                boxShadow: '0 4px 15px rgba(34, 197, 94, 0.4)',
+                boxShadow: '0 4px 15px rgba(13, 71, 161, 0.4)',
                 transition: 'all 0.3s ease'
               }}
             >
@@ -303,8 +303,8 @@ export default function UserManagement() {
                 style={{
                   padding: '10px 20px',
                   borderRadius: '25px',
-                  border: '2px solid rgba(255, 255, 255, 0.2)',
-                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '2px solid rgba(80, 70, 60, 0.5)',
+                  background: 'rgba(40, 35, 30, 0.8)',
                   backdropFilter: 'blur(10px)',
                   WebkitBackdropFilter: 'blur(10px)',
                   cursor: 'pointer',
@@ -337,8 +337,8 @@ export default function UserManagement() {
                 style={{
                   padding: '10px 20px',
                   borderRadius: '25px',
-                  border: '2px solid rgba(255, 255, 255, 0.2)',
-                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '2px solid rgba(80, 70, 60, 0.5)',
+                  background: 'rgba(40, 35, 30, 0.8)',
                   backdropFilter: 'blur(10px)',
                   WebkitBackdropFilter: 'blur(10px)',
                   cursor: 'pointer',
@@ -407,10 +407,10 @@ export default function UserManagement() {
         padding: 3,
         position: 'relative',
         zIndex: 1,
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: 'rgba(20, 15, 10, 0.85)',
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
-        boxShadow: '0 6px 18px rgba(15,23,42,0.06)'
+        boxShadow: '0 6px 18px rgba(0,0,0,0.5)'
       }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 3 }}>
           <Typography variant="h4" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 2px 6px rgba(0,0,0,0.6)' }}>User Management</Typography>
@@ -419,18 +419,18 @@ export default function UserManagement() {
             onClick={fetchUsers} 
             disabled={loading}
             sx={{
-              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+              backgroundColor: 'rgba(40, 35, 30, 0.8)',
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)',
               color: '#ffffff',
               fontFamily: 'Verdana, sans-serif',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
+              border: '1px solid rgba(80, 70, 60, 0.5)',
               textShadow: '0 1px 2px rgba(0,0,0,0.3)',
               transition: 'all 0.3s ease',
               '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                backgroundColor: 'rgba(60, 50, 40, 0.9)',
                 transform: 'translateY(-2px)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                boxShadow: '0 4px 12px rgba(0,0,0,0.4)'
               }
             }}
           >
@@ -449,14 +449,14 @@ export default function UserManagement() {
               flexGrow: 1, 
               minWidth: 200,
               '& .MuiOutlinedInput-root': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                backgroundColor: 'rgba(30, 25, 20, 0.9)',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
                 color: '#ffffff',
                 fontFamily: 'Verdana, sans-serif',
-                '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
-                '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.5)' },
-                '&.Mui-focused fieldset': { borderColor: 'rgba(255, 255, 255, 0.7)' }
+                '& fieldset': { borderColor: 'rgba(80, 70, 60, 0.5)' },
+                '&:hover fieldset': { borderColor: 'rgba(100, 85, 70, 0.7)' },
+                '&.Mui-focused fieldset': { borderColor: 'rgba(120, 100, 80, 0.9)' }
               },
               '& .MuiInputLabel-root': { color: '#cacacaff', fontFamily: 'Verdana, sans-serif' },
               '& .MuiInputBase-input::placeholder': { color: '#999', opacity: 1 }
@@ -465,13 +465,13 @@ export default function UserManagement() {
           <FormControl sx={{ 
             minWidth: 150,
             '& .MuiOutlinedInput-root': {
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              backgroundColor: 'rgba(30, 25, 20, 0.9)',
               backdropFilter: 'blur(8px)',
               WebkitBackdropFilter: 'blur(8px)',
               color: '#ffffff',
               fontFamily: 'Verdana, sans-serif',
-              '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
-              '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.5)' }
+              '& fieldset': { borderColor: 'rgba(80, 70, 60, 0.5)' },
+              '&:hover fieldset': { borderColor: 'rgba(100, 85, 70, 0.7)' }
             },
             '& .MuiInputLabel-root': { color: '#cacacaff', fontFamily: 'Verdana, sans-serif' },
             '& .MuiSelect-icon': { color: '#ffffff' }
@@ -512,13 +512,13 @@ export default function UserManagement() {
           <FormControl sx={{ 
             minWidth: 150,
             '& .MuiOutlinedInput-root': {
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              backgroundColor: 'rgba(30, 25, 20, 0.9)',
               backdropFilter: 'blur(8px)',
               WebkitBackdropFilter: 'blur(8px)',
               color: '#ffffff',
               fontFamily: 'Verdana, sans-serif',
-              '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
-              '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.5)' }
+              '& fieldset': { borderColor: 'rgba(80, 70, 60, 0.5)' },
+              '&:hover fieldset': { borderColor: 'rgba(100, 85, 70, 0.7)' }
             },
             '& .MuiInputLabel-root': { color: '#cacacaff', fontFamily: 'Verdana, sans-serif' },
             '& .MuiSelect-icon': { color: '#ffffff' }
