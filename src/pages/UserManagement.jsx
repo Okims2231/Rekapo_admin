@@ -40,6 +40,7 @@ import { useAuth } from '../hooks/useAuth';
 import backgroundImage from '../assets/images/poolrooms1.jpg';
 import backgroundAudio from '../assets/audio/daisy bell.mp3';
 import Poolrooms from '../components/AdminFeatures/Poolrooms';
+import PoolRoomEntities from '../components/AdminFeatures/PoolRoomEntities';
 
 export default function UserManagement() {
   const navigate = useNavigate();
@@ -57,6 +58,7 @@ export default function UserManagement() {
   const audioRef = useRef(null);
   const [showClickPrompt] = useState(true);
   const [showPoolroomsPopup, setShowPoolroomsPopup] = useState(false);
+  const [showPoolRoomEntitiesPopup, setShowPoolRoomEntitiesPopup] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -189,15 +191,30 @@ export default function UserManagement() {
   const totalPages = Math.ceil(total / pageSize);
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh', 
-      padding: 3,
-      backgroundImage: `url(${backgroundImage})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      position: 'relative'
-    }}>
+    <>
+      <style>{`
+        /* Hide scrollbar completely - prevent layout shift */
+        ::-webkit-scrollbar {
+          display: none;
+        }
+        
+        html {
+          scrollbar-width: none; /* Firefox */
+        }
+        
+        body {
+          overflow-y: scroll; /* Always allocate space for scrollbar (doesn't show) */
+        }
+      `}</style>
+      <Box sx={{ 
+        minHeight: '100vh', 
+        padding: 3,
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        position: 'relative'
+      }}>
       {/* Dark overlay for better readability */}
       <Box sx={{
         position: 'absolute',
@@ -215,9 +232,41 @@ export default function UserManagement() {
         Your browser does not support the audio element.
       </audio>
 
-      {/* Poolrooms Button - Fixed Upper Left */}
+      {/* Poolrooms Button - Fixed Upper Right */}
       <button 
         onClick={() => setShowPoolroomsPopup(true)}
+        style={{ 
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 1000,
+          padding: '10px 20px', 
+          borderRadius: '20px', 
+          border: '1px solid rgba(255, 255, 255, 0.2)', 
+          background: 'rgba(0, 0, 0, 0.6)', 
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          cursor: 'pointer',
+          color: '#ffffff',
+          fontFamily: 'Verdana, sans-serif',
+          fontWeight: 500,
+          fontSize: '14px',
+          textShadow: '0 1px 2px rgba(0,0,0,0.4)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'rgba(0, 0, 0, 0.6)';
+        }}
+      >
+        Poolrooms
+      </button>
+
+      {/* Pool Room Entities Button - Fixed Upper Left */}
+      <button 
+        onClick={() => setShowPoolRoomEntitiesPopup(true)}
         style={{ 
           position: 'fixed',
           top: '20px',
@@ -244,7 +293,7 @@ export default function UserManagement() {
           e.target.style.background = 'rgba(0, 0, 0, 0.6)';
         }}
       >
-        Poolrooms
+        Pool Room Entities
       </button>
 
       {/* Header with Navigation */}
@@ -907,52 +956,18 @@ export default function UserManagement() {
       </Snackbar>
 
       {/* Click Prompt at bottom */}
-      {showClickPrompt && (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            padding: '30px 0',
-            position: 'relative',
-            zIndex: 1
-          }}
-        >
-          <Box
-            sx={{
-              padding: '10px 20px',
-              backgroundColor: 'rgba(0, 0, 0, 0.6)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-              borderRadius: '20px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              animation: 'fadeInPulse 2s ease-in-out infinite',
-              '@keyframes fadeInPulse': {
-                '0%, 100%': { opacity: 0.6 },
-                '50%': { opacity: 0.9 },
-              },
-            }}
-          >
-            <Typography
-              sx={{
-                color: '#ffffff',
-                fontFamily: 'Verdana, sans-serif',
-                fontSize: '13px',
-                fontWeight: 400,
-                textShadow: '0 1px 3px rgba(0,0,0,0.8)',
-                letterSpacing: '0.3px',
-              }}
-            >
-            click anywhere to feel the liminality
-            </Typography>
-          </Box>
-        </Box>
-      )}
-
       {/* Poolrooms Popup */}
       <Poolrooms
         isOpen={showPoolroomsPopup}
         onClose={() => setShowPoolroomsPopup(false)}
       />
-    </Box>
+
+      {/* Pool Room Entities Popup */}
+      <PoolRoomEntities
+        isOpen={showPoolRoomEntitiesPopup}
+        onClose={() => setShowPoolRoomEntitiesPopup(false)}
+      />
+      </Box>
+    </>
   );
 }

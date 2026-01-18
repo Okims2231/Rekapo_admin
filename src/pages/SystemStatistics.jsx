@@ -193,15 +193,30 @@ export default function SystemStatistics() {
   }
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      padding: '24px',
-      backgroundImage: `url(${backgroundImage})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      position: 'relative'
-    }}>
+    <>
+      <style>{`
+        /* Hide scrollbar completely - prevent layout shift */
+        ::-webkit-scrollbar {
+          display: none;
+        }
+        
+        html {
+          scrollbar-width: none; /* Firefox */
+        }
+        
+        body {
+          overflow-y: scroll; /* Always allocate space for scrollbar (doesn't show) */
+        }
+      `}</style>
+      <div style={{ 
+        minHeight: '100vh', 
+        padding: '24px',
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        position: 'relative'
+      }}>
       {/* Dark overlay */}
       <div style={{
         position: 'absolute',
@@ -846,6 +861,7 @@ export default function SystemStatistics() {
         isOpen={showFlytrapPopup}
         onClose={() => setShowFlytrapPopup(false)}
       />
-    </div>
+      </div>
+    </>
   );
 }

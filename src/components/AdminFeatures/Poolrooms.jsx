@@ -3,7 +3,8 @@ import plore1 from '../../assets/images/plore1.jpg';
 import plore2 from '../../assets/images/plore2.jpg';
 
 export default function Poolrooms({ isOpen, onClose }) {
-  const loreText = `Level 37, commonly referred to as the Poolrooms, is an expansive complex of interconnected rooms and corridors submerged in undulating, lukewarm water. Each area of the level varies greatly in size and structure, ranging from uniform pools and hallways to more open, abnormally shaped areas. The majority of surfaces in the level are composed of white, ceramic tiling, with the only deviation from this color being the blue-green hue of the water. The tiles are eerily pristine in condition, all identical to one another, without a single hint of damage on their shiny surfaces.`;
+  const loreText = `  Level 37, commonly referred to as the Poolrooms, is an expansive complex of interconnected rooms and corridors submerged in undulating, lukewarm water. Each area of the level varies greatly in size and structure, ranging from uniform pools and hallways to more open, abnormally shaped areas. The majority of surfaces in the level are composed of white, ceramic tiling, with the only deviation from this color being the blue-green hue of the water. The tiles are eerily pristine in condition, all identical to one another, without a single hint of damage on their shiny surfaces.
+  The architecture of Level 37 is varied, but strict in design; all areas in the level connect to one another in a senseless manner, with none having an easily identifiable purpose. Although the intended use of each area is difficult to determine, they are much too large to properly serve the function of a pool.`;
 
   if (!isOpen) return null;
 
@@ -21,14 +22,14 @@ export default function Poolrooms({ isOpen, onClose }) {
         style={{
           position: 'fixed',
           top: '70px',
-          left: '20px',
+          right: '20px',
           maxWidth: '600px',
           width: 'auto',
-          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          backgroundColor: 'rgba(0, 0, 0, 0.95)',
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
-          borderRadius: '20px',
+          borderRadius: '8px',
           padding: '20px',
           display: 'flex',
           gap: '20px',
@@ -40,16 +41,14 @@ export default function Poolrooms({ isOpen, onClose }) {
         <div style={{ flex: 1 }}>
           <p
             style={{
-              color: '#f5f5f5',
+              color: '#ffffffff',
               fontFamily: 'Verdana, sans-serif',
-              fontSize: '13px',
-              fontWeight: 500,
-              lineHeight: '1.8',
+              fontSize: '12px',
+              lineHeight: '1.6',
               textAlign: 'left',
-              letterSpacing: '0.3px',
+              letterSpacing: '0.2px',
               margin: 0,
               whiteSpace: 'pre-wrap',
-              textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
             }}
           >
             {loreText}

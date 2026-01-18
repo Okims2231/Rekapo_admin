@@ -147,15 +147,30 @@ export default function SessionManagement() {
   };
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh', 
-      padding: 3,
-      backgroundImage: `url(${backgroundImage})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      position: 'relative'
-    }}>
+    <>
+      <style>{`
+        /* Hide scrollbar completely - prevent layout shift */
+        ::-webkit-scrollbar {
+          display: none;
+        }
+        
+        html {
+          scrollbar-width: none; /* Firefox */
+        }
+        
+        body {
+          overflow-y: scroll; /* Always allocate space for scrollbar (doesn't show) */
+        }
+      `}</style>
+      <Box sx={{ 
+        minHeight: '100vh', 
+        padding: 3,
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        position: 'relative'
+      }}>
       {/* Dark overlay for better readability */}
       <Box sx={{
         position: 'absolute',
@@ -628,6 +643,7 @@ export default function SessionManagement() {
           </Box>
         </Box>
       )}
-    </Box>
+      </Box>
+    </>
   );
 }
