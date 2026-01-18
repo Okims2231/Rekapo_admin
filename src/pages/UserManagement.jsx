@@ -39,6 +39,7 @@ import userService from '../services/userService';
 import { useAuth } from '../hooks/useAuth';
 import backgroundImage from '../assets/images/poolrooms1.jpg';
 import backgroundAudio from '../assets/audio/daisy bell.mp3';
+import Poolrooms from '../components/AdminFeatures/Poolrooms';
 
 export default function UserManagement() {
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ export default function UserManagement() {
   const [success, setSuccess] = useState(null);
   const audioRef = useRef(null);
   const [showClickPrompt] = useState(true);
+  const [showPoolroomsPopup, setShowPoolroomsPopup] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -213,6 +215,38 @@ export default function UserManagement() {
         Your browser does not support the audio element.
       </audio>
 
+      {/* Poolrooms Button - Fixed Upper Left */}
+      <button 
+        onClick={() => setShowPoolroomsPopup(true)}
+        style={{ 
+          position: 'fixed',
+          top: '20px',
+          left: '20px',
+          zIndex: 1000,
+          padding: '10px 20px', 
+          borderRadius: '20px', 
+          border: '1px solid rgba(255, 255, 255, 0.2)', 
+          background: 'rgba(0, 0, 0, 0.6)', 
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          cursor: 'pointer',
+          color: '#ffffff',
+          fontFamily: 'Verdana, sans-serif',
+          fontWeight: 500,
+          fontSize: '14px',
+          textShadow: '0 1px 2px rgba(0,0,0,0.4)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'rgba(0, 0, 0, 0.6)';
+        }}
+      >
+        Poolrooms
+      </button>
+
       {/* Header with Navigation */}
       <Box sx={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1, marginBottom: 3 }}>
         <div style={{
@@ -221,11 +255,12 @@ export default function UserManagement() {
           alignItems: 'center',
           gap: 12,
           marginBottom: 16,
-          backgroundColor: 'rgba(20, 15, 10, 0.85)',
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           padding: '20px',
-          borderRadius: '10px'
+          borderRadius: '20px',
+          border: '1px solid rgba(255, 255, 255, 0.2)'
         }}>
           <div>
             <h1 style={{
@@ -248,10 +283,10 @@ export default function UserManagement() {
                 style={{
                   padding: '10px 20px',
                   borderRadius: '25px',
-                  border: '2px solid rgba(80, 70, 60, 0.5)',
-                  background: 'rgba(40, 35, 30, 0.8)',
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackdropFilter: 'blur(10px)',
+                  border: '2px solid rgba(255, 255, 255, 0.2)',
+                  background: 'rgba(0, 0, 0, 0.6)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
                   cursor: 'pointer',
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
@@ -261,16 +296,16 @@ export default function UserManagement() {
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = 'rgba(60, 50, 40, 0.9)';
+                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
                   e.target.style.transform = 'translateY(-3px)';
                   e.target.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
-                  e.target.style.borderColor = 'rgba(100, 85, 70, 0.7)';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.4)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = 'rgba(40, 35, 30, 0.8)';
+                  e.target.style.background = 'rgba(0, 0, 0, 0.6)';
                   e.target.style.transform = 'translateY(0)';
                   e.target.style.boxShadow = 'none';
-                  e.target.style.borderColor = 'rgba(80, 70, 60, 0.5)';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
                 }}
               >
                 Statistics
@@ -303,10 +338,10 @@ export default function UserManagement() {
                 style={{
                   padding: '10px 20px',
                   borderRadius: '25px',
-                  border: '2px solid rgba(80, 70, 60, 0.5)',
-                  background: 'rgba(40, 35, 30, 0.8)',
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackdropFilter: 'blur(10px)',
+                  border: '2px solid rgba(255, 255, 255, 0.2)',
+                  background: 'rgba(0, 0, 0, 0.6)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
                   cursor: 'pointer',
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
@@ -316,13 +351,13 @@ export default function UserManagement() {
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = 'rgba(255, 255, 255, 0.25)';
+                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
                   e.target.style.transform = 'translateY(-3px)';
-                  e.target.style.boxShadow = '0 6px 20px rgba(255,255,255,0.3)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
                   e.target.style.borderColor = 'rgba(255, 255, 255, 0.4)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.target.style.background = 'rgba(0, 0, 0, 0.6)';
                   e.target.style.transform = 'translateY(0)';
                   e.target.style.boxShadow = 'none';
                   e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
@@ -337,10 +372,10 @@ export default function UserManagement() {
                 style={{
                   padding: '10px 20px',
                   borderRadius: '25px',
-                  border: '2px solid rgba(80, 70, 60, 0.5)',
-                  background: 'rgba(40, 35, 30, 0.8)',
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackdropFilter: 'blur(10px)',
+                  border: '2px solid rgba(255, 255, 255, 0.2)',
+                  background: 'rgba(0, 0, 0, 0.6)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
                   cursor: 'pointer',
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
@@ -350,13 +385,13 @@ export default function UserManagement() {
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = 'rgba(255, 255, 255, 0.25)';
+                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
                   e.target.style.transform = 'translateY(-3px)';
-                  e.target.style.boxShadow = '0 6px 20px rgba(255,255,255,0.3)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
                   e.target.style.borderColor = 'rgba(255, 255, 255, 0.4)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.target.style.background = 'rgba(0, 0, 0, 0.6)';
                   e.target.style.transform = 'translateY(0)';
                   e.target.style.boxShadow = 'none';
                   e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
@@ -407,10 +442,12 @@ export default function UserManagement() {
         padding: 3,
         position: 'relative',
         zIndex: 1,
-        backgroundColor: 'rgba(20, 15, 10, 0.85)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        boxShadow: '0 6px 18px rgba(0,0,0,0.5)'
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+        boxShadow: '0 6px 18px rgba(0,0,0,0.5)',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+        borderRadius: '20px'
       }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 3 }}>
           <Typography variant="h4" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 2px 6px rgba(0,0,0,0.6)' }}>User Management</Typography>
@@ -419,16 +456,16 @@ export default function UserManagement() {
             onClick={fetchUsers} 
             disabled={loading}
             sx={{
-              backgroundColor: 'rgba(40, 35, 30, 0.8)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
               color: '#ffffff',
               fontFamily: 'Verdana, sans-serif',
-              border: '1px solid rgba(80, 70, 60, 0.5)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
               textShadow: '0 1px 2px rgba(0,0,0,0.3)',
               transition: 'all 0.3s ease',
               '&:hover': {
-                backgroundColor: 'rgba(60, 50, 40, 0.9)',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
                 transform: 'translateY(-2px)',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.4)'
               }
@@ -449,14 +486,14 @@ export default function UserManagement() {
               flexGrow: 1, 
               minWidth: 200,
               '& .MuiOutlinedInput-root': {
-                backgroundColor: 'rgba(30, 25, 20, 0.9)',
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
                 color: '#ffffff',
                 fontFamily: 'Verdana, sans-serif',
-                '& fieldset': { borderColor: 'rgba(80, 70, 60, 0.5)' },
-                '&:hover fieldset': { borderColor: 'rgba(100, 85, 70, 0.7)' },
-                '&.Mui-focused fieldset': { borderColor: 'rgba(120, 100, 80, 0.9)' }
+                '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+                '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.4)' },
+                '&.Mui-focused fieldset': { borderColor: 'rgba(255, 255, 255, 0.6)' }
               },
               '& .MuiInputLabel-root': { color: '#cacacaff', fontFamily: 'Verdana, sans-serif' },
               '& .MuiInputBase-input::placeholder': { color: '#999', opacity: 1 }
@@ -465,13 +502,13 @@ export default function UserManagement() {
           <FormControl sx={{ 
             minWidth: 150,
             '& .MuiOutlinedInput-root': {
-              backgroundColor: 'rgba(30, 25, 20, 0.9)',
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
               backdropFilter: 'blur(8px)',
               WebkitBackdropFilter: 'blur(8px)',
               color: '#ffffff',
               fontFamily: 'Verdana, sans-serif',
-              '& fieldset': { borderColor: 'rgba(80, 70, 60, 0.5)' },
-              '&:hover fieldset': { borderColor: 'rgba(100, 85, 70, 0.7)' }
+              '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+              '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.4)' }
             },
             '& .MuiInputLabel-root': { color: '#cacacaff', fontFamily: 'Verdana, sans-serif' },
             '& .MuiSelect-icon': { color: '#ffffff' }
@@ -512,13 +549,13 @@ export default function UserManagement() {
           <FormControl sx={{ 
             minWidth: 150,
             '& .MuiOutlinedInput-root': {
-              backgroundColor: 'rgba(30, 25, 20, 0.9)',
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
               backdropFilter: 'blur(8px)',
               WebkitBackdropFilter: 'blur(8px)',
               color: '#ffffff',
               fontFamily: 'Verdana, sans-serif',
-              '& fieldset': { borderColor: 'rgba(80, 70, 60, 0.5)' },
-              '&:hover fieldset': { borderColor: 'rgba(100, 85, 70, 0.7)' }
+              '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+              '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.4)' }
             },
             '& .MuiInputLabel-root': { color: '#cacacaff', fontFamily: 'Verdana, sans-serif' },
             '& .MuiSelect-icon': { color: '#ffffff' }
@@ -910,6 +947,12 @@ export default function UserManagement() {
           </Box>
         </Box>
       )}
+
+      {/* Poolrooms Popup */}
+      <Poolrooms
+        isOpen={showPoolroomsPopup}
+        onClose={() => setShowPoolroomsPopup(false)}
+      />
     </Box>
   );
 }
