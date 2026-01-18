@@ -54,7 +54,7 @@ function App() {
               path="/"
               element={
                 <ProtectedRoute>
-                  <SystemStatistics />
+                  <AdminInterface />
                 </ProtectedRoute>
               }
             />

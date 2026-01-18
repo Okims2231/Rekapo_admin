@@ -63,7 +63,7 @@ export default function Popup({ message, type = 'success', isOpen, onClose, auto
         </style>
 
         <div style={{ marginBottom: '16px', fontSize: '28px' }}>
-          {isSuccess ? '✨' : '⚠️'}
+          {isSuccess ? '' : ''}
         </div>
 
         <p

@@ -189,7 +189,7 @@ export default function AdminInterface() {
               letterSpacing: '0.3px',
             }}
           >
-            ✨ click anywhere to feel the liminality ✨
+            click anywhere to feel the liminality
           </div>
         </div>
       )}
@@ -210,7 +210,7 @@ export default function AdminInterface() {
           </div>
 
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-            <Link to="/">
+            <Link to="/statistics">
               <button 
                 style={{ 
                   padding: '10px 20px', 
@@ -240,7 +240,7 @@ export default function AdminInterface() {
                   e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
                 }}
               >
-                📊 Statistics
+                Statistics
               </button>
             </Link>
 
@@ -274,7 +274,7 @@ export default function AdminInterface() {
                   e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
                 }}
               >
-                👥 Users
+                Users
               </button>
             </Link>
 
@@ -308,7 +308,7 @@ export default function AdminInterface() {
                   e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
                 }}
               >
-                🎮 Sessions
+                Sessions
               </button>
             </Link>
 
@@ -330,7 +330,7 @@ export default function AdminInterface() {
                 transition: 'all 0.3s ease'
               }}
             >
-              🏠 Dashboard
+              Dashboard
             </button>
 
             <button 
@@ -362,7 +362,7 @@ export default function AdminInterface() {
                 e.target.style.boxShadow = '0 4px 15px rgba(239, 68, 68, 0.4)';
               }}
             >
-              🚪 Logout
+              Logout
             </button>
           </div>
         </div>

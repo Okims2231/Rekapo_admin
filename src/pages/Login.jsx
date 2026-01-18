@@ -153,7 +153,7 @@ export default function Login() {
               letterSpacing: '0.3px',
             }}
           >
-            ✨ click anywhere to feel the liminality ✨
+            click anywhere to feel the liminality
           </Typography>
         </Box>
       )}

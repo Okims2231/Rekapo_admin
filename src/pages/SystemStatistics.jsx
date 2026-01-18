@@ -5,6 +5,7 @@ import useAuth from '../hooks/useAuth';
 import backgroundImage from '../assets/images/lvl807.jpg';
 import backgroundAudio from '../assets/audio/lvl807.mp3';
 import CalculationPopup from '../components/popups/CalculationPopup';
+import Lvl807 from '../components/AdminFeatures/lvl807';
 import '../index.css';
 
 export default function SystemStatistics() {
@@ -16,6 +17,7 @@ export default function SystemStatistics() {
   const [page, setPage] = useState(1);
   const [showClickPrompt, setShowClickPrompt] = useState(true);
   const [popup, setPopup] = useState({ isOpen: false, message: '', type: 'success' });
+  const [showLorePopup, setShowLorePopup] = useState(false);
   const pageSize = 10;
 
   // Auto-play background music
@@ -215,6 +217,38 @@ export default function SystemStatistics() {
         Your browser does not support the audio element.
       </audio>
 
+      {/* Lore Button - Fixed Upper Right */}
+      <button 
+        onClick={() => setShowLorePopup(true)}
+        style={{ 
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 1000,
+          padding: '10px 20px', 
+          borderRadius: '20px', 
+          border: '1px solid rgba(120, 160, 100, 0.4)', 
+          background: 'rgba(60, 80, 60, 0.5)', 
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          cursor: 'pointer',
+          color: '#ffffff',
+          fontFamily: 'Verdana, sans-serif',
+          fontWeight: 500,
+          fontSize: '14px',
+          textShadow: '0 1px 2px rgba(0,0,0,0.4)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'rgba(60, 80, 60, 0.8)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'rgba(60, 80, 60, 0.5)';
+        }}
+      >
+        Level 807 Lore
+      </button>
+
       {/* Click Prompt */}
       {showClickPrompt && (
         <div
@@ -251,7 +285,7 @@ export default function SystemStatistics() {
               letterSpacing: '0.3px',
             }}
           >
-            ✨ click anywhere to feel the liminality ✨
+            click anywhere to feel the liminality
           </div>
         </div>
       )}
@@ -293,7 +327,7 @@ export default function SystemStatistics() {
                 transition: 'all 0.3s ease'
               }}
             >
-              📊 Statistics
+              Statistics
             </button>
 
             <Link to="/users">
@@ -326,7 +360,7 @@ export default function SystemStatistics() {
                   e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
                 }}
               >
-                👥 Users
+                Users
               </button>
             </Link>
 
@@ -360,11 +394,11 @@ export default function SystemStatistics() {
                   e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
                 }}
               >
-                🎮 Sessions
+                Sessions
               </button>
             </Link>
 
-            <Link to="/admin">
+            <Link to="/">
               <button 
                 style={{ 
                   padding: '10px 20px', 
@@ -394,7 +428,7 @@ export default function SystemStatistics() {
                   e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
                 }}
               >
-                🏠 Dashboard
+                Dashboard
               </button>
             </Link>
 
@@ -427,7 +461,7 @@ export default function SystemStatistics() {
                 e.target.style.boxShadow = '0 4px 15px rgba(239, 68, 68, 0.4)';
               }}
             >
-              🚪 Logout
+              Logout
             </button>
           </div>
         </div>
@@ -483,7 +517,7 @@ export default function SystemStatistics() {
                 e.target.style.boxShadow = 'none';
               }}
             >
-              📊 Calculate Today's Statistics
+              Calculate Today's Statistics
             </button>
           </div>
         </div>
@@ -765,6 +799,12 @@ export default function SystemStatistics() {
         type={popup.type}
         isOpen={popup.isOpen}
         onClose={() => setPopup({ ...popup, isOpen: false })}
+      />
+
+      {/* Lore Popup */}
+      <Lvl807
+        isOpen={showLorePopup}
+        onClose={() => setShowLorePopup(false)}
       />
     </div>
   );
