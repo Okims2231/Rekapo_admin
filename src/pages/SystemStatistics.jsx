@@ -22,6 +22,13 @@ export default function SystemStatistics() {
   const [showFlytrapPopup, setShowFlytrapPopup] = useState(false);
   const pageSize = 10;
 
+  // Ensure audio volume stays at 30% whenever popup state changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.30;
+    }
+  }, [popup.isOpen, showLorePopup, showFlytrapPopup]);
+
   // Auto-play background music
   useEffect(() => {
     const playAudio = async () => {
@@ -32,6 +39,13 @@ export default function SystemStatistics() {
         }
       } catch (err) {
         console.log('Auto-play prevented:', err);
+      }
+    };
+
+    // Ensure volume stays at 30% even after state changes
+    const maintainVolume = () => {
+      if (audioRef.current) {
+        audioRef.current.volume = 0.30;
       }
     };
 
@@ -50,10 +64,18 @@ export default function SystemStatistics() {
     };
 
     document.addEventListener('click', handleFirstClick);
+    
+    // Add volumechange listener to prevent volume from changing
+    if (audioRef.current) {
+      audioRef.current.addEventListener('volumechange', maintainVolume);
+    }
 
     return () => {
       clearTimeout(timer);
       document.removeEventListener('click', handleFirstClick);
+      if (audioRef.current) {
+        audioRef.current.removeEventListener('volumechange', maintainVolume);
+      }
     };
   }, []);
 
@@ -229,7 +251,16 @@ export default function SystemStatistics() {
       }}></div>
 
       {/* Background Audio */}
-      <audio ref={audioRef} loop autoPlay>
+      <audio 
+        ref={audioRef} 
+        loop 
+        autoPlay
+        onVolumeChange={(e) => {
+          if (e.target.volume !== 0.30) {
+            e.target.volume = 0.30;
+          }
+        }}
+      >
         <source src={backgroundAudio} type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
