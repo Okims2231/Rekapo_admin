@@ -34,6 +34,8 @@ import {
   AdminPanelSettings,
   PersonOff,
   Refresh,
+  KeyboardArrowDown,
+  KeyboardArrowUp,
 } from '@mui/icons-material';
 import userService from '../services/userService';
 import { useAuth } from '../hooks/useAuth';
@@ -59,6 +61,9 @@ export default function UserManagement() {
   const [showClickPrompt] = useState(true);
   const [showPoolroomsPopup, setShowPoolroomsPopup] = useState(false);
   const [showPoolRoomEntitiesPopup, setShowPoolRoomEntitiesPopup] = useState(false);
+  const [expandedUserId, setExpandedUserId] = useState(null);
+  const [userAnalytics, setUserAnalytics] = useState({});
+  const [loadingAnalytics, setLoadingAnalytics] = useState({});
 
   const handleLogout = async () => {
     try {
@@ -185,6 +190,29 @@ export default function UserManagement() {
       fetchUsers();
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to update admin status');
+    }
+  };
+
+  // Handle row expansion and fetch analytics
+  const handleExpandRow = async (userId) => {
+    if (expandedUserId === userId) {
+      setExpandedUserId(null);
+      return;
+    }
+
+    setExpandedUserId(userId);
+
+    // Fetch analytics if not already loaded
+    if (!userAnalytics[userId]) {
+      setLoadingAnalytics(prev => ({ ...prev, [userId]: true }));
+      try {
+        const analytics = await userService.getUserAnalytics(userId);
+        setUserAnalytics(prev => ({ ...prev, [userId]: analytics }));
+      } catch (err) {
+        setError(err.response?.data?.detail || 'Failed to load user analytics');
+      } finally {
+        setLoadingAnalytics(prev => ({ ...prev, [userId]: false }));
+      }
     }
   };
 
@@ -672,63 +700,164 @@ export default function UserManagement() {
                     </TableRow>
                   ) : (
                     users.map((user) => (
-                      <TableRow key={user.id} sx={{ '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' } }}>
-                        <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>{user.name || 'N/A'}</TableCell>
-                        <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>{user.email}</TableCell>
-                        <TableCell align="center" sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                          {user.is_admin ? (
-                            <Chip label="Admin" size="small" sx={{ backgroundColor: 'rgba(33, 150, 243, 0.8)', color: '#ffffff', fontFamily: 'Verdana, sans-serif', backdropFilter: 'blur(8px)' }} />
-                          ) : (
-                            <Chip label="User" size="small" sx={{ backgroundColor: 'rgba(158, 158, 158, 0.6)', color: '#ffffff', fontFamily: 'Verdana, sans-serif', backdropFilter: 'blur(8px)' }} />
-                          )}
-                        </TableCell>
-                        <TableCell align="center" sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                          {user.is_disabled ? (
-                            <Chip label="Disabled" size="small" sx={{ backgroundColor: 'rgba(244, 67, 54, 0.8)', color: '#ffffff', fontFamily: 'Verdana, sans-serif', backdropFilter: 'blur(8px)' }} />
-                          ) : (
-                            <Chip label="Active" size="small" sx={{ backgroundColor: 'rgba(76, 175, 80, 0.8)', color: '#ffffff', fontFamily: 'Verdana, sans-serif', backdropFilter: 'blur(8px)' }} />
-                          )}
-                        </TableCell>
-                        <TableCell align="center" sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                          <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-                            {user.is_disabled ? (
+                      <>
+                        <TableRow key={user.id} sx={{ '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }, cursor: 'pointer' }}>
+                          <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                               <IconButton
                                 size="small"
-                                color="success"
-                                onClick={() => handleEnableUser(user)}
-                                title="Enable User"
+                                onClick={() => handleExpandRow(user.id)}
+                                sx={{ color: '#ffffff' }}
                               >
-                                <CheckCircle />
+                                {expandedUserId === user.id ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
                               </IconButton>
+                              {user.name || 'N/A'}
+                            </Box>
+                          </TableCell>
+                          <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>{user.email}</TableCell>
+                          <TableCell align="center" sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                            {user.is_admin ? (
+                              <Chip label="Admin" size="small" sx={{ backgroundColor: 'rgba(33, 150, 243, 0.8)', color: '#ffffff', fontFamily: 'Verdana, sans-serif', backdropFilter: 'blur(8px)' }} />
                             ) : (
+                              <Chip label="User" size="small" sx={{ backgroundColor: 'rgba(158, 158, 158, 0.6)', color: '#ffffff', fontFamily: 'Verdana, sans-serif', backdropFilter: 'blur(8px)' }} />
+                            )}
+                          </TableCell>
+                          <TableCell align="center" sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                            {user.is_disabled ? (
+                              <Chip label="Disabled" size="small" sx={{ backgroundColor: 'rgba(244, 67, 54, 0.8)', color: '#ffffff', fontFamily: 'Verdana, sans-serif', backdropFilter: 'blur(8px)' }} />
+                            ) : (
+                              <Chip label="Active" size="small" sx={{ backgroundColor: 'rgba(76, 175, 80, 0.8)', color: '#ffffff', fontFamily: 'Verdana, sans-serif', backdropFilter: 'blur(8px)' }} />
+                            )}
+                          </TableCell>
+                          <TableCell align="center" sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                            <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
+                              {user.is_disabled ? (
+                                <IconButton
+                                  size="small"
+                                  color="success"
+                                  onClick={(e) => { e.stopPropagation(); handleEnableUser(user); }}
+                                  title="Enable User"
+                                >
+                                  <CheckCircle />
+                                </IconButton>
+                              ) : (
+                                <IconButton
+                                  size="small"
+                                  color="warning"
+                                  onClick={(e) => { e.stopPropagation(); setDisableDialog({ open: true, user, reason: '' }); }}
+                                  title="Disable User"
+                                >
+                                  <Block />
+                                </IconButton>
+                              )}
                               <IconButton
                                 size="small"
-                                color="warning"
-                                onClick={() => setDisableDialog({ open: true, user, reason: '' })}
-                                title="Disable User"
+                                color="primary"
+                                onClick={(e) => { e.stopPropagation(); setAdminDialog({ open: true, user, isAdmin: !user.is_admin }); }}
+                                title={user.is_admin ? 'Demote from Admin' : 'Promote to Admin'}
                               >
-                                <Block />
+                                <AdminPanelSettings />
                               </IconButton>
-                            )}
-                            <IconButton
-                              size="small"
-                              color="primary"
-                              onClick={() => setAdminDialog({ open: true, user, isAdmin: !user.is_admin })}
-                              title={user.is_admin ? 'Demote from Admin' : 'Promote to Admin'}
-                            >
-                              <AdminPanelSettings />
-                            </IconButton>
-                            <IconButton
-                              size="small"
-                              color="error"
-                              onClick={() => setDeleteDialog({ open: true, user })}
-                              title="Delete User"
-                            >
-                              <Delete />
-                            </IconButton>
-                          </Box>
-                        </TableCell>
-                      </TableRow>
+                              <IconButton
+                                size="small"
+                                color="error"
+                                onClick={(e) => { e.stopPropagation(); setDeleteDialog({ open: true, user }); }}
+                                title="Delete User"
+                              >
+                                <Delete />
+                              </IconButton>
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                        {expandedUserId === user.id && (
+                          <TableRow>
+                            <TableCell colSpan={5} sx={{ padding: 0, borderBottom: '2px solid rgba(255,255,255,0.2)' }}>
+                              <Box sx={{ 
+                                padding: 3, 
+                                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                                backdropFilter: 'blur(4px)',
+                                WebkitBackdropFilter: 'blur(4px)'
+                              }}>
+                                {loadingAnalytics[user.id] ? (
+                                  <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
+                                    <CircularProgress size={30} sx={{ color: '#ffffff' }} />
+                                  </Box>
+                                ) : userAnalytics[user.id] ? (
+                                  <Box>
+                                    <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2, textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+                                      User Analytics
+                                    </Typography>
+                                    <Box sx={{ 
+                                      display: 'grid', 
+                                      gridTemplateColumns: 'repeat(6, 1fr)', 
+                                      gap: 1.5 
+                                    }}>
+                                      <Box sx={{ padding: 1.5, backgroundColor: 'rgba(33, 150, 243, 0.2)', borderRadius: '8px', border: '1px solid rgba(33, 150, 243, 0.4)' }}>
+                                        <Typography variant="caption" sx={{ color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '0.7rem' }}>Total Sessions</Typography>
+                                        <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 600, fontSize: '1.25rem' }}>{userAnalytics[user.id].total_sessions}</Typography>
+                                      </Box>
+                                      <Box sx={{ padding: 1.5, backgroundColor: 'rgba(76, 175, 80, 0.2)', borderRadius: '8px', border: '1px solid rgba(76, 175, 80, 0.4)' }}>
+                                        <Typography variant="caption" sx={{ color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '0.7rem' }}>Completed Sessions</Typography>
+                                        <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 600, fontSize: '1.25rem' }}>{userAnalytics[user.id].completed_sessions}</Typography>
+                                      </Box>
+                                      <Box sx={{ padding: 1.5, backgroundColor: 'rgba(244, 67, 54, 0.2)', borderRadius: '8px', border: '1px solid rgba(244, 67, 54, 0.4)' }}>
+                                        <Typography variant="caption" sx={{ color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '0.7rem' }}>Failed Sessions</Typography>
+                                        <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 600, fontSize: '1.25rem' }}>{userAnalytics[user.id].failed_sessions}</Typography>
+                                      </Box>
+                                      <Box sx={{ padding: 1.5, backgroundColor: 'rgba(255, 152, 0, 0.2)', borderRadius: '8px', border: '1px solid rgba(255, 152, 0, 0.4)' }}>
+                                        <Typography variant="caption" sx={{ color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '0.7rem' }}>Active Sessions</Typography>
+                                        <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 600, fontSize: '1.25rem' }}>{userAnalytics[user.id].active_sessions}</Typography>
+                                      </Box>
+                                      <Box sx={{ padding: 1.5, backgroundColor: 'rgba(156, 39, 176, 0.2)', borderRadius: '8px', border: '1px solid rgba(156, 39, 176, 0.4)' }}>
+                                        <Typography variant="caption" sx={{ color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '0.7rem' }}>Avg Session Duration</Typography>
+                                        <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 600, fontSize: '1.25rem' }}>{userAnalytics[user.id].average_session_duration?.toFixed(1) || 0} min</Typography>
+                                      </Box>
+                                      <Box sx={{ padding: 1.5, backgroundColor: 'rgba(0, 188, 212, 0.2)', borderRadius: '8px', border: '1px solid rgba(0, 188, 212, 0.4)' }}>
+                                        <Typography variant="caption" sx={{ color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '0.7rem' }}>Total Recording Time</Typography>
+                                        <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 600, fontSize: '1.25rem' }}>{userAnalytics[user.id].total_recording_time?.toFixed(1) || 0} min</Typography>
+                                      </Box>
+                                      <Box sx={{ padding: 1.5, backgroundColor: 'rgba(255, 193, 7, 0.2)', borderRadius: '8px', border: '1px solid rgba(255, 193, 7, 0.4)' }}>
+                                        <Typography variant="caption" sx={{ color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '0.7rem' }}>Longest Session</Typography>
+                                        <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 600, fontSize: '1.25rem' }}>{userAnalytics[user.id].longest_session_duration?.toFixed(1) || 0} min</Typography>
+                                      </Box>
+                                      <Box sx={{ padding: 1.5, backgroundColor: 'rgba(103, 58, 183, 0.2)', borderRadius: '8px', border: '1px solid rgba(103, 58, 183, 0.4)' }}>
+                                        <Typography variant="caption" sx={{ color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '0.7rem' }}>Recording Segments</Typography>
+                                        <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 600, fontSize: '1.25rem' }}>{userAnalytics[user.id].total_recording_segments}</Typography>
+                                      </Box>
+                                      <Box sx={{ padding: 1.5, backgroundColor: 'rgba(233, 30, 99, 0.2)', borderRadius: '8px', border: '1px solid rgba(233, 30, 99, 0.4)' }}>
+                                        <Typography variant="caption" sx={{ color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '0.7rem' }}>Transcribed Words</Typography>
+                                        <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 600, fontSize: '1.25rem' }}>{userAnalytics[user.id].total_transcribed_words?.toLocaleString()}</Typography>
+                                      </Box>
+                                      <Box sx={{ padding: 1.5, backgroundColor: 'rgba(121, 134, 203, 0.2)', borderRadius: '8px', border: '1px solid rgba(121, 134, 203, 0.4)' }}>
+                                        <Typography variant="caption" sx={{ color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '0.7rem' }}>Last Session</Typography>
+                                        <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 600, fontSize: '1.25rem' }}>
+                                          {userAnalytics[user.id].days_since_last_session !== null 
+                                            ? (userAnalytics[user.id].days_since_last_session === 0 || userAnalytics[user.id].days_since_last_session === -1)
+                                              ? 'Today'
+                                              : userAnalytics[user.id].days_since_last_session === 1
+                                                ? 'Yesterday'
+                                                : `${Math.max(0, userAnalytics[user.id].days_since_last_session)} days ago`
+                                            : 'Never'}
+                                        </Typography>
+                                      </Box>
+                                      <Box sx={{ padding: 1.5, backgroundColor: 'rgba(96, 125, 139, 0.2)', borderRadius: '8px', border: '1px solid rgba(96, 125, 139, 0.4)' }}>
+                                        <Typography variant="caption" sx={{ color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '0.7rem' }}>Account Age</Typography>
+                                        <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 600, fontSize: '1.25rem' }}>{userAnalytics[user.id].account_age_days} days</Typography>
+                                      </Box>
+                                      <Box sx={{ padding: 1.5, backgroundColor: 'rgba(255, 87, 34, 0.2)', borderRadius: '8px', border: '1px solid rgba(255, 87, 34, 0.4)' }}>
+                                        <Typography variant="caption" sx={{ color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '0.7rem' }}>Deleted Sessions</Typography>
+                                        <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 600, fontSize: '1.25rem' }}>{userAnalytics[user.id].deleted_sessions}</Typography>
+                                      </Box>
+                                    </Box>
+                                  </Box>
+                                ) : (
+                                  <Typography sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>Failed to load analytics</Typography>
+                                )}
+                              </Box>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </>
                     ))
                   )}
                 </TableBody>

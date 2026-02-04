@@ -111,6 +111,19 @@ export const userService = {
       throw error;
     }
   },
+
+  /**
+   * Get user analytics
+   */
+  async getUserAnalytics(userId) {
+    try {
+      const response = await axiosInstance.get(`/admin/users/${userId}/analytics`);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get user analytics:', error);
+      throw error;
+    }
+  },
 };
 
 export default userService;

@@ -32,22 +32,30 @@ export const sessionService = {
   /**
    * Get paginated list of sessions
    */
-  async getSessions(page = 1, pageSize = 20, search = null, status = null) {
+  async getSessions(page = 1, pageSize = 20, search = null, status = null, trainingConsent = null) {
     try {
       const params = new URLSearchParams({
         page,
         page_size: pageSize,
       });
 
-      if (search) params.append('search', search);
+      // Filter by user_id if search is a number, otherwise search by session_title
+      if (search) {
+        if (!isNaN(search)) {
+          params.append('user_id', search);
+        } else {
+          params.append('session_title', search);
+        }
+      }
       if (status) params.append('status', status);
+      if (trainingConsent !== null && trainingConsent !== '') params.append('training_consent', trainingConsent);
 
       const response = await axiosInstance.get(`/admin/sessions?${params}`);
       return response.data;
     } catch (error) {
       const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
-      console.error('Failed to fetch sessions:', errorMsg);
-      throw new Error(`Failed to fetch sessions: ${errorMsg}`);
+      console.error('Failed to fetch sessions:', error.response?.data || errorMsg);
+      throw new Error(typeof errorMsg === 'string' ? `Failed to fetch sessions: ${errorMsg}` : 'Failed to fetch sessions');
     }
   },
 
@@ -124,4 +132,20 @@ export const sessionService = {
       throw new Error(`Failed to end session: ${errorMsg}`);
     }
   },
+
+  /**
+   * Get training data for a session (enforces consent check)
+   */
+  async getTrainingData(sessionId) {
+    try {
+      const response = await axiosInstance.get(`/admin/training-data/sessions/${sessionId}`);
+      return response.data;
+    } catch (error) {
+      const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
+      console.error('Failed to fetch training data:', errorMsg);
+      throw new Error(`Failed to fetch training data: ${errorMsg}`);
+    }
+  },
 };
+
+export default sessionService;

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -26,12 +26,14 @@ import Level94 from '../components/AdminFeatures/Level94';
 import AnimatedEntities from '../components/AdminFeatures/AnimatedEntities';
 
 export default function SessionManagement() {
+  const navigate = useNavigate();
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { logout } = useAuth();
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [trainingConsentFilter, setTrainingConsentFilter] = useState('');
   const [page, setPage] = useState(1);
   const [totalSessions, setTotalSessions] = useState(0);
   const [selectedSession, setSelectedSession] = useState(null);
@@ -85,7 +87,7 @@ export default function SessionManagement() {
   // Fetch sessions
   useEffect(() => {
     fetchSessions();
-  }, [page, statusFilter]);
+  }, [page, query, statusFilter, trainingConsentFilter]);
 
   const fetchSessions = async () => {
     try {
@@ -95,7 +97,8 @@ export default function SessionManagement() {
         page,
         pageSize,
         query || null,
-        statusFilter || null
+        statusFilter || null,
+        trainingConsentFilter || null
       );
       setSessions(data.sessions || []);
       setTotalSessions(data.total || 0);
@@ -114,6 +117,11 @@ export default function SessionManagement() {
 
   const handleStatusChange = (e) => {
     setStatusFilter(e.target.value);
+    setPage(1);
+  };
+
+  const handleTrainingConsentChange = (e) => {
+    setTrainingConsentFilter(e.target.value);
     setPage(1);
   };
 
@@ -523,6 +531,53 @@ export default function SessionManagement() {
               <MenuItem value="failed">Failed</MenuItem>
             </Select>
           </FormControl>
+
+          <FormControl sx={{ minWidth: '150px' }}>
+            <InputLabel sx={{ color: '#ffffff' }}>Training Consent</InputLabel>
+            <Select
+              value={trainingConsentFilter}
+              onChange={handleTrainingConsentChange}
+              label="Training Consent"
+              sx={{
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                color: '#ffffff',
+                fontFamily: 'Verdana, sans-serif',
+                '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+                '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.7)' },
+                '& .MuiSvgIcon-root': { color: '#ffffff' }
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    '& .MuiMenuItem-root': {
+                      color: '#ffffff',
+                      fontFamily: 'Verdana, sans-serif',
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                      },
+                      '&.Mui-selected': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                        '&:hover': {
+                          backgroundColor: 'rgba(255, 255, 255, 0.25)'
+                        }
+                      }
+                    }
+                  }
+                }
+              }}
+            >
+              <MenuItem value="">All</MenuItem>
+              <MenuItem value="true">Consented</MenuItem>
+              <MenuItem value="false">Not Consented</MenuItem>
+            </Select>
+          </FormControl>
         </Box>
         
         {confirmMsg && (
@@ -541,19 +596,20 @@ export default function SessionManagement() {
                 <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Start Time</TableCell>
                 <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>End Time</TableCell>
                 <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Status</TableCell>
+                <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Training Consent</TableCell>
                 <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={7} align="center" sx={{ padding: 4, color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>
+                  <TableCell colSpan={8} align="center" sx={{ padding: 4, color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>
                     Loading sessions...
                   </TableCell>
                 </TableRow>
               ) : sessions.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} align="center" sx={{ padding: 4, color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                  <TableCell colSpan={8} align="center" sx={{ padding: 4, color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                     No sessions found.
                   </TableCell>
                 </TableRow>
@@ -579,7 +635,38 @@ export default function SessionManagement() {
                       />
                     </TableCell>
                     <TableCell align="center" sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                      <Chip 
+                        label={s.user?.data_usage_consent ? 'Consented' : 'Not Consented'} 
+                        size="small"
+                        sx={{
+                          backgroundColor: s.user?.data_usage_consent ? 'rgba(76, 175, 80, 0.8)' : 'rgba(158, 158, 158, 0.8)',
+                          color: '#ffffff',
+                          fontFamily: 'Verdana, sans-serif',
+                          fontWeight: 600,
+                          backdropFilter: 'blur(8px)',
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell align="center" sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <Chip 
+                          label="Details" 
+                          onClick={() => navigate(`/sessions/${s.id}`)} 
+                          size="small"
+                          sx={{
+                            backgroundColor: 'rgba(33, 150, 243, 0.8)',
+                            color: '#ffffff',
+                            fontFamily: 'Verdana, sans-serif',
+                            backdropFilter: 'blur(8px)',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            '&:hover': {
+                              backgroundColor: 'rgba(33, 150, 243, 1)',
+                              transform: 'translateY(-2px)',
+                              boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                            }
+                          }}
+                        />
                         <Chip 
                           label="Delete" 
                           onClick={() => handleDelete(s.id)} 

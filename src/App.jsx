@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import SystemStatistics from './pages/SystemStatistics';
 import UserManagement from './pages/UserManagement';
 import SessionManagement from './pages/SessionManagement';
+import SessionDetails from './pages/SessionDetails';
 import Login from './pages/Login';
 import AuthCallback from './pages/AuthCallback';
 import AdminInterface from './pages/AdminInterface';
@@ -39,6 +40,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <SessionManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/sessions/:sessionId"
+              element={
+                <ProtectedRoute>
+                  <SessionDetails />
                 </ProtectedRoute>
               }
             />
