@@ -109,6 +109,7 @@ export default function UserManagement() {
   
   // Dialog states
   const [disableDialog, setDisableDialog] = useState({ open: false, user: null, reason: '' });
+  const [enableDialog, setEnableDialog] = useState({ open: false, user: null });
   const [deleteDialog, setDeleteDialog] = useState({ open: false, user: null });
   const [adminDialog, setAdminDialog] = useState({ open: false, user: null, isAdmin: false });
 
@@ -158,10 +159,11 @@ export default function UserManagement() {
   };
 
   // Handle enable user
-  const handleEnableUser = async (user) => {
+  const handleEnableUser = async () => {
     try {
-      await userService.enableUser(user.id);
-      setSuccess(`User ${user.email} has been enabled`);
+      await userService.enableUser(enableDialog.user.id);
+      setSuccess(`User ${enableDialog.user.email} has been enabled`);
+      setEnableDialog({ open: false, user: null });
       fetchUsers();
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to enable user');
@@ -410,6 +412,40 @@ export default function UserManagement() {
               Users
             </button>
 
+            <Link to="/user-analytics">
+              <button
+                style={{
+                  padding: '10px 20px',
+                  borderRadius: '25px',
+                  border: '2px solid rgba(255, 255, 255, 0.2)',
+                  background: 'rgba(0, 0, 0, 0.6)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                  cursor: 'pointer',
+                  color: '#ffffff',
+                  fontFamily: 'Verdana, sans-serif',
+                  fontWeight: 500,
+                  fontSize: '14px',
+                  textShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.target.style.transform = 'translateY(-3px)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(0, 0, 0, 0.6)';
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'none';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                }}
+              >
+                User Analytics
+              </button>
+            </Link>
+
             <Link to="/sessions">
               <button
                 style={{
@@ -556,7 +592,7 @@ export default function UserManagement() {
         <Box sx={{ display: 'flex', gap: 2, marginBottom: 3, flexWrap: 'wrap' }}>
           <TextField
             label="Search"
-            placeholder="Search by name or email..."
+            placeholder="Search by ID, username, email, or name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             sx={{ 
@@ -621,6 +657,7 @@ export default function UserManagement() {
             >
               <MenuItem value="all">All</MenuItem>
               <MenuItem value="true">Admin</MenuItem>
+              <MenuItem value="false">User</MenuItem>
             </Select>
           </FormControl>
           <FormControl sx={{ 
@@ -684,6 +721,8 @@ export default function UserManagement() {
               <Table>
                 <TableHead>
                   <TableRow>
+                    <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>ID</TableCell>
+                    <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Username</TableCell>
                     <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Name</TableCell>
                     <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Email</TableCell>
                     <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Users</TableCell>
@@ -694,7 +733,7 @@ export default function UserManagement() {
                 <TableBody>
                   {users.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={5} align="center" sx={{ padding: 4, color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                      <TableCell colSpan={7} align="center" sx={{ padding: 4, color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                         No users found
                       </TableCell>
                     </TableRow>
@@ -711,8 +750,14 @@ export default function UserManagement() {
                               >
                                 {expandedUserId === user.id ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
                               </IconButton>
-                              {user.name || 'N/A'}
+                              {user.id}
                             </Box>
+                          </TableCell>
+                          <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                            {user.username || 'N/A'}
+                          </TableCell>
+                          <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                            {user.name || 'N/A'}
                           </TableCell>
                           <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>{user.email}</TableCell>
                           <TableCell align="center" sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
@@ -735,7 +780,7 @@ export default function UserManagement() {
                                 <IconButton
                                   size="small"
                                   color="success"
-                                  onClick={(e) => { e.stopPropagation(); handleEnableUser(user); }}
+                                  onClick={(e) => { e.stopPropagation(); setEnableDialog({ open: true, user }); }}
                                   title="Enable User"
                                 >
                                   <CheckCircle />
@@ -1020,6 +1065,51 @@ export default function UserManagement() {
             }}
           >
             Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Enable User Dialog */}
+      <Dialog 
+        open={enableDialog.open} 
+        onClose={() => setEnableDialog({ open: false, user: null })}
+        PaperProps={{
+          sx: {
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            color: '#ffffff'
+          }
+        }}
+      >
+        <DialogTitle sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>Enable User</DialogTitle>
+        <DialogContent>
+          <Typography sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>
+            Are you sure you want to enable user <strong>{enableDialog.user?.email}</strong>?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button 
+            onClick={() => setEnableDialog({ open: false, user: null })}
+            sx={{
+              color: '#ffffff',
+              fontFamily: 'Verdana, sans-serif',
+              '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' }
+            }}
+          >
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleEnableUser}
+            sx={{
+              backgroundColor: 'rgba(76, 175, 80, 0.8)',
+              color: '#ffffff',
+              fontFamily: 'Verdana, sans-serif',
+              '&:hover': { backgroundColor: 'rgba(76, 175, 80, 1)' }
+            }}
+          >
+            Enable
           </Button>
         </DialogActions>
       </Dialog>

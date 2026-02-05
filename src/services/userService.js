@@ -125,6 +125,24 @@ export const userService = {
       throw error;
     }
   },
+
+  /**
+   * Get all users analytics with pagination and time period filter
+   */
+  async getUsersAnalytics({ page = 1, pageSize = 20, timePeriod = 'all' } = {}) {
+    try {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        page_size: pageSize.toString(),
+        time_period: timePeriod
+      });
+      const response = await axiosInstance.get(`/admin/analytics/users?${params.toString()}`);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get users analytics:', error);
+      throw error;
+    }
+  },
 };
 
 export default userService;

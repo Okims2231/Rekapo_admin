@@ -444,6 +444,40 @@ export default function SystemStatistics() {
               </button>
             </Link>
 
+            <Link to="/user-analytics">
+              <button 
+                style={{ 
+                  padding: '10px 20px', 
+                  borderRadius: '25px', 
+                  border: '2px solid rgba(255, 255, 255, 0.2)', 
+                  background: 'rgba(255, 255, 255, 0.1)', 
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  cursor: 'pointer',
+                  color: '#ffffff',
+                  fontFamily: 'Verdana, sans-serif',
+                  fontWeight: 500,
+                  fontSize: '14px',
+                  textShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.25)';
+                  e.target.style.transform = 'translateY(-3px)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(255,255,255,0.3)';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'none';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                }}
+              >
+                User Analytics
+              </button>
+            </Link>
+
             <Link to="/sessions">
               <button 
                 style={{ 

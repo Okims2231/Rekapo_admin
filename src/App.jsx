@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import SystemStatistics from './pages/SystemStatistics';
 import UserManagement from './pages/UserManagement';
+import UserAnalytics from './pages/UserAnalytics';
 import SessionManagement from './pages/SessionManagement';
 import SessionDetails from './pages/SessionDetails';
 import Login from './pages/Login';
@@ -32,6 +33,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <UserManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/user-analytics"
+              element={
+                <ProtectedRoute>
+                  <UserAnalytics />
                 </ProtectedRoute>
               }
             />

@@ -381,6 +381,40 @@ export default function SessionManagement() {
               </button>
             </Link>
 
+            <Link to="/user-analytics">
+              <button
+                style={{
+                  padding: '10px 20px',
+                  borderRadius: '25px',
+                  border: '2px solid rgba(255, 255, 255, 0.2)',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  cursor: 'pointer',
+                  color: '#ffffff',
+                  fontFamily: 'Verdana, sans-serif',
+                  fontWeight: 500,
+                  fontSize: '14px',
+                  textShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.25)';
+                  e.target.style.transform = 'translateY(-3px)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(255,255,255,0.3)';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'none';
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                }}
+              >
+                User Analytics
+              </button>
+            </Link>
+
             <button
               style={{
                 padding: '10px 20px',
@@ -657,42 +691,74 @@ export default function SessionManagement() {
                     </TableCell>
                     <TableCell align="center" sx={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
-                        <Chip 
-                          label="Details" 
+                        <button 
                           onClick={() => navigate(`/sessions/${s.id}`)} 
-                          size="small"
-                          sx={{
-                            backgroundColor: 'rgba(33, 150, 243, 0.8)',
+                          style={{
+                            padding: '8px 16px',
+                            borderRadius: '8px',
+                            border: '2px solid rgba(33, 150, 243, 0.6)',
+                            background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.85), rgba(21, 101, 192, 0.85))',
+                            backdropFilter: 'blur(8px)',
+                            WebkitBackdropFilter: 'blur(8px)',
+                            cursor: 'pointer',
                             color: '#ffffff',
                             fontFamily: 'Verdana, sans-serif',
-                            backdropFilter: 'blur(8px)',
-                            cursor: 'pointer',
+                            fontWeight: 600,
+                            fontSize: '13px',
+                            textShadow: '0 1px 3px rgba(0,0,0,0.4)',
+                            boxShadow: '0 2px 8px rgba(33, 150, 243, 0.3)',
                             transition: 'all 0.3s ease',
-                            '&:hover': {
-                              backgroundColor: 'rgba(33, 150, 243, 1)',
-                              transform: 'translateY(-2px)',
-                              boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
-                            }
+                            minWidth: '80px'
                           }}
-                        />
-                        <Chip 
-                          label="Delete" 
+                          onMouseEnter={(e) => {
+                            e.target.style.background = 'linear-gradient(135deg, rgba(33, 150, 243, 1), rgba(21, 101, 192, 1))';
+                            e.target.style.transform = 'translateY(-2px)';
+                            e.target.style.boxShadow = '0 4px 16px rgba(33, 150, 243, 0.5)';
+                            e.target.style.borderColor = 'rgba(33, 150, 243, 0.9)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.background = 'linear-gradient(135deg, rgba(33, 150, 243, 0.85), rgba(21, 101, 192, 0.85))';
+                            e.target.style.transform = 'translateY(0)';
+                            e.target.style.boxShadow = '0 2px 8px rgba(33, 150, 243, 0.3)';
+                            e.target.style.borderColor = 'rgba(33, 150, 243, 0.6)';
+                          }}
+                        >
+                          Details
+                        </button>
+                        <button 
                           onClick={() => handleDelete(s.id)} 
-                          size="small"
-                          sx={{
-                            backgroundColor: 'rgba(244, 67, 54, 0.8)',
+                          style={{
+                            padding: '8px 16px',
+                            borderRadius: '8px',
+                            border: '2px solid rgba(244, 67, 54, 0.6)',
+                            background: 'linear-gradient(135deg, rgba(244, 67, 54, 0.85), rgba(211, 47, 47, 0.85))',
+                            backdropFilter: 'blur(8px)',
+                            WebkitBackdropFilter: 'blur(8px)',
+                            cursor: 'pointer',
                             color: '#ffffff',
                             fontFamily: 'Verdana, sans-serif',
-                            backdropFilter: 'blur(8px)',
-                            cursor: 'pointer',
+                            fontWeight: 600,
+                            fontSize: '13px',
+                            textShadow: '0 1px 3px rgba(0,0,0,0.4)',
+                            boxShadow: '0 2px 8px rgba(244, 67, 54, 0.3)',
                             transition: 'all 0.3s ease',
-                            '&:hover': {
-                              backgroundColor: 'rgba(244, 67, 54, 1)',
-                              transform: 'translateY(-2px)',
-                              boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
-                            }
+                            minWidth: '80px'
                           }}
-                        />
+                          onMouseEnter={(e) => {
+                            e.target.style.background = 'linear-gradient(135deg, rgba(244, 67, 54, 1), rgba(211, 47, 47, 1))';
+                            e.target.style.transform = 'translateY(-2px)';
+                            e.target.style.boxShadow = '0 4px 16px rgba(244, 67, 54, 0.5)';
+                            e.target.style.borderColor = 'rgba(244, 67, 54, 0.9)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.background = 'linear-gradient(135deg, rgba(244, 67, 54, 0.85), rgba(211, 47, 47, 0.85))';
+                            e.target.style.transform = 'translateY(0)';
+                            e.target.style.boxShadow = '0 2px 8px rgba(244, 67, 54, 0.3)';
+                            e.target.style.borderColor = 'rgba(244, 67, 54, 0.6)';
+                          }}
+                        >
+                          Delete
+                        </button>
                       </Box>
                     </TableCell>
                   </TableRow>
