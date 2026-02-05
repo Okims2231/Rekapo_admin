@@ -558,6 +558,10 @@ export default function UserManagement() {
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
         backdropFilter: 'blur(8px)',
         WebkitBackdropFilter: 'blur(8px)',
+        maxHeight: 'calc(100vh - 200px)',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
         boxShadow: '0 6px 18px rgba(0,0,0,0.5)',
         border: '1px solid rgba(255, 255, 255, 0.2)',
         borderRadius: '20px'
@@ -717,7 +721,23 @@ export default function UserManagement() {
           </Box>
         ) : (
           <>
-            <TableContainer>
+            <TableContainer sx={{
+              flex: 1,
+              overflow: 'auto',
+              '&::-webkit-scrollbar': {
+                width: '8px'
+              },
+              '&::-webkit-scrollbar-track': {
+                backgroundColor: 'rgba(255, 255, 255, 0.05)'
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                borderRadius: '4px',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.3)'
+                }
+              }
+            }}>
               <Table>
                 <TableHead>
                   <TableRow>

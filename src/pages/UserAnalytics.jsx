@@ -521,7 +521,11 @@ export default function UserAnalytics() {
           borderRadius: '20px',
           border: '1px solid rgba(255, 255, 255, 0.2)',
           position: 'relative',
-          zIndex: 1
+          zIndex: 1,
+          maxHeight: 'calc(100vh - 200px)',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden'
         }}>
           <Box sx={{ marginBottom: 3, display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
             <TextField
@@ -672,7 +676,23 @@ export default function UserAnalytics() {
             </Box>
           ) : (
             <>
-              <TableContainer>
+              <TableContainer sx={{
+                flex: 1,
+                overflow: 'auto',
+                '&::-webkit-scrollbar': {
+                  width: '8px'
+                },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)'
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  borderRadius: '4px',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.3)'
+                  }
+                }
+              }}>
                 <Table>
                   <TableHead>
                     <TableRow>
