@@ -34,6 +34,7 @@ export default function SessionManagement() {
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [trainingConsentFilter, setTrainingConsentFilter] = useState('');
+  const [deletedFilter, setDeletedFilter] = useState('');
   const [page, setPage] = useState(1);
   const [totalSessions, setTotalSessions] = useState(0);
   const [selectedSession, setSelectedSession] = useState(null);
@@ -87,7 +88,7 @@ export default function SessionManagement() {
   // Fetch sessions
   useEffect(() => {
     fetchSessions();
-  }, [page, query, statusFilter, trainingConsentFilter]);
+  }, [page, query, statusFilter, trainingConsentFilter, deletedFilter]);
 
   const fetchSessions = async () => {
     try {
@@ -98,7 +99,8 @@ export default function SessionManagement() {
         pageSize,
         query || null,
         statusFilter || null,
-        trainingConsentFilter || null
+        trainingConsentFilter || null,
+        deletedFilter || null
       );
       setSessions(data.sessions || []);
       setTotalSessions(data.total || 0);
@@ -122,6 +124,11 @@ export default function SessionManagement() {
 
   const handleTrainingConsentChange = (e) => {
     setTrainingConsentFilter(e.target.value);
+    setPage(1);
+  };
+
+  const handleDeletedFilterChange = (e) => {
+    setDeletedFilter(e.target.value);
     setPage(1);
   };
 
@@ -549,33 +556,34 @@ export default function SessionManagement() {
                 '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.7)' },
                 '& .MuiSvgIcon-root': { color: '#ffffff' }
               }}
-              MenuProps={{
-                PaperProps: {
-                  sx: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    backdropFilter: 'blur(12px)',
-                    WebkitBackdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    '& .MuiMenuItem-root': {
-                      color: '#ffffff',
-                      fontFamily: 'Verdana, sans-serif',
-                      '&:hover': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                      },
-                      '&.Mui-selected': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                        '&:hover': {
-                          backgroundColor: 'rgba(255, 255, 255, 0.25)'
-                        }
-                      }
-                    }
-                  }
-                }
-              }}
             >
               <MenuItem value="">All</MenuItem>
               <MenuItem value="true">Consented</MenuItem>
               <MenuItem value="false">Not Consented</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl sx={{ minWidth: '150px' }}>
+            <InputLabel sx={{ color: '#ffffff' }}>Deleted Status</InputLabel>
+            <Select
+              value={deletedFilter}
+              onChange={handleDeletedFilterChange}
+              label="Deleted Status"
+              sx={{
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                color: '#ffffff',
+                fontFamily: 'Verdana, sans-serif',
+                '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+                '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.7)' },
+                '& .MuiSvgIcon-root': { color: '#ffffff' }
+              }}
+            >
+              <MenuItem value="">All</MenuItem>
+              <MenuItem value="true">Deleted</MenuItem>
+              <MenuItem value="false">Not Deleted</MenuItem>
             </Select>
           </FormControl>
         </Box>

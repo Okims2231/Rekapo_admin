@@ -32,12 +32,13 @@ export const userService = {
   /**
    * Get paginated list of users with optional filters
    */
-  async getUsers({ page = 1, pageSize = 20, search = '', isAdmin = null, isDisabled = null } = {}) {
+  async getUsers({ page = 1, pageSize = 20, search = '', isAdmin = null, isDisabled = null, isActive = null } = {}) {
     try {
       const params = new URLSearchParams({ page: page.toString(), page_size: pageSize.toString() });
       if (search) params.append('search', search);
       if (isAdmin !== null) params.append('is_admin', isAdmin.toString());
       if (isDisabled !== null) params.append('is_disabled', isDisabled.toString());
+      if (isActive !== null) params.append('is_active', isActive.toString());
 
       const response = await axiosInstance.get(`/admin/users?${params.toString()}`);
       return response.data;

@@ -32,7 +32,7 @@ export const sessionService = {
   /**
    * Get paginated list of sessions
    */
-  async getSessions(page = 1, pageSize = 20, search = null, status = null, trainingConsent = null) {
+  async getSessions(page = 1, pageSize = 20, search = null, status = null, trainingConsent = null, isDeleted = null) {
     try {
       const params = new URLSearchParams({
         page,
@@ -49,6 +49,7 @@ export const sessionService = {
       }
       if (status) params.append('status', status);
       if (trainingConsent !== null && trainingConsent !== '') params.append('training_consent', trainingConsent);
+      if (isDeleted !== null && isDeleted !== '') params.append('is_deleted', isDeleted);
 
       const response = await axiosInstance.get(`/admin/sessions?${params}`);
       return response.data;
