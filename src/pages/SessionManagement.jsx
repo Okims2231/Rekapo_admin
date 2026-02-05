@@ -40,7 +40,6 @@ export default function SessionManagement() {
   const [selectedSession, setSelectedSession] = useState(null);
   const [confirmMsg, setConfirmMsg] = useState('');
   const audioRef = useRef(null);
-  const [showClickPrompt] = useState(true);
   const [showLevel94Popup, setShowLevel94Popup] = useState(false);
   const [showAnimatedEntitiesPopup, setShowAnimatedEntitiesPopup] = useState(false);
 
@@ -514,7 +513,11 @@ export default function SessionManagement() {
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
-        boxShadow: '0 6px 18px rgba(15,23,42,0.06)'
+        boxShadow: '0 6px 18px rgba(15,23,42,0.06)',
+        maxHeight: 'calc(100vh - 200px)',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden'
       }}>
         <Typography variant="h4" sx={{ marginBottom: 3, color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 2px 6px rgba(0,0,0,0.6)' }}>
           Session Management
@@ -628,7 +631,23 @@ export default function SessionManagement() {
           </Typography>
         )}
 
-        <TableContainer>
+        <TableContainer sx={{ 
+          flex: 1, 
+          overflow: 'auto',
+          '&::-webkit-scrollbar': {
+            width: '8px'
+          },
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: 'rgba(255, 255, 255, 0.05)'
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            borderRadius: '4px'
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.3)'
+          }
+        }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -696,31 +715,31 @@ export default function SessionManagement() {
                           style={{
                             padding: '8px 16px',
                             borderRadius: '8px',
-                            border: '2px solid rgba(33, 150, 243, 0.6)',
-                            background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.85), rgba(21, 101, 192, 0.85))',
+                            border: '2px solid rgba(100, 200, 255, 0.8)',
+                            background: 'rgba(33, 150, 243, 0.7)',
                             backdropFilter: 'blur(8px)',
                             WebkitBackdropFilter: 'blur(8px)',
                             cursor: 'pointer',
                             color: '#ffffff',
                             fontFamily: 'Verdana, sans-serif',
-                            fontWeight: 600,
+                            fontWeight: 700,
                             fontSize: '13px',
-                            textShadow: '0 1px 3px rgba(0,0,0,0.4)',
-                            boxShadow: '0 2px 8px rgba(33, 150, 243, 0.3)',
+                            textShadow: '0 2px 4px rgba(0,0,0,0.6)',
+                            boxShadow: '0 0 15px rgba(33, 150, 243, 0.6), inset 0 1px 2px rgba(255,255,255,0.2)',
                             transition: 'all 0.3s ease',
                             minWidth: '80px'
                           }}
                           onMouseEnter={(e) => {
-                            e.target.style.background = 'linear-gradient(135deg, rgba(33, 150, 243, 1), rgba(21, 101, 192, 1))';
-                            e.target.style.transform = 'translateY(-2px)';
-                            e.target.style.boxShadow = '0 4px 16px rgba(33, 150, 243, 0.5)';
-                            e.target.style.borderColor = 'rgba(33, 150, 243, 0.9)';
+                            e.target.style.background = 'rgba(33, 150, 243, 0.9)';
+                            e.target.style.transform = 'translateY(-3px)';
+                            e.target.style.boxShadow = '0 0 25px rgba(33, 150, 243, 0.9), inset 0 1px 2px rgba(255,255,255,0.3)';
+                            e.target.style.borderColor = 'rgba(100, 200, 255, 1)';
                           }}
                           onMouseLeave={(e) => {
-                            e.target.style.background = 'linear-gradient(135deg, rgba(33, 150, 243, 0.85), rgba(21, 101, 192, 0.85))';
+                            e.target.style.background = 'rgba(33, 150, 243, 0.7)';
                             e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = '0 2px 8px rgba(33, 150, 243, 0.3)';
-                            e.target.style.borderColor = 'rgba(33, 150, 243, 0.6)';
+                            e.target.style.boxShadow = '0 0 15px rgba(33, 150, 243, 0.6), inset 0 1px 2px rgba(255,255,255,0.2)';
+                            e.target.style.borderColor = 'rgba(100, 200, 255, 0.8)';
                           }}
                         >
                           Details
@@ -730,31 +749,31 @@ export default function SessionManagement() {
                           style={{
                             padding: '8px 16px',
                             borderRadius: '8px',
-                            border: '2px solid rgba(244, 67, 54, 0.6)',
-                            background: 'linear-gradient(135deg, rgba(244, 67, 54, 0.85), rgba(211, 47, 47, 0.85))',
+                            border: '2px solid rgba(255, 120, 100, 0.8)',
+                            background: 'rgba(244, 67, 54, 0.7)',
                             backdropFilter: 'blur(8px)',
                             WebkitBackdropFilter: 'blur(8px)',
                             cursor: 'pointer',
                             color: '#ffffff',
                             fontFamily: 'Verdana, sans-serif',
-                            fontWeight: 600,
+                            fontWeight: 700,
                             fontSize: '13px',
-                            textShadow: '0 1px 3px rgba(0,0,0,0.4)',
-                            boxShadow: '0 2px 8px rgba(244, 67, 54, 0.3)',
+                            textShadow: '0 2px 4px rgba(0,0,0,0.6)',
+                            boxShadow: '0 0 15px rgba(244, 67, 54, 0.6), inset 0 1px 2px rgba(255,255,255,0.2)',
                             transition: 'all 0.3s ease',
                             minWidth: '80px'
                           }}
                           onMouseEnter={(e) => {
-                            e.target.style.background = 'linear-gradient(135deg, rgba(244, 67, 54, 1), rgba(211, 47, 47, 1))';
-                            e.target.style.transform = 'translateY(-2px)';
-                            e.target.style.boxShadow = '0 4px 16px rgba(244, 67, 54, 0.5)';
-                            e.target.style.borderColor = 'rgba(244, 67, 54, 0.9)';
+                            e.target.style.background = 'rgba(244, 67, 54, 0.9)';
+                            e.target.style.transform = 'translateY(-3px)';
+                            e.target.style.boxShadow = '0 0 25px rgba(244, 67, 54, 0.9), inset 0 1px 2px rgba(255,255,255,0.3)';
+                            e.target.style.borderColor = 'rgba(255, 120, 100, 1)';
                           }}
                           onMouseLeave={(e) => {
-                            e.target.style.background = 'linear-gradient(135deg, rgba(244, 67, 54, 0.85), rgba(211, 47, 47, 0.85))';
+                            e.target.style.background = 'rgba(244, 67, 54, 0.7)';
                             e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = '0 2px 8px rgba(244, 67, 54, 0.3)';
-                            e.target.style.borderColor = 'rgba(244, 67, 54, 0.6)';
+                            e.target.style.boxShadow = '0 0 15px rgba(244, 67, 54, 0.6), inset 0 1px 2px rgba(255,255,255,0.2)';
+                            e.target.style.borderColor = 'rgba(255, 120, 100, 0.8)';
                           }}
                         >
                           Delete
@@ -843,49 +862,6 @@ export default function SessionManagement() {
         )}
       </Card>
 
-      {/* Click Prompt at bottom */}
-      {showClickPrompt && (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            padding: '30px 0',
-            position: 'relative',
-            zIndex: 1
-          }}
-        >
-          <Box
-            sx={{
-              padding: '10px 20px',
-              backgroundColor: 'rgba(0, 0, 0, 0.6)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-              borderRadius: '20px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              animation: 'fadeInPulse 2s ease-in-out infinite',
-              '@keyframes fadeInPulse': {
-                '0%, 100%': { opacity: 0.6 },
-                '50%': { opacity: 0.9 },
-              },
-            }}
-          >
-            <Typography
-              sx={{
-                color: '#ffffff',
-                fontFamily: 'Verdana, sans-serif',
-                fontSize: '13px',
-                fontWeight: 400,
-                textShadow: '0 1px 3px rgba(0,0,0,0.8)',
-                letterSpacing: '0.3px',
-              }}
-            >
-              click anywhere to feel the liminality
-            </Typography>
-          </Box>
-        </Box>
-      )}
-      </Box>
-
       {/* Level 94 Popup */}
       <Level94
         isOpen={showLevel94Popup}
@@ -897,6 +873,7 @@ export default function SessionManagement() {
         isOpen={showAnimatedEntitiesPopup}
         onClose={() => setShowAnimatedEntitiesPopup(false)}
       />
+      </Box>
     </>
   );
 }

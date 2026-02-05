@@ -15,7 +15,6 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const audioRef = useRef(null);
-  const [showClickPrompt] = useState(true);
 
   // Auto-play background music
   useEffect(() => {
@@ -120,43 +119,6 @@ export default function Login() {
         <source src={backgroundAudio} type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
-
-      {/* Click Prompt */}
-      {showClickPrompt && (
-        <Box
-          sx={{
-            position: 'fixed',
-            top: 30,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 9999,
-            padding: '10px 20px',
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            borderRadius: '20px',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            animation: 'fadeInPulse 2s ease-in-out infinite',
-            '@keyframes fadeInPulse': {
-              '0%, 100%': { opacity: 0.6 },
-              '50%': { opacity: 0.9 },
-            },
-          }}
-        >
-          <Typography
-            sx={{
-              color: '#ffffff',
-              fontFamily: 'Verdana, sans-serif',
-              fontSize: '13px',
-              fontWeight: 400,
-              textShadow: '0 1px 3px rgba(0,0,0,0.8)',
-              letterSpacing: '0.3px',
-            }}
-          >
-            click anywhere to feel the liminality
-          </Typography>
-        </Box>
-      )}
 
       <Card sx={{ 
         padding: 4, 

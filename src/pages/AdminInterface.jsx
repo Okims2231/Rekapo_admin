@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAdmin } from '../hooks/useAdmin';
 import useAuth from '../hooks/useAuth';
 import { statisticsService } from '../services/statisticsService';
 import backgroundImage from '../assets/images/lvl fun!.jpg';
@@ -12,9 +11,7 @@ import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Cart
 export default function AdminInterface() {
   const { logout } = useAuth();
   const audioRef = useRef(null);
-  const [showClickPrompt, setShowClickPrompt] = useState(true);
   const [statistics, setStatistics] = useState(null);
-  const [loadingStats, setLoadingStats] = useState(true);
 
   // Auto-play background music
   useEffect(() => {
@@ -47,15 +44,12 @@ export default function AdminInterface() {
   useEffect(() => {
     const fetchLatestStatistics = async () => {
       try {
-        setLoadingStats(true);
         const data = await statisticsService.getStatistics(1, 1);
         if (data.statistics && data.statistics.length > 0) {
           setStatistics(data.statistics[0]);
         }
       } catch (err) {
         console.error('Error fetching statistics:', err);
-      } finally {
-        setLoadingStats(false);
       }
     };
 
@@ -153,47 +147,6 @@ export default function AdminInterface() {
 
       {/* Party Entities Component */}
       <PartyEntities />
-
-      {/* Click Prompt */}
-      {showClickPrompt && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: 30,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 9999,
-            padding: '10px 20px',
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            borderRadius: '20px',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            animation: 'fadeInPulse 2s ease-in-out infinite',
-          }}
-        >
-          <style>
-            {`
-              @keyframes fadeInPulse {
-                0%, 100% { opacity: 0.6; }
-                50% { opacity: 0.9; }
-              }
-            `}
-          </style>
-          <div
-            style={{
-              color: '#ffffff',
-              fontFamily: 'Verdana, sans-serif',
-              fontSize: '13px',
-              fontWeight: 400,
-              textShadow: '0 1px 3px rgba(0,0,0,0.8)',
-              letterSpacing: '0.3px',
-            }}
-          >
-            click anywhere to feel the liminality
-          </div>
-        </div>
-      )}
 
       <div style={{ maxWidth: 1100, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div style={headerStyles}>

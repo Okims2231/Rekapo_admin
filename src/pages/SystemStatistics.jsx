@@ -16,7 +16,6 @@ export default function SystemStatistics() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
-  const [showClickPrompt, setShowClickPrompt] = useState(true);
   const [popup, setPopup] = useState({ isOpen: false, message: '', type: 'success' });
   const [showLorePopup, setShowLorePopup] = useState(false);
   const [showFlytrapPopup, setShowFlytrapPopup] = useState(false);
@@ -59,22 +58,24 @@ export default function SystemStatistics() {
           console.log('Audio play failed:', err);
         });
       }
-      setShowClickPrompt(false);
       document.removeEventListener('click', handleFirstClick);
     };
 
     document.addEventListener('click', handleFirstClick);
     
+    // Store ref in variable to avoid cleanup issues
+    const audioElement = audioRef.current;
+    
     // Add volumechange listener to prevent volume from changing
-    if (audioRef.current) {
-      audioRef.current.addEventListener('volumechange', maintainVolume);
+    if (audioElement) {
+      audioElement.addEventListener('volumechange', maintainVolume);
     }
 
     return () => {
       clearTimeout(timer);
       document.removeEventListener('click', handleFirstClick);
-      if (audioRef.current) {
-        audioRef.current.removeEventListener('volumechange', maintainVolume);
+      if (audioElement) {
+        audioElement.removeEventListener('volumechange', maintainVolume);
       }
     };
   }, []);
@@ -328,47 +329,6 @@ export default function SystemStatistics() {
       >
         Flytrap Humanoid
       </button>
-
-      {/* Click Prompt */}
-      {showClickPrompt && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: 30,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 9999,
-            padding: '10px 20px',
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            borderRadius: '20px',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            animation: 'fadeInPulse 2s ease-in-out infinite',
-          }}
-        >
-          <style>
-            {`
-              @keyframes fadeInPulse {
-                0%, 100% { opacity: 0.6; }
-                50% { opacity: 0.9; }
-              }
-            `}
-          </style>
-          <div
-            style={{
-              color: '#ffffff',
-              fontFamily: 'Verdana, sans-serif',
-              fontSize: '13px',
-              fontWeight: 400,
-              textShadow: '0 1px 3px rgba(0,0,0,0.8)',
-              letterSpacing: '0.3px',
-            }}
-          >
-            click anywhere to feel the liminality
-          </div>
-        </div>
-      )}
 
       <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         {/* Navigation Header */}
