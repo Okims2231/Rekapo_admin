@@ -7,6 +7,7 @@ import backgroundImage from '../assets/images/lvl fun!.jpg';
 import backgroundAudio from '../assets/audio/Escape The Backrooms OST - Fun (You Day!) (Filtered Version).mp3';
 import LevelFun from '../components/AdminFeatures/LevelFun';
 import PartyEntities from '../components/AdminFeatures/PartyEntities';
+import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function AdminInterface() {
   const { logout } = useAuth();
@@ -508,7 +509,146 @@ export default function AdminInterface() {
             </div>
           </div>
 
-          <div style={{ marginTop: 18 }}>
+          <div style={{ marginTop: 30 }}>
+            {/* Charts Section */}
+            <h3 style={{ 
+              margin: '20px 0 15px 0', 
+              color: '#ffffffff', 
+              textShadow: '0 2px 6px rgba(0,0,0,0.6)', 
+              fontFamily: 'Verdana, sans-serif',
+              fontSize: '18px'
+            }}>Analytics Overview</h3>
+            
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gap: 20,
+              marginTop: 15
+            }}>
+              {/* Bar Chart - Users vs Sessions */}
+              <div style={{
+                ...cardStyles,
+                padding: '20px'
+              }}>
+                <h4 style={{ 
+                  margin: '0 0 15px 0', 
+                  color: '#ffffffff', 
+                  fontFamily: 'Verdana, sans-serif',
+                  fontSize: '16px'
+                }}>Users & Sessions Overview</h4>
+                <ResponsiveContainer width="100%" height={150}>
+                  <BarChart data={[
+                    {
+                      name: 'Current',
+                      'Total Users': statistics?.total_users || 0,
+                      'Active Users': statistics?.active_users || 0,
+                      'Total Sessions': statistics?.total_sessions || 0,
+                    }
+                  ]}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                    <XAxis dataKey="name" stroke="#cacacaff" />
+                    <YAxis stroke="#cacacaff" />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        border: '1px solid rgba(255,255,255,0.2)',
+                        borderRadius: '8px',
+                        color: '#ffffff'
+                      }}
+                    />
+                    <Legend />
+                    <Bar dataKey="Total Users" fill="#8b5cf6" />
+                    <Bar dataKey="Active Users" fill="#06b6d4" />
+                    <Bar dataKey="Total Sessions" fill="#f97316" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Pie Chart - Active vs Inactive Users */}
+              <div style={{
+                ...cardStyles,
+                padding: '20px'
+              }}>
+                <h4 style={{ 
+                  margin: '0 0 15px 0', 
+                  color: '#ffffffff', 
+                  fontFamily: 'Verdana, sans-serif',
+                  fontSize: '16px'
+                }}>User Distribution</h4>
+                <ResponsiveContainer width="100%" height={200}>
+                  <PieChart>
+                    <Pie
+                      data={[
+                        { name: 'Active Users', value: statistics?.active_users || 0 },
+                        { name: 'Inactive Users', value: (statistics?.total_users || 0) - (statistics?.active_users || 0) }
+                      ]}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, value }) => `${name}: ${value}`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      <Cell fill="#06b6d4" />
+                      <Cell fill="#6b7280" />
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        border: '1px solid rgba(255,255,255,0.2)',
+                        borderRadius: '8px',
+                        color: '#ffffff'
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Line Chart - Average Session Duration */}
+            <div style={{
+              ...cardStyles,
+              padding: '20px',
+              marginTop: 20
+            }}>
+              <h4 style={{ 
+                margin: '0 0 15px 0', 
+                color: '#ffffffff', 
+                fontFamily: 'Verdana, sans-serif',
+                fontSize: '16px'
+              }}>Session Duration Metrics</h4>
+              <ResponsiveContainer width="100%" height={150}>
+                <LineChart data={[
+                  {
+                    name: 'Avg Duration',
+                    'Duration (min)': statistics?.average_session_duration?.toFixed(2) || 0,
+                  }
+                ]}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                  <XAxis dataKey="name" stroke="#cacacaff" />
+                  <YAxis stroke="#cacacaff" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'rgba(0,0,0,0.8)',
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      borderRadius: '8px',
+                      color: '#ffffff'
+                    }}
+                    formatter={(value) => `${value} minutes`}
+                  />
+                  <Legend />
+                  <Line 
+                    type="monotone" 
+                    dataKey="Duration (min)" 
+                    stroke="#f97316"
+                    strokeWidth={2}
+                    dot={{ fill: '#f97316', r: 6 }}
+                    activeDot={{ r: 8 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       </div>
