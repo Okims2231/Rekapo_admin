@@ -30,7 +30,6 @@ import {
 import {
   Block,
   CheckCircle,
-  Delete,
   AdminPanelSettings,
   PersonOff,
   Refresh,
@@ -110,7 +109,6 @@ export default function UserManagement() {
   // Dialog states
   const [disableDialog, setDisableDialog] = useState({ open: false, user: null, reason: '' });
   const [enableDialog, setEnableDialog] = useState({ open: false, user: null });
-  const [deleteDialog, setDeleteDialog] = useState({ open: false, user: null });
   const [adminDialog, setAdminDialog] = useState({ open: false, user: null, isAdmin: false });
 
   // Fetch users
@@ -170,17 +168,7 @@ export default function UserManagement() {
     }
   };
 
-  // Handle delete user
-  const handleDeleteUser = async () => {
-    try {
-      await userService.deleteUser(deleteDialog.user.id);
-      setSuccess(`User ${deleteDialog.user.email} has been deleted`);
-      setDeleteDialog({ open: false, user: null });
-      fetchUsers();
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to delete user');
-    }
-  };
+
 
   // Handle admin status update
   const handleUpdateAdminStatus = async () => {
@@ -823,14 +811,7 @@ export default function UserManagement() {
                               >
                                 <AdminPanelSettings />
                               </IconButton>
-                              <IconButton
-                                size="small"
-                                color="error"
-                                onClick={(e) => { e.stopPropagation(); setDeleteDialog({ open: true, user }); }}
-                                title="Delete User"
-                              >
-                                <Delete />
-                              </IconButton>
+
                             </Box>
                           </TableCell>
                         </TableRow>
@@ -1031,63 +1012,7 @@ export default function UserManagement() {
         </DialogActions>
       </Dialog>
 
-      {/* Delete User Dialog */}
-      <Dialog 
-        open={deleteDialog.open} 
-        onClose={() => setDeleteDialog({ open: false, user: null })}
-        PaperProps={{
-          sx: {
-            backgroundColor: 'rgba(0, 0, 0, 0.85)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            color: '#ffffff'
-          }
-        }}
-      >
-        <DialogTitle sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>Delete User</DialogTitle>
-        <DialogContent>
-          <Alert 
-            severity="warning" 
-            sx={{ 
-              marginBottom: 2,
-              backgroundColor: 'rgba(255, 152, 0, 0.2)',
-              color: '#ffffff',
-              fontFamily: 'Verdana, sans-serif',
-              border: '1px solid rgba(255, 152, 0, 0.5)',
-              '& .MuiAlert-icon': { color: '#ff9800' }
-            }}
-          >
-            This action cannot be undone!
-          </Alert>
-          <Typography sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>
-            Are you sure you want to permanently delete <strong>{deleteDialog.user?.email}</strong>?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button 
-            onClick={() => setDeleteDialog({ open: false, user: null })}
-            sx={{
-              color: '#ffffff',
-              fontFamily: 'Verdana, sans-serif',
-              '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' }
-            }}
-          >
-            Cancel
-          </Button>
-          <Button 
-            onClick={handleDeleteUser}
-            sx={{
-              backgroundColor: 'rgba(244, 67, 54, 0.8)',
-              color: '#ffffff',
-              fontFamily: 'Verdana, sans-serif',
-              '&:hover': { backgroundColor: 'rgba(244, 67, 54, 1)' }
-            }}
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+
 
       {/* Enable User Dialog */}
       <Dialog 

@@ -294,7 +294,7 @@ export default function SessionManagement() {
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
           padding: '20px',
-          borderRadius: '10px'
+          borderRadius: '30px'
         }}>
           <div>
             <h1 style={{
@@ -517,7 +517,8 @@ export default function SessionManagement() {
         maxHeight: 'calc(100vh - 200px)',
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        borderRadius: '30px'
       }}>
         <Typography variant="h4" sx={{ marginBottom: 3, color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 2px 6px rgba(0,0,0,0.6)' }}>
           Session Management

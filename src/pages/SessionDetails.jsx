@@ -177,7 +177,8 @@ export default function SessionDetails() {
           marginBottom: 3,
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
           backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)'
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          borderRadius: '30px'
         }}>
           <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2 }}>
             Session Overview
@@ -208,7 +209,8 @@ export default function SessionDetails() {
           marginBottom: 3,
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
           backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)'
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          borderRadius: '30px'
         }}>
           <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2 }}>
             User Information
@@ -248,7 +250,8 @@ export default function SessionDetails() {
           marginBottom: 3,
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
           backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)'
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          borderRadius: '30px'
         }}>
           <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2 }}>
             Statistics
@@ -288,7 +291,8 @@ export default function SessionDetails() {
             marginBottom: 3,
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            borderRadius: '30px'
           }}>
             <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2 }}>
               Recording Segments ({sessionData.recording_segments.length})
@@ -407,7 +411,8 @@ export default function SessionDetails() {
             marginBottom: 3,
             backgroundColor: 'rgba(76, 175, 80, 0.1)',
             backdropFilter: 'blur(10px)',
-            border: '2px solid rgba(76, 175, 80, 0.5)'
+            border: '2px solid rgba(76, 175, 80, 0.5)',
+            borderRadius: '30px'
           }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: 2 }}>
               <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>
@@ -438,7 +443,8 @@ export default function SessionDetails() {
             padding: 3,
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            borderRadius: '30px'
           }}>
             <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2 }}>
               Intermediate Summaries ({sessionData.summaries.filter(s => !s.is_final_summary).length})
