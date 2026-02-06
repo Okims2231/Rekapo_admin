@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Box,
@@ -31,10 +31,11 @@ import {
 import { Refresh, Block, CheckCircle } from '@mui/icons-material';
 import userService from '../services/userService';
 import { useAuth } from '../hooks/useAuth';
-import backgroundImage from '../assets/images/poolrooms1.jpg';
-import backgroundAudio from '../assets/audio/daisy bell.mp3';
+import backgroundImage from '../assets/images/level heaven.jpg';
+import backgroundAudio from '../assets/audio/level heaven.mp3';
 import Poolrooms from '../components/AdminFeatures/Poolrooms';
-import PoolRoomEntities from '../components/AdminFeatures/PoolRoomEntities';
+import BeastOfLevelHeaven from '../components/AdminFeatures/BeastOfLevelHeaven';
+import LevelHeaven from '../components/AdminFeatures/LevelHeaven';
 
 export default function UserAnalytics() {
   const { logout } = useAuth();
@@ -49,8 +50,8 @@ export default function UserAnalytics() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const audioRef = useRef(null);
-  const [showPoolroomsPopup, setShowPoolroomsPopup] = useState(false);
-  const [showPoolRoomEntitiesPopup, setShowPoolRoomEntitiesPopup] = useState(false);
+  const [showLevelHeavenPopup, setShowLevelHeavenPopup] = useState(false);
+  const [showBeastOfLevelHeavenPopup, setShowBeastOfLevelHeavenPopup] = useState(false);
   const [userAnalytics, setUserAnalytics] = useState({});
 
   // Dialog states
@@ -98,7 +99,7 @@ export default function UserAnalytics() {
   }, []);
 
   // Fetch users with analytics
-  const fetchUsersAnalytics = async () => {
+  const fetchUsersAnalytics = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -166,7 +167,7 @@ export default function UserAnalytics() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, pageSize, timePeriod, search, sortBy]);
 
   // Handle disable user
   const handleDisableUser = async () => {
@@ -194,7 +195,7 @@ export default function UserAnalytics() {
 
   useEffect(() => {
     fetchUsersAnalytics();
-  }, [page, pageSize, search, sortBy, timePeriod]);
+  }, [fetchUsersAnalytics]);
 
   const totalPages = Math.ceil(total / pageSize);
 
@@ -235,7 +236,7 @@ export default function UserAnalytics() {
         </audio>
 
         <button 
-          onClick={() => setShowPoolroomsPopup(true)}
+          onClick={() => setShowLevelHeavenPopup(true)}
           style={{ 
             position: 'fixed',
             top: '20px',
@@ -258,11 +259,11 @@ export default function UserAnalytics() {
           onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
           onMouseLeave={(e) => e.target.style.background = 'rgba(0, 0, 0, 0.6)'}
         >
-          Poolrooms
+          Level Heaven
         </button>
 
         <button 
-          onClick={() => setShowPoolRoomEntitiesPopup(true)}
+          onClick={() => setShowBeastOfLevelHeavenPopup(true)}
           style={{ 
             position: 'fixed',
             top: '20px',
@@ -285,7 +286,7 @@ export default function UserAnalytics() {
           onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
           onMouseLeave={(e) => e.target.style.background = 'rgba(0, 0, 0, 0.6)'}
         >
-          Pool Room Entities
+          Level Heaven Entities
         </button>
 
         <Box sx={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1, marginBottom: 3 }}>
@@ -969,12 +970,12 @@ export default function UserAnalytics() {
           </Alert>
         </Snackbar>
 
-        {showPoolroomsPopup && (
-          <Poolrooms onClose={() => setShowPoolroomsPopup(false)} />
+        {showLevelHeavenPopup && (
+          <LevelHeaven onClose={() => setShowLevelHeavenPopup(false)} />
         )}
 
-        {showPoolRoomEntitiesPopup && (
-          <PoolRoomEntities onClose={() => setShowPoolRoomEntitiesPopup(false)} />
+        {showBeastOfLevelHeavenPopup && (
+          <BeastOfLevelHeaven onClose={() => setShowBeastOfLevelHeavenPopup(false)} />
         )}
       </Box>
     </>
