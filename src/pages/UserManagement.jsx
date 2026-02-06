@@ -817,7 +817,7 @@ export default function UserManagement() {
                         </TableRow>
                         {expandedUserId === user.id && (
                           <TableRow>
-                            <TableCell colSpan={5} sx={{ padding: 0, borderBottom: '2px solid rgba(255,255,255,0.2)' }}>
+                            <TableCell colSpan={7} sx={{ padding: 0, borderBottom: '2px solid rgba(255,255,255,0.2)' }}>
                               <Box sx={{ 
                                 padding: 3, 
                                 backgroundColor: 'rgba(0, 0, 0, 0.4)',
@@ -835,8 +835,13 @@ export default function UserManagement() {
                                     </Typography>
                                     <Box sx={{ 
                                       display: 'grid', 
-                                      gridTemplateColumns: 'repeat(6, 1fr)', 
-                                      gap: 1.5 
+                                      gridTemplateColumns: {
+                                        xs: 'repeat(2, 1fr)',
+                                        sm: 'repeat(3, 1fr)',
+                                        md: 'repeat(4, 1fr)',
+                                        lg: 'repeat(4, 1fr)',
+                                      },
+                                      gap: 2 
                                     }}>
                                       <Box sx={{ padding: 1.5, backgroundColor: 'rgba(33, 150, 243, 0.2)', borderRadius: '8px', border: '1px solid rgba(33, 150, 243, 0.4)' }}>
                                         <Typography variant="caption" sx={{ color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '0.7rem' }}>Total Sessions</Typography>
