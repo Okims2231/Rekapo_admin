@@ -512,7 +512,7 @@ export default function UserAnalytics() {
         </Box>
 
         <Card sx={{ 
-          maxWidth: 1200, 
+          maxWidth: '95vw', 
           margin: '0 auto', 
           padding: 3,
           backgroundColor: 'rgba(0, 0, 0, 0.6)',
