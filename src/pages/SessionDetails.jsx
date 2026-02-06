@@ -20,6 +20,9 @@ import {
 import { ArrowBack, ExpandMore, Block } from '@mui/icons-material';
 import { sessionService } from '../services/sessionService';
 import { useAuth } from '../hooks/useAuth';
+import backgroundImage from '../assets/images/lvl youshouldnotbehere.jpg';
+import LevelYouShouldNotBeHere from '../components/AdminFeatures/LevelYouShouldNotBeHere';
+import Entities from '../components/AdminFeatures/Entities';
 
 export default function SessionDetails() {
   const { sessionId } = useParams();
@@ -29,6 +32,8 @@ export default function SessionDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showConsentDialog, setShowConsentDialog] = useState(false);
+  const [showYouShouldNotBeHerePopup, setShowYouShouldNotBeHerePopup] = useState(false);
+  const [showEntitiesPopup, setShowEntitiesPopup] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -78,12 +83,25 @@ export default function SessionDetails() {
       <Box sx={{ 
         minHeight: '100vh', 
         padding: 3,
-        backgroundColor: '#0f172a',
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        position: 'relative',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <CircularProgress sx={{ color: '#ffffff' }} />
+        <Box sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.4)',
+          zIndex: 0
+        }}></Box>
+        <CircularProgress sx={{ color: '#ffffff', position: 'relative', zIndex: 1 }} />
       </Box>
     );
   }
@@ -93,19 +111,54 @@ export default function SessionDetails() {
       <Box sx={{ 
         minHeight: '100vh', 
         padding: 3,
-        backgroundColor: '#0f172a'
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        position: 'relative'
       }}>
+        <Box sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.4)',
+          zIndex: 0
+        }}></Box>
         <Card sx={{ 
           maxWidth: 800, 
           margin: '0 auto', 
           padding: 3,
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(10px)'
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          borderRadius: '20px',
+          position: 'relative',
+          zIndex: 1
         }}>
-          <Alert severity="error" sx={{ marginBottom: 2 }}>{error}</Alert>
-          <Button variant="contained" onClick={() => navigate('/sessions')}>
+          <Alert severity="error" sx={{ marginBottom: 2, fontFamily: 'Verdana, sans-serif' }}>{error}</Alert>
+          <button
+            onClick={() => navigate('/sessions')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: '25px',
+              border: '2px solid rgba(255, 255, 255, 0.2)',
+              background: 'rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              cursor: 'pointer',
+              color: '#ffffff',
+              fontFamily: 'Verdana, sans-serif',
+              fontWeight: 500,
+              fontSize: '14px',
+              textShadow: '0 1px 3px rgba(0,0,0,0.3)',
+              transition: 'all 0.3s ease'
+            }}
+          >
             Back to Sessions
-          </Button>
+          </button>
         </Card>
       </Box>
     );
@@ -114,73 +167,185 @@ export default function SessionDetails() {
   if (!sessionData) return null;
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh', 
-      padding: 3,
-      backgroundColor: '#0f172a'
-    }}>
+    <>
+      <style>{`
+        /* Hide scrollbar completely - prevent layout shift */
+        ::-webkit-scrollbar {
+          display: none;
+        }
+        
+        html {
+          scrollbar-width: none; /* Firefox */
+        }
+        
+        body {
+          overflow-y: scroll; /* Always allocate space for scrollbar (doesn't show) */
+        }
+      `}</style>
+      <Box sx={{ 
+        minHeight: '100vh', 
+        padding: 3,
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        position: 'relative'
+      }}>
+      <Box sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        zIndex: 0
+      }}></Box>
+
+      {/* Entity Button */}
+      <button 
+        onClick={() => setShowEntitiesPopup(true)}
+        style={{ 
+          position: 'fixed',
+          top: '20px',
+          left: '20px',
+          zIndex: 10000,
+          padding: '12px 24px', 
+          borderRadius: '25px', 
+          border: '2px solid rgba(255, 255, 255, 0.4)', 
+          background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6))', 
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+          cursor: 'pointer',
+          color: '#ffffff',
+          fontFamily: 'Verdana, sans-serif',
+          fontWeight: 600,
+          fontSize: '14px',
+          textShadow: '0 2px 4px rgba(0,0,0,0.6)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'linear-gradient(135deg, rgba(30, 100, 200, 0.9), rgba(50, 150, 255, 0.8))';
+          e.target.style.transform = 'translateY(-3px)';
+          e.target.style.boxShadow = '0 6px 25px rgba(0, 0, 0, 0.4)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6))';
+          e.target.style.transform = 'translateY(0)';
+          e.target.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+        }}
+      >
+        ENTITY
+      </button>
+
+      {/* Level YouShouldNotBeHere Lore Button */}
+      <button 
+        onClick={() => setShowYouShouldNotBeHerePopup(true)}
+        style={{ 
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 10000,
+          padding: '12px 24px', 
+          borderRadius: '25px', 
+          border: '2px solid rgba(255, 255, 255, 0.4)', 
+          background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6))', 
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+          cursor: 'pointer',
+          color: '#ffffff',
+          fontFamily: 'Verdana, sans-serif',
+          fontWeight: 600,
+          fontSize: '14px',
+          textShadow: '0 2px 4px rgba(0,0,0,0.6)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'linear-gradient(135deg, rgba(30, 100, 200, 0.9), rgba(50, 150, 255, 0.8))';
+          e.target.style.transform = 'translateY(-3px)';
+          e.target.style.boxShadow = '0 6px 25px rgba(0, 0, 0, 0.4)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6))';
+          e.target.style.transform = 'translateY(0)';
+          e.target.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+        }}
+      >
+        LORE
+      </button>
+
       {/* Header */}
-      <Box sx={{ maxWidth: 1400, margin: '0 auto', marginBottom: 3 }}>
+      <Box sx={{ maxWidth: 1400, margin: '0 auto', marginBottom: 3, position: 'relative', zIndex: 1 }}>
         <Box sx={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           gap: 2,
           marginBottom: 2,
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(10px)',
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           padding: '20px',
           borderRadius: '20px',
-          border: '1px solid rgba(255, 255, 255, 0.2)'
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          textShadow: '0 2px 6px rgba(0,0,0,0.6)'
         }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Button
-              startIcon={<ArrowBack />}
+            <button
               onClick={() => navigate('/sessions')}
-              sx={{
+              style={{
+                padding: '10px 20px',
+                borderRadius: '25px',
+                border: '2px solid rgba(255, 255, 255, 0.2)',
+                background: 'rgba(0, 0, 0, 0.6)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                cursor: 'pointer',
                 color: '#ffffff',
                 fontFamily: 'Verdana, sans-serif',
-                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' }
+                fontWeight: 500,
+                fontSize: '14px',
+                textShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                transition: 'all 0.3s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
               }}
             >
+              <ArrowBack sx={{ fontSize: '20px' }} />
               Back
-            </Button>
-            <Typography variant="h4" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>
+            </button>
+            <Typography variant="h4" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 2px 6px rgba(0,0,0,0.6)' }}>
               Session Details #{sessionData.id}
             </Typography>
-          </Box>
-
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Link to="/statistics">
-              <Button sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>Statistics</Button>
-            </Link>
-            <Link to="/users">
-              <Button sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>Users</Button>
-            </Link>
-            <Link to="/sessions">
-              <Button sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>Sessions</Button>
-            </Link>
-            <Link to="/">
-              <Button sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>Dashboard</Button>
-            </Link>
-            <Button onClick={handleLogout} sx={{ color: '#ef4444', fontFamily: 'Verdana, sans-serif' }}>
-              Logout
-            </Button>
           </Box>
         </Box>
       </Box>
 
-      <Box sx={{ maxWidth: 1400, margin: '0 auto' }}>
+      <Box sx={{ maxWidth: 1400, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         {/* Session Overview */}
         <Card sx={{ 
           padding: 3, 
           marginBottom: 3,
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(10px)',
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
-          borderRadius: '30px'
+          borderRadius: '20px',
+          boxShadow: '0 6px 18px rgba(0,0,0,0.5)'
         }}>
-          <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2 }}>
+          <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2, textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
             Session Overview
           </Typography>
           <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 2 }}>
@@ -207,12 +372,14 @@ export default function SessionDetails() {
         <Card sx={{ 
           padding: 3, 
           marginBottom: 3,
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(10px)',
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
-          borderRadius: '30px'
+          borderRadius: '20px',
+          boxShadow: '0 6px 18px rgba(0,0,0,0.5)'
         }}>
-          <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2 }}>
+          <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2, textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
             User Information
           </Typography>
           <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 2 }}>
@@ -248,12 +415,14 @@ export default function SessionDetails() {
         <Card sx={{ 
           padding: 3, 
           marginBottom: 3,
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(10px)',
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
-          borderRadius: '30px'
+          borderRadius: '20px',
+          boxShadow: '0 6px 18px rgba(0,0,0,0.5)'
         }}>
-          <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2 }}>
+          <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2, textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
             Statistics
           </Typography>
           <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 2 }}>
@@ -289,18 +458,24 @@ export default function SessionDetails() {
           <Card sx={{ 
             padding: 3, 
             marginBottom: 3,
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(10px)',
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
             border: '1px solid rgba(255, 255, 255, 0.2)',
-            borderRadius: '30px'
+            borderRadius: '20px',
+            boxShadow: '0 6px 18px rgba(0,0,0,0.5)'
           }}>
-            <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2 }}>
+            <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2, textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
               Recording Segments ({sessionData.recording_segments.length})
             </Typography>
             {sessionData.recording_segments.map((segment, index) => (
               <Accordion key={segment.id} sx={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                backdropFilter: 'blur(4px)',
+                WebkitBackdropFilter: 'blur(4px)',
                 marginBottom: 1,
+                borderRadius: '10px',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
                 '&:before': { display: 'none' }
               }}>
                 <AccordionSummary expandIcon={<ExpandMore sx={{ color: '#ffffff' }} />}>
@@ -409,13 +584,15 @@ export default function SessionDetails() {
           <Card sx={{ 
             padding: 3,
             marginBottom: 3,
-            backgroundColor: 'rgba(76, 175, 80, 0.1)',
-            backdropFilter: 'blur(10px)',
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
             border: '2px solid rgba(76, 175, 80, 0.5)',
-            borderRadius: '30px'
+            borderRadius: '20px',
+            boxShadow: '0 6px 18px rgba(0,0,0,0.5)'
           }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: 2 }}>
-              <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>
+              <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
                 Final Summary
               </Typography>
               <Chip 
@@ -441,19 +618,24 @@ export default function SessionDetails() {
         {sessionData.summaries && sessionData.summaries.filter(s => !s.is_final_summary).length > 0 && (
           <Card sx={{ 
             padding: 3,
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(10px)',
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
             border: '1px solid rgba(255, 255, 255, 0.2)',
-            borderRadius: '30px'
+            borderRadius: '20px',
+            boxShadow: '0 6px 18px rgba(0,0,0,0.5)'
           }}>
-            <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2 }}>
+            <Typography variant="h5" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 2, textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
               Intermediate Summaries ({sessionData.summaries.filter(s => !s.is_final_summary).length})
             </Typography>
             {sessionData.summaries.filter(s => !s.is_final_summary).map((summary, index) => (
               <Box key={summary.id} sx={{ 
                 marginBottom: 2, 
                 padding: 2, 
-                backgroundColor: 'rgba(255, 255, 255, 0.05)', 
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                backdropFilter: 'blur(4px)',
+                WebkitBackdropFilter: 'blur(4px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
                 borderRadius: '10px'
               }}>
                 <Typography variant="h6" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', marginBottom: 1 }}>
@@ -487,7 +669,7 @@ export default function SessionDetails() {
         }}
         PaperProps={{
           sx: {
-            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
             border: '2px solid rgba(244, 67, 54, 0.5)',
@@ -544,6 +726,19 @@ export default function SessionDetails() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Level YouShouldNotBeHere Lore Popup */}
+      <LevelYouShouldNotBeHere
+        isOpen={showYouShouldNotBeHerePopup}
+        onClose={() => setShowYouShouldNotBeHerePopup(false)}
+      />
+
+      {/* Entities Popup */}
+      <Entities
+        isOpen={showEntitiesPopup}
+        onClose={() => setShowEntitiesPopup(false)}
+      />
     </Box>
+    </>
   );
 }
