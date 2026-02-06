@@ -13,5 +13,11 @@ export default defineConfig({
       clientPort: 443,
       protocol: 'wss'
     }
+  },
+  preview: {
+    port: 4173,
+    host: '0.0.0.0',
+    strictPort: true,
+    allowedHosts: ['rekapo-admin.loca.lt', '.devtunnels.ms']
   }
 })
