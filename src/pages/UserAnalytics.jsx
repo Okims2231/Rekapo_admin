@@ -259,7 +259,7 @@ export default function UserAnalytics() {
           onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
           onMouseLeave={(e) => e.target.style.background = 'rgba(0, 0, 0, 0.6)'}
         >
-          Level Heaven
+          Level Heaven?
         </button>
 
         <button 
@@ -286,7 +286,7 @@ export default function UserAnalytics() {
           onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
           onMouseLeave={(e) => e.target.style.background = 'rgba(0, 0, 0, 0.6)'}
         >
-          Level Heaven Entities
+          Level Heaven? Entities
         </button>
 
         <Box sx={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1, marginBottom: 3 }}>

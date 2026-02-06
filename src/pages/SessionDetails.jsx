@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   Box,
@@ -21,6 +21,7 @@ import { ArrowBack, ExpandMore, Block } from '@mui/icons-material';
 import { sessionService } from '../services/sessionService';
 import { useAuth } from '../hooks/useAuth';
 import backgroundImage from '../assets/images/lvl youshouldnotbehere.jpg';
+import backgroundAudio from '../assets/audio/youshouldnotbehere.mp3';
 import LevelYouShouldNotBeHere from '../components/AdminFeatures/LevelYouShouldNotBeHere';
 import Entities from '../components/AdminFeatures/Entities';
 
@@ -34,6 +35,31 @@ export default function SessionDetails() {
   const [showConsentDialog, setShowConsentDialog] = useState(false);
   const [showYouShouldNotBeHerePopup, setShowYouShouldNotBeHerePopup] = useState(false);
   const [showEntitiesPopup, setShowEntitiesPopup] = useState(false);
+  const audioRef = useRef(null);
+
+  // Auto-play background music
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3; // Set volume to 30%
+      audioRef.current.play().catch(err => {
+        console.log('Auto-play prevented:', err);
+      });
+    }
+
+    // Add click handler to play audio on first user interaction
+    const handleFirstClick = () => {
+      if (audioRef.current && audioRef.current.paused) {
+        audioRef.current.play().catch(err => {
+          console.log('Audio play failed:', err);
+        });
+      }
+      // Remove listener after first click
+      document.removeEventListener('click', handleFirstClick);
+    };
+
+    document.addEventListener('click', handleFirstClick);
+    return () => document.removeEventListener('click', handleFirstClick);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -738,6 +764,12 @@ export default function SessionDetails() {
         isOpen={showEntitiesPopup}
         onClose={() => setShowEntitiesPopup(false)}
       />
+
+      {/* Background Audio */}
+      <audio ref={audioRef} loop autoPlay>
+        <source src={backgroundAudio} type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
     </Box>
     </>
   );

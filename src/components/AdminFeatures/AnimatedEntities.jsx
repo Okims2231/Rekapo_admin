@@ -87,18 +87,17 @@ export default function AnimatedEntities({ isOpen, onClose }) {
         }}
       >
         {/* Animated King */}
-        <Box sx={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+        <Box sx={{ display: 'flex', gap: '16px', alignItems: 'stretch' }}>
           <Box
             sx={{
               width: 300,
-              height: 280,
               minWidth: 300,
               backgroundImage: `url(${animatedKingImage})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
+              flexShrink: 0
             }}
           />
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -112,18 +111,17 @@ export default function AnimatedEntities({ isOpen, onClose }) {
         </Box>
 
         {/* Animations */}
-        <Box sx={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+        <Box sx={{ display: 'flex', gap: '16px', alignItems: 'stretch' }}>
           <Box
             sx={{
               width: 300,
-              height: 280,
               minWidth: 300,
               backgroundImage: `url(${animationsImage})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
+              flexShrink: 0
             }}
           />
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -137,18 +135,17 @@ export default function AnimatedEntities({ isOpen, onClose }) {
         </Box>
 
         {/* Smilers */}
-        <Box sx={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+        <Box sx={{ display: 'flex', gap: '16px', alignItems: 'stretch' }}>
           <Box
             sx={{
               width: 300,
-              height: 280,
               minWidth: 300,
               backgroundImage: `url(${smilerImage})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
+              flexShrink: 0
             }}
           />
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
