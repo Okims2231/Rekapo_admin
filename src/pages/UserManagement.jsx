@@ -129,10 +129,12 @@ export default function UserManagement() {
       }
       
       const data = await userService.getUsers(params);
+      console.log('API Response:', data);
       // Handle different response formats
       const usersList = Array.isArray(data) ? data : (data.users || data.data || []);
+      console.log('Processing users:', usersList, 'Is Array:', Array.isArray(usersList));
       const total = data.total || (Array.isArray(data) ? data.length : usersList.length);
-      setUsers(usersList);
+      setUsers(Array.isArray(usersList) ? usersList : []);
       setTotal(total);
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to load users');

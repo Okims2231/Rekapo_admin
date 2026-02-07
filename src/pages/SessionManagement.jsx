@@ -97,10 +97,12 @@ export default function SessionManagement() {
         trainingConsentFilter || null,
         deletedFilter || null
       );
+      console.log('Sessions API Response:', data);
       // Handle different response formats
       const sessionsList = Array.isArray(data) ? data : (data.sessions || data.data || []);
+      console.log('Processing sessions:', sessionsList, 'Is Array:', Array.isArray(sessionsList));
       const total = data.total || (Array.isArray(data) ? data.length : sessionsList.length);
-      setSessions(sessionsList);
+      setSessions(Array.isArray(sessionsList) ? sessionsList : []);
       setTotalSessions(total);
     } catch (err) {
       setError(err.message);
