@@ -28,7 +28,7 @@ import {
   Snackbar,
   ButtonGroup,
 } from '@mui/material';
-import { Refresh, Block, CheckCircle } from '@mui/icons-material';
+import { Refresh, Block, CheckCircle, ArrowUpward, ArrowDownward } from '@mui/icons-material';
 import userService from '../services/userService';
 import { useAuth } from '../hooks/useAuth';
 import backgroundImage from '../assets/images/level heaven.jpg';
@@ -44,7 +44,9 @@ export default function UserAnalytics() {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(20);
   const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState('total_sessions');
+  const [sortConfig, setSortConfig] = useState([{ column: 'total_sessions', order: 'desc' }]);
+  const [multiSortMode, setMultiSortMode] = useState(false);
+  const [showSortModal, setShowSortModal] = useState(false);
   const [timePeriod, setTimePeriod] = useState('all');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -141,23 +143,62 @@ export default function UserAnalytics() {
         );
       }
       
-      // Sort users
+      // Sort users with multi-column support
       filteredUsers.sort((a, b) => {
         const aAnalytics = analyticsMap[a.id] || {};
         const bAnalytics = analyticsMap[b.id] || {};
         
-        switch (sortBy) {
-          case 'total_sessions':
-            return (bAnalytics.total_sessions || 0) - (aAnalytics.total_sessions || 0);
-          case 'recording_time':
-            return (bAnalytics.total_recording_time || 0) - (aAnalytics.total_recording_time || 0);
-          case 'transcribed_words':
-            return (bAnalytics.total_transcribed_words || 0) - (aAnalytics.total_transcribed_words || 0);
-          case 'last_session':
-            return (aAnalytics.days_since_last_session || 999999) - (bAnalytics.days_since_last_session || 999999);
-          default:
-            return 0;
+        // Apply sorts in priority order
+        for (const { column, order } of sortConfig) {
+          let comparison = 0;
+          
+          switch (column) {
+            case 'user_id':
+              comparison = (b.id || 0) - (a.id || 0);
+              break;
+            case 'total_sessions':
+              comparison = (bAnalytics.total_sessions || 0) - (aAnalytics.total_sessions || 0);
+              break;
+            case 'completed_sessions':
+              comparison = (bAnalytics.completed_sessions || 0) - (aAnalytics.completed_sessions || 0);
+              break;
+            case 'failed_sessions':
+              comparison = (bAnalytics.failed_sessions || 0) - (aAnalytics.failed_sessions || 0);
+              break;
+            case 'active_sessions':
+              comparison = (bAnalytics.active_sessions || 0) - (aAnalytics.active_sessions || 0);
+              break;
+            case 'average_duration':
+              comparison = (bAnalytics.average_session_duration || 0) - (aAnalytics.average_session_duration || 0);
+              break;
+            case 'recording_time':
+              comparison = (bAnalytics.total_recording_time || 0) - (aAnalytics.total_recording_time || 0);
+              break;
+            case 'longest_session':
+              comparison = (bAnalytics.longest_session_duration || 0) - (aAnalytics.longest_session_duration || 0);
+              break;
+            case 'segments':
+              comparison = (bAnalytics.total_recording_segments || 0) - (aAnalytics.total_recording_segments || 0);
+              break;
+            case 'transcribed_words':
+              comparison = (bAnalytics.total_transcribed_words || 0) - (aAnalytics.total_transcribed_words || 0);
+              break;
+            case 'last_session':
+              comparison = (aAnalytics.days_since_last_session || 999999) - (bAnalytics.days_since_last_session || 999999);
+              break;
+            case 'account_age':
+              comparison = (bAnalytics.account_age_days || 0) - (aAnalytics.account_age_days || 0);
+              break;
+            case 'deleted_sessions':
+              comparison = (bAnalytics.deleted_sessions || 0) - (aAnalytics.deleted_sessions || 0);
+              break;
+          }
+          
+          const result = order === 'desc' ? comparison : -comparison;
+          if (result !== 0) return result;
         }
+        
+        return 0;
       });
       
       setUsers(filteredUsers);
@@ -167,7 +208,7 @@ export default function UserAnalytics() {
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, timePeriod, search, sortBy]);
+  }, [page, pageSize, timePeriod, search, sortConfig]);
 
   // Handle disable user
   const handleDisableUser = async () => {
@@ -198,6 +239,67 @@ export default function UserAnalytics() {
   }, [fetchUsersAnalytics]);
 
   const totalPages = Math.ceil(total / pageSize);
+
+  const handleSort = (column) => {
+    if (multiSortMode) {
+      // Multi-column sort mode: cycle through asc -> desc -> remove
+      const existingIndex = sortConfig.findIndex(s => s.column === column);
+      
+      if (existingIndex !== -1) {
+        const currentSort = sortConfig[existingIndex];
+        if (currentSort.order === 'asc') {
+          // asc -> desc
+          const newConfig = [...sortConfig];
+          newConfig[existingIndex].order = 'desc';
+          setSortConfig(newConfig);
+        } else {
+          // desc -> remove
+          const newConfig = sortConfig.filter((_, i) => i !== existingIndex);
+          setSortConfig(newConfig.length > 0 ? newConfig : [{ column: 'total_sessions', order: 'desc' }]);
+        }
+      } else {
+        // First click: add with ascending
+        if (sortConfig.length < 3) {
+          setSortConfig([...sortConfig, { column, order: 'asc' }]);
+        }
+      }
+    } else {
+      // Single column sort mode: cycle through asc -> desc -> default
+      const currentSort = sortConfig[0];
+      
+      if (currentSort.column === column) {
+        if (currentSort.order === 'asc') {
+          // asc -> desc
+          setSortConfig([{ column, order: 'desc' }]);
+        } else {
+          // desc -> default
+          setSortConfig([{ column: 'total_sessions', order: 'desc' }]);
+        }
+      } else {
+        // New column: start with asc
+        setSortConfig([{ column, order: 'asc' }]);
+      }
+    }
+  };
+
+  const renderSortIcon = (column) => {
+    const sortIndex = sortConfig.findIndex(s => s.column === column);
+    if (sortIndex === -1) return null;
+    
+    const { order } = sortConfig[sortIndex];
+    const priority = sortConfig.length > 1 ? sortIndex + 1 : null;
+    
+    return (
+      <Box sx={{ display: 'inline-flex', alignItems: 'center', ml: 0.5 }}>
+        {order === 'desc' ? 
+          <ArrowDownward sx={{ fontSize: 16 }} /> : 
+          <ArrowUpward sx={{ fontSize: 16 }} />}
+        {priority && (
+          <Typography sx={{ fontSize: 10, ml: 0.2, fontWeight: 700 }}>{priority}</Typography>
+        )}
+      </Box>
+    );
+  };
 
   return (
     <>
@@ -551,7 +653,7 @@ export default function UserAnalytics() {
             />
 
             <FormControl sx={{ 
-              minWidth: 200,
+              minWidth: 140,
               '& .MuiOutlinedInput-root': {
                 backgroundColor: 'rgba(0, 0, 0, 0.6)',
                 backdropFilter: 'blur(8px)',
@@ -561,14 +663,14 @@ export default function UserAnalytics() {
                 '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
                 '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.4)' }
               },
-              '& .MuiInputLabel-root': { color: '#cacacaff', fontFamily: 'Verdana, sans-serif' },
+              '& .MuiInputLabel-root': { color: '#cacacaff', fontFamily: 'Verdana, sans-serif', fontSize: '13px' },
               '& .MuiSelect-icon': { color: '#ffffff' }
             }}>
-              <InputLabel>Sort By</InputLabel>
-              <Select 
-                value={sortBy} 
-                onChange={(e) => setSortBy(e.target.value)} 
-                label="Sort By"
+              <InputLabel>Time Period</InputLabel>
+              <Select
+                value={timePeriod}
+                onChange={(e) => setTimePeriod(e.target.value)}
+                label="Time Period"
                 MenuProps={{
                   PaperProps: {
                     sx: {
@@ -593,62 +695,67 @@ export default function UserAnalytics() {
                   }
                 }}
               >
-                <MenuItem value="total_sessions">Total Sessions</MenuItem>
-                <MenuItem value="recording_time">Recording Time</MenuItem>
-                <MenuItem value="transcribed_words">Transcribed Words</MenuItem>
-                <MenuItem value="last_session">Last Session</MenuItem>
+                <MenuItem value="all">All Time</MenuItem>
+                <MenuItem value="24h">24 Hours</MenuItem>
+                <MenuItem value="7d">7 Days</MenuItem>
+                <MenuItem value="30d">30 Days</MenuItem>
+                <MenuItem value="90d">90 Days</MenuItem>
               </Select>
             </FormControl>
 
-            <ButtonGroup variant="outlined" sx={{ 
-              '& .MuiButton-root': {
-                color: '#ffffff',
-                borderColor: 'rgba(255, 255, 255, 0.2)',
+            <Button
+              variant={multiSortMode ? 'contained' : 'outlined'}
+              onClick={() => setMultiSortMode(!multiSortMode)}
+              size="small"
+              sx={{
+                color: multiSortMode ? '#ffffff' : '#ffffff',
+                borderColor: multiSortMode ? 'rgba(76, 175, 80, 0.6)' : 'rgba(255, 255, 255, 0.2)',
                 fontFamily: 'Verdana, sans-serif',
-                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                fontSize: '11px',
+                backgroundColor: multiSortMode ? 'rgba(76, 175, 80, 0.7)' : 'rgba(0, 0, 0, 0.6)',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
+                padding: '5px 12px',
+                minWidth: 'auto',
                 '&:hover': {
-                  borderColor: 'rgba(255, 255, 255, 0.4)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                },
-                '&.active': {
-                  backgroundColor: 'rgba(33, 150, 243, 0.6)',
-                  borderColor: 'rgba(33, 150, 243, 0.8)'
+                  borderColor: multiSortMode ? 'rgba(76, 175, 80, 1)' : 'rgba(255, 255, 255, 0.4)',
+                  backgroundColor: multiSortMode ? 'rgba(76, 175, 80, 0.85)' : 'rgba(255, 255, 255, 0.1)'
                 }
-              }
-            }}>
-              <Button 
-                className={timePeriod === 'all' ? 'active' : ''}
-                onClick={() => setTimePeriod('all')}
+              }}
+            >
+              {multiSortMode ? 'Multi ✓' : 'Multi'}
+            </Button>
+
+            {sortConfig.length > 1 && (
+              <Box
+                onClick={() => setShowSortModal(true)}
+                sx={{
+                  padding: '6px 12px',
+                  backgroundColor: 'rgba(33, 150, 243, 0.2)',
+                  borderRadius: '6px',
+                  border: '1px solid rgba(33, 150, 243, 0.4)',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    backgroundColor: 'rgba(33, 150, 243, 0.3)',
+                    borderColor: 'rgba(33, 150, 243, 0.7)',
+                    boxShadow: '0 2px 8px rgba(33, 150, 243, 0.3)'
+                  }
+                }}
               >
-                All Time
-              </Button>
-              <Button 
-                className={timePeriod === '24h' ? 'active' : ''}
-                onClick={() => setTimePeriod('24h')}
-              >
-                24 Hours
-              </Button>
-              <Button 
-                className={timePeriod === '7d' ? 'active' : ''}
-                onClick={() => setTimePeriod('7d')}
-              >
-                7 Days
-              </Button>
-              <Button 
-                className={timePeriod === '30d' ? 'active' : ''}
-                onClick={() => setTimePeriod('30d')}
-              >
-                30 Days
-              </Button>
-              <Button 
-                className={timePeriod === '90d' ? 'active' : ''}
-                onClick={() => setTimePeriod('90d')}
-              >
-                90 Days
-              </Button>
-            </ButtonGroup>
+                <Typography
+                  sx={{
+                    color: '#90caf9',
+                    fontSize: '12px',
+                    fontFamily: 'Verdana, sans-serif',
+                    fontWeight: 500,
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  {sortConfig.length} sorts • Click to manage
+                </Typography>
+              </Box>
+            )}
 
             <Button
               variant="outlined"
@@ -670,6 +777,40 @@ export default function UserAnalytics() {
               Refresh
             </Button>
           </Box>
+
+          {sortConfig.length > 1 && (
+            <Box
+              onClick={() => setShowSortModal(true)}
+              sx={{
+                marginTop: 2,
+                marginBottom: 1,
+                padding: 1.5,
+                backgroundColor: 'rgba(33, 150, 243, 0.15)',
+                borderRadius: '8px',
+                border: '1px solid rgba(33, 150, 243, 0.3)',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  backgroundColor: 'rgba(33, 150, 243, 0.25)',
+                  borderColor: 'rgba(33, 150, 243, 0.6)',
+                  boxShadow: '0 2px 8px rgba(33, 150, 243, 0.3)'
+                },
+                display: 'none'
+              }}
+            >
+              <Typography
+                sx={{
+                  color: '#90caf9',
+                  fontSize: '13px',
+                  fontFamily: 'Verdana, sans-serif',
+                  textAlign: 'center',
+                  fontWeight: 500
+                }}
+              >
+                <strong>{sortConfig.length} sorts active</strong> • Click to manage
+              </Typography>
+            </Box>
+          )}
 
           {loading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', padding: 4 }}>
@@ -697,19 +838,252 @@ export default function UserAnalytics() {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>ID</TableCell>
-                      <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Total</TableCell>
-                      <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Completed</TableCell>
-                      <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Failed</TableCell>
-                      <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Active</TableCell>
-                      <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Avg Dur.</TableCell>
-                      <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Rec. Time</TableCell>
-                      <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Longest</TableCell>
-                      <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Segments</TableCell>
-                      <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Words</TableCell>
-                      <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Last</TableCell>
-                      <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Age</TableCell>
-                      <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Deleted</TableCell>
+                      <TableCell 
+                        onClick={() => handleSort('user_id')}
+                        sx={{ 
+                          color: '#ffffff', 
+                          fontFamily: 'Verdana, sans-serif', 
+                          fontWeight: 700, 
+                          textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+                          borderBottom: '1px solid rgba(255,255,255,0.2)',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                        }}
+                      >
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                          User ID
+                          {renderSortIcon('user_id')}
+                        </Box>
+                      </TableCell>
+                      <TableCell 
+                        align="center" 
+                        onClick={() => handleSort('total_sessions')}
+                        sx={{ 
+                          color: '#ffffff', 
+                          fontFamily: 'Verdana, sans-serif', 
+                          fontWeight: 700, 
+                          textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+                          borderBottom: '1px solid rgba(255,255,255,0.2)',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                        }}
+                      >
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                          Total
+                          {renderSortIcon('total_sessions')}
+                        </Box>
+                      </TableCell>
+                      <TableCell 
+                        align="center" 
+                        onClick={() => handleSort('completed_sessions')}
+                        sx={{ 
+                          color: '#ffffff', 
+                          fontFamily: 'Verdana, sans-serif', 
+                          fontWeight: 700, 
+                          textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+                          borderBottom: '1px solid rgba(255,255,255,0.2)',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                        }}
+                      >
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                          Completed
+                          {renderSortIcon('completed_sessions')}
+                        </Box>
+                      </TableCell>
+                      <TableCell 
+                        align="center" 
+                        onClick={() => handleSort('failed_sessions')}
+                        sx={{ 
+                          color: '#ffffff', 
+                          fontFamily: 'Verdana, sans-serif', 
+                          fontWeight: 700, 
+                          textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+                          borderBottom: '1px solid rgba(255,255,255,0.2)',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                        }}
+                      >
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                          Failed
+                          {renderSortIcon('failed_sessions')}
+                        </Box>
+                      </TableCell>
+                      <TableCell 
+                        align="center" 
+                        onClick={() => handleSort('active_sessions')}
+                        sx={{ 
+                          color: '#ffffff', 
+                          fontFamily: 'Verdana, sans-serif', 
+                          fontWeight: 700, 
+                          textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+                          borderBottom: '1px solid rgba(255,255,255,0.2)',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                        }}
+                      >
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                          Active
+                          {renderSortIcon('active_sessions')}
+                        </Box>
+                      </TableCell>
+                      <TableCell 
+                        align="center" 
+                        onClick={() => handleSort('average_duration')}
+                        sx={{ 
+                          color: '#ffffff', 
+                          fontFamily: 'Verdana, sans-serif', 
+                          fontWeight: 700, 
+                          textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+                          borderBottom: '1px solid rgba(255,255,255,0.2)',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                        }}
+                      >
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                          Avg Dur.
+                          {renderSortIcon('average_duration')}
+                        </Box>
+                      </TableCell>
+                      <TableCell 
+                        align="center" 
+                        onClick={() => handleSort('recording_time')}
+                        sx={{ 
+                          color: '#ffffff', 
+                          fontFamily: 'Verdana, sans-serif', 
+                          fontWeight: 700, 
+                          textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+                          borderBottom: '1px solid rgba(255,255,255,0.2)',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                        }}
+                      >
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                          Rec. Time
+                          {renderSortIcon('recording_time')}
+                        </Box>
+                      </TableCell>
+                      <TableCell 
+                        align="center" 
+                        onClick={() => handleSort('longest_session')}
+                        sx={{ 
+                          color: '#ffffff', 
+                          fontFamily: 'Verdana, sans-serif', 
+                          fontWeight: 700, 
+                          textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+                          borderBottom: '1px solid rgba(255,255,255,0.2)',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                        }}
+                      >
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                          Longest
+                          {renderSortIcon('longest_session')}
+                        </Box>
+                      </TableCell>
+                      <TableCell 
+                        align="center" 
+                        onClick={() => handleSort('segments')}
+                        sx={{ 
+                          color: '#ffffff', 
+                          fontFamily: 'Verdana, sans-serif', 
+                          fontWeight: 700, 
+                          textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+                          borderBottom: '1px solid rgba(255,255,255,0.2)',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                        }}
+                      >
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                          Segments
+                          {renderSortIcon('segments')}
+                        </Box>
+                      </TableCell>
+                      <TableCell 
+                        align="center" 
+                        onClick={() => handleSort('transcribed_words')}
+                        sx={{ 
+                          color: '#ffffff', 
+                          fontFamily: 'Verdana, sans-serif', 
+                          fontWeight: 700, 
+                          textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+                          borderBottom: '1px solid rgba(255,255,255,0.2)',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                        }}
+                      >
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                          Words
+                          {renderSortIcon('transcribed_words')}
+                        </Box>
+                      </TableCell>
+                      <TableCell 
+                        align="center" 
+                        onClick={() => handleSort('last_session')}
+                        sx={{ 
+                          color: '#ffffff', 
+                          fontFamily: 'Verdana, sans-serif', 
+                          fontWeight: 700, 
+                          textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+                          borderBottom: '1px solid rgba(255,255,255,0.2)',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                        }}
+                      >
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                          Last
+                          {renderSortIcon('last_session')}
+                        </Box>
+                      </TableCell>
+                      <TableCell 
+                        align="center" 
+                        onClick={() => handleSort('account_age')}
+                        sx={{ 
+                          color: '#ffffff', 
+                          fontFamily: 'Verdana, sans-serif', 
+                          fontWeight: 700, 
+                          textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+                          borderBottom: '1px solid rgba(255,255,255,0.2)',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                        }}
+                      >
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                          Age
+                          {renderSortIcon('account_age')}
+                        </Box>
+                      </TableCell>
+                      <TableCell 
+                        align="center" 
+                        onClick={() => handleSort('deleted_sessions')}
+                        sx={{ 
+                          color: '#ffffff', 
+                          fontFamily: 'Verdana, sans-serif', 
+                          fontWeight: 700, 
+                          textShadow: '0 2px 4px rgba(0,0,0,0.5)', 
+                          borderBottom: '1px solid rgba(255,255,255,0.2)',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
+                        }}
+                      >
+                        <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                          Deleted
+                          {renderSortIcon('deleted_sessions')}
+                        </Box>
+                      </TableCell>
                       <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Status</TableCell>
                       <TableCell align="center" sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>Actions</TableCell>
                     </TableRow>
@@ -969,6 +1343,96 @@ export default function UserAnalytics() {
             {success}
           </Alert>
         </Snackbar>
+
+        {/* Sort Modal */}
+        <Dialog
+          open={showSortModal}
+          onClose={() => setShowSortModal(false)}
+          PaperProps={{
+            sx: {
+              backgroundColor: 'rgba(0, 0, 0, 0.85)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              color: '#ffffff'
+            }
+          }}
+        >
+          <DialogTitle sx={{ color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>Active Sorts</DialogTitle>
+          <DialogContent>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, minWidth: 300 }}>
+              {sortConfig.map((sort, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
+                    padding: '10px 12px',
+                    backgroundColor: 'rgba(33, 150, 243, 0.15)',
+                    borderRadius: '6px',
+                    border: '1px solid rgba(33, 150, 243, 0.3)'
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      minWidth: '24px',
+                      width: '24px',
+                      height: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: 'rgba(33, 150, 243, 0.4)',
+                      borderRadius: '50%',
+                      fontWeight: 700,
+                      fontSize: '12px',
+                      color: '#90caf9'
+                    }}
+                  >
+                    {index + 1}
+                  </Typography>
+                  <Typography sx={{ flex: 1, color: '#ffffff', fontFamily: 'Verdana, sans-serif' }}>
+                    {sort.column.replace(/_/g, ' ').toUpperCase()}
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                    {sort.order === 'asc' ? (
+                      <ArrowUpward sx={{ fontSize: 18, color: '#90caf9' }} />
+                    ) : (
+                      <ArrowDownward sx={{ fontSize: 18, color: '#90caf9' }} />
+                    )}
+                  </Box>
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      const newConfig = sortConfig.filter((_, i) => i !== index);
+                      setSortConfig(newConfig.length > 0 ? newConfig : [{ column: 'total_sessions', order: 'desc' }]);
+                    }}
+                    sx={{
+                      color: '#ff9999',
+                      '&:hover': {
+                        backgroundColor: 'rgba(244, 67, 54, 0.2)'
+                      }
+                    }}
+                  >
+                    <Block sx={{ fontSize: 18 }} />
+                  </IconButton>
+                </Box>
+              ))}
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setShowSortModal(false)}
+              sx={{
+                color: '#ffffff',
+                fontFamily: 'Verdana, sans-serif',
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' }
+              }}
+            >
+              Done
+            </Button>
+          </DialogActions>
+        </Dialog>
 
         {showLevelHeavenPopup && (
           <LevelHeaven onClose={() => setShowLevelHeavenPopup(false)} />
