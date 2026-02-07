@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -85,7 +85,7 @@ export default function SessionManagement() {
   }, []);
 
   // Fetch sessions
-  const fetchSessions = async () => {
+  const fetchSessions = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -97,12 +97,10 @@ export default function SessionManagement() {
         trainingConsentFilter || null,
         deletedFilter || null
       );
-      console.log('Sessions API Response:', data);
       // Handle different response formats
       const sessionsList = Array.isArray(data) ? data : (data.sessions || data.data || []);
-      console.log('Processing sessions:', sessionsList, 'Is Array:', Array.isArray(sessionsList));
       const total = data.total || (Array.isArray(data) ? data.length : sessionsList.length);
-      setSessions(Array.isArray(sessionsList) ? sessionsList : []);
+      setSessions(sessionsList);
       setTotalSessions(total);
     } catch (err) {
       setError(err.message);
@@ -110,11 +108,11 @@ export default function SessionManagement() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, pageSize, query, statusFilter, trainingConsentFilter, deletedFilter]);
 
   useEffect(() => {
     fetchSessions();
-  }, [page, pageSize, query, statusFilter, trainingConsentFilter, deletedFilter]);
+  }, [fetchSessions]);
 
   const handleSearch = (e) => {
     setQuery(e.target.value);
@@ -674,7 +672,7 @@ export default function SessionManagement() {
                     Loading sessions...
                   </TableCell>
                 </TableRow>
-              ) : !Array.isArray(sessions) || sessions.length === 0 ? (
+              ) : sessions.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} align="center" sx={{ padding: 4, color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                     No sessions found.

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Box,
@@ -110,7 +110,7 @@ export default function UserManagement() {
   const [adminDialog, setAdminDialog] = useState({ open: false, user: null, isAdmin: false });
 
   // Fetch users
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -129,23 +129,21 @@ export default function UserManagement() {
       }
       
       const data = await userService.getUsers(params);
-      console.log('API Response:', data);
       // Handle different response formats
       const usersList = Array.isArray(data) ? data : (data.users || data.data || []);
-      console.log('Processing users:', usersList, 'Is Array:', Array.isArray(usersList));
       const total = data.total || (Array.isArray(data) ? data.length : usersList.length);
-      setUsers(Array.isArray(usersList) ? usersList : []);
+      setUsers(usersList);
       setTotal(total);
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to load users');
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, pageSize, search, isAdminFilter, isDisabledFilter]);
 
   useEffect(() => {
     fetchUsers();
-  }, [page, pageSize, search, isAdminFilter, isDisabledFilter]);
+  }, [fetchUsers]);
 
   // Handle disable user
   const handleDisableUser = async () => {
@@ -742,7 +740,7 @@ export default function UserManagement() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {!Array.isArray(users) || users.length === 0 ? (
+                  {users.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={7} align="center" sx={{ padding: 4, color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                         No users found
