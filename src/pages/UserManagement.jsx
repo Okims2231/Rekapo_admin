@@ -742,7 +742,7 @@ export default function UserManagement() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {users.length === 0 ? (
+                  {!Array.isArray(users) || users.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={7} align="center" sx={{ padding: 4, color: '#ffffff', fontFamily: 'Verdana, sans-serif', textShadow: '0 1px 3px rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                         No users found
