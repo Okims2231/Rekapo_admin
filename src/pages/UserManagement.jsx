@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -44,6 +44,7 @@ import Poolrooms from '../components/AdminFeatures/Poolrooms';
 import PoolRoomEntities from '../components/AdminFeatures/PoolRoomEntities';
 
 export default function UserManagement() {
+  const navigate = useNavigate();
   const { logout } = useAuth();
   const [users, setUsers] = useState([]);
   const [total, setTotal] = useState(0);
@@ -55,7 +56,8 @@ export default function UserManagement() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [audioRef] = useRef(null);
+  const audioRef = useRef(null);
+  const [showClickPrompt] = useState(true);
   const [showPoolroomsPopup, setShowPoolroomsPopup] = useState(false);
   const [showPoolRoomEntitiesPopup, setShowPoolRoomEntitiesPopup] = useState(false);
   const [expandedUserId, setExpandedUserId] = useState(null);
@@ -102,7 +104,7 @@ export default function UserManagement() {
     return () => {
       document.removeEventListener('click', handleFirstClick);
     };
-  }, [audioRef]);
+  }, []);
   
   // Dialog states
   const [disableDialog, setDisableDialog] = useState({ open: false, user: null, reason: '' });
@@ -110,7 +112,7 @@ export default function UserManagement() {
   const [adminDialog, setAdminDialog] = useState({ open: false, user: null, isAdmin: false });
 
   // Fetch users
-  const fetchUsers = useCallback(async () => {
+  const fetchUsers = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -129,21 +131,18 @@ export default function UserManagement() {
       }
       
       const data = await userService.getUsers(params);
-      // Handle different response formats
-      const usersList = Array.isArray(data) ? data : (data.users || data.data || []);
-      const total = data.total || (Array.isArray(data) ? data.length : usersList.length);
-      setUsers(usersList);
-      setTotal(total);
+      setUsers(data.users);
+      setTotal(data.total);
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to load users');
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, search, isAdminFilter, isDisabledFilter]);
+  };
 
   useEffect(() => {
     fetchUsers();
-  }, [fetchUsers]);
+  }, [page, pageSize, search, isAdminFilter, isDisabledFilter]);
 
   // Handle disable user
   const handleDisableUser = async () => {
