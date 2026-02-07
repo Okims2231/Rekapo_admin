@@ -19,7 +19,6 @@ import {
 } from '@mui/material';
 import { ArrowBack, ExpandMore, Block } from '@mui/icons-material';
 import { sessionService } from '../services/sessionService';
-import { useAuth } from '../hooks/useAuth';
 import backgroundImage from '../assets/images/lvl youshouldnotbehere.jpg';
 import backgroundAudio from '../assets/audio/youshouldnotbehere.mp3';
 import LevelYouShouldNotBeHere from '../components/AdminFeatures/LevelYouShouldNotBeHere';
@@ -28,7 +27,6 @@ import Entities from '../components/AdminFeatures/Entities';
 export default function SessionDetails() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
-  const { logout } = useAuth();
   const [sessionData, setSessionData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -60,21 +58,6 @@ export default function SessionDetails() {
     document.addEventListener('click', handleFirstClick);
     return () => document.removeEventListener('click', handleFirstClick);
   }, []);
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch {
-      console.warn('Logout API failed; clearing token locally');
-      try {
-        localStorage.removeItem('adminToken');
-      } catch (ex) {
-        console.warn('Failed to clear token:', ex);
-      }
-    } finally {
-      window.location.assign('/login');
-    }
-  };
 
   const fetchSessionDetails = useCallback(async () => {
     try {

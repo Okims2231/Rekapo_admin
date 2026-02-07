@@ -22,7 +22,7 @@ export default function AuthCallback() {
         .then(() => {
           navigate('/');
         })
-        .catch((err) => {
+        .catch(() => {
           navigate(`/login?error=auth_failed`);
         });
     }

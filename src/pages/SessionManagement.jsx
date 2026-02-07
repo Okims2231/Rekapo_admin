@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -85,11 +85,7 @@ export default function SessionManagement() {
   }, []);
 
   // Fetch sessions
-  useEffect(() => {
-    fetchSessions();
-  }, [page, query, statusFilter, trainingConsentFilter, deletedFilter]);
-
-  const fetchSessions = async () => {
+  const fetchSessions = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -109,7 +105,11 @@ export default function SessionManagement() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, pageSize, query, statusFilter, trainingConsentFilter, deletedFilter]);
+
+  useEffect(() => {
+    fetchSessions();
+  }, [fetchSessions]);
 
   const handleSearch = (e) => {
     setQuery(e.target.value);
