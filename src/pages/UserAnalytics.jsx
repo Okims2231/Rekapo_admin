@@ -1061,7 +1061,7 @@ export default function UserAnalytics() {
                         }}
                       >
                         <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
-                          Age
+                          Account Age
                           {renderSortIcon('account_age')}
                         </Box>
                       </TableCell>
