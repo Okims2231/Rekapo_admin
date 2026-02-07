@@ -87,6 +87,7 @@ export default function SessionManagement() {
   // Fetch sessions
   useEffect(() => {
     fetchSessions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, query, statusFilter, trainingConsentFilter, deletedFilter]);
 
   const fetchSessions = async () => {

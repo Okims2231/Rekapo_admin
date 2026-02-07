@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -44,7 +44,6 @@ import Poolrooms from '../components/AdminFeatures/Poolrooms';
 import PoolRoomEntities from '../components/AdminFeatures/PoolRoomEntities';
 
 export default function UserManagement() {
-  const navigate = useNavigate();
   const { logout } = useAuth();
   const [users, setUsers] = useState([]);
   const [total, setTotal] = useState(0);
@@ -57,7 +56,6 @@ export default function UserManagement() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const audioRef = useRef(null);
-  const [showClickPrompt] = useState(true);
   const [showPoolroomsPopup, setShowPoolroomsPopup] = useState(false);
   const [showPoolRoomEntitiesPopup, setShowPoolRoomEntitiesPopup] = useState(false);
   const [expandedUserId, setExpandedUserId] = useState(null);
@@ -142,6 +140,7 @@ export default function UserManagement() {
 
   useEffect(() => {
     fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, pageSize, search, isAdminFilter, isDisabledFilter]);
 
   // Handle disable user
