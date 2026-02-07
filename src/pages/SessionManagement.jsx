@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -85,7 +85,7 @@ export default function SessionManagement() {
   }, []);
 
   // Fetch sessions
-  const fetchSessions = useCallback(async () => {
+  const fetchSessions = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -97,19 +97,22 @@ export default function SessionManagement() {
         trainingConsentFilter || null,
         deletedFilter || null
       );
-      setSessions(data.sessions || []);
-      setTotalSessions(data.total || 0);
+      // Handle different response formats
+      const sessionsList = Array.isArray(data) ? data : (data.sessions || data.data || []);
+      const total = data.total || (Array.isArray(data) ? data.length : sessionsList.length);
+      setSessions(sessionsList);
+      setTotalSessions(total);
     } catch (err) {
       setError(err.message);
       console.error('Error fetching sessions:', err);
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, query, statusFilter, trainingConsentFilter, deletedFilter]);
+  };
 
   useEffect(() => {
     fetchSessions();
-  }, [fetchSessions]);
+  }, [page, pageSize, query, statusFilter, trainingConsentFilter, deletedFilter]);
 
   const handleSearch = (e) => {
     setQuery(e.target.value);

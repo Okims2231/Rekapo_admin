@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Box,
@@ -110,7 +110,7 @@ export default function UserManagement() {
   const [adminDialog, setAdminDialog] = useState({ open: false, user: null, isAdmin: false });
 
   // Fetch users
-  const fetchUsers = useCallback(async () => {
+  const fetchUsers = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -129,18 +129,21 @@ export default function UserManagement() {
       }
       
       const data = await userService.getUsers(params);
-      setUsers(data.users);
-      setTotal(data.total);
+      // Handle different response formats
+      const usersList = Array.isArray(data) ? data : (data.users || data.data || []);
+      const total = data.total || (Array.isArray(data) ? data.length : usersList.length);
+      setUsers(usersList);
+      setTotal(total);
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to load users');
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, search, isAdminFilter, isDisabledFilter]);
+  };
 
   useEffect(() => {
     fetchUsers();
-  }, [fetchUsers]);
+  }, [page, pageSize, search, isAdminFilter, isDisabledFilter]);
 
   // Handle disable user
   const handleDisableUser = async () => {
