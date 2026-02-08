@@ -80,7 +80,7 @@ export default function UserManagement() {
   // Auto-play background music
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.3; // Set volume to 30%
+      audioRef.current.volume = 1; // Set volume to 100%
       audioRef.current.play().catch(err => {
         console.log('Auto-play prevented:', err);
       });
