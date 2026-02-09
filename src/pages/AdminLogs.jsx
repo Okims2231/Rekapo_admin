@@ -120,26 +120,6 @@ export default function AdminLogs() {
     }
   };
 
-  const handleCleanup = async () => {
-    if (window.confirm('Delete logs older than 30 days?')) {
-      try {
-        const result = await logsService.cleanupOldLogs(30);
-        setPopup({ 
-          isOpen: true, 
-          message: `Deleted ${result.deleted} old log files`, 
-          type: 'success' 
-        });
-        await fetchLogFiles();
-      } catch (err) {
-        setPopup({ 
-          isOpen: true, 
-          message: `Error cleaning up logs: ${err.message}`, 
-          type: 'error' 
-        });
-      }
-    }
-  };
-
   useEffect(() => {
     fetchRecentErrors();
     fetchLogFiles();
@@ -513,22 +493,6 @@ export default function AdminLogs() {
               }}
             >
               Refresh
-            </button>
-
-            <button
-              onClick={handleCleanup}
-              style={{
-                padding: '8px 20px',
-                borderRadius: '12px',
-                border: 'none',
-                background: 'rgba(239, 68, 68, 0.8)',
-                color: '#ffffff',
-                cursor: 'pointer',
-                fontFamily: 'Verdana, sans-serif',
-                fontWeight: 500
-              }}
-            >
-              Cleanup Old Logs
             </button>
           </div>
         </div>
