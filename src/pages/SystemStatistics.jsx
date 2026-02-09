@@ -21,40 +21,34 @@ export default function SystemStatistics() {
   const [showFlytrapPopup, setShowFlytrapPopup] = useState(false);
   const pageSize = 10;
 
-  // Ensure audio volume stays at 30% whenever popup state changes
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.30;
-    }
-  }, [popup.isOpen, showLorePopup, showFlytrapPopup]);
-
   // Auto-play background music
   useEffect(() => {
-    const playAudio = async () => {
-      try {
-        if (audioRef.current) {
-          audioRef.current.volume = 0.30;
-          await audioRef.current.play();
-        }
-      } catch (err) {
-        console.log('Auto-play prevented:', err);
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // Force volume to always be 0.3
+    const forceVolume = () => {
+      if (audio.volume !== 0.3) {
+        audio.volume = 0.3;
       }
     };
 
-    // Ensure volume stays at 30% even after state changes
-    const maintainVolume = () => {
-      if (audioRef.current) {
-        audioRef.current.volume = 0.30;
-      }
-    };
+    // Set initial volume
+    audio.volume = 0.3;
 
-    // Delay slightly to ensure volume is set before playing
-    const timer = setTimeout(playAudio, 100);
+    // Add listener to prevent volume from changing
+    audio.addEventListener('volumechange', forceVolume);
 
+    // Play audio
+    audio.play().catch(err => {
+      console.log('Auto-play prevented:', err);
+    });
+
+    // Click handler fallback
     const handleFirstClick = () => {
-      if (audioRef.current && audioRef.current.paused) {
-        audioRef.current.volume = 0.30;
-        audioRef.current.play().catch(err => {
+      if (audio && audio.paused) {
+        audio.volume = 0.3;
+        audio.play().catch(err => {
           console.log('Audio play failed:', err);
         });
       }
@@ -62,23 +56,12 @@ export default function SystemStatistics() {
     };
 
     document.addEventListener('click', handleFirstClick);
-    
-    // Store ref in variable to avoid cleanup issues
-    const audioElement = audioRef.current;
-    
-    // Add volumechange listener to prevent volume from changing
-    if (audioElement) {
-      audioElement.addEventListener('volumechange', maintainVolume);
-    }
 
     return () => {
-      clearTimeout(timer);
+      audio.removeEventListener('volumechange', forceVolume);
       document.removeEventListener('click', handleFirstClick);
-      if (audioElement) {
-        audioElement.removeEventListener('volumechange', maintainVolume);
-      }
     };
-  }, []);
+  }, [loading]);
 
   const fetchStatistics = async () => {
     try {
@@ -233,16 +216,7 @@ export default function SystemStatistics() {
       }}></div>
 
       {/* Background Audio */}
-      <audio 
-        ref={audioRef} 
-        loop 
-        autoPlay
-        onVolumeChange={(e) => {
-          if (e.target.volume !== 0.30) {
-            e.target.volume = 0.30;
-          }
-        }}
-      >
+      <audio ref={audioRef} loop>
         <source src={backgroundAudio} type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
