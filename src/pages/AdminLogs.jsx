@@ -974,6 +974,7 @@ export default function AdminLogs() {
                 <thead>
                   <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Time</th>
+                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>User</th>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Level</th>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Message</th>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>File</th>
@@ -990,6 +991,10 @@ export default function AdminLogs() {
                     >
                       <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
                         {new Date(log.timestamp).toLocaleString()}
+                      </td>
+                      <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
+                        {log.user_email || `User ${log.user_id}`}
+                        <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {log.user_id}</div>
                       </td>
                       <td style={{ padding: '12px' }}>
                         <span style={getLevelBadgeStyle(log.level)}>
@@ -1124,6 +1129,7 @@ export default function AdminLogs() {
                 <thead>
                   <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Time</th>
+                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>User</th>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Level</th>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Message</th>
                   </tr>
@@ -1139,6 +1145,10 @@ export default function AdminLogs() {
                     >
                       <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
                         {new Date(log.timestamp).toLocaleString()}
+                      </td>
+                      <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
+                        {log.user_email || `User ${log.user_id}`}
+                        <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {log.user_id}</div>
                       </td>
                       <td style={{ padding: '12px' }}>
                         <span style={getLevelBadgeStyle(log.level)}>
