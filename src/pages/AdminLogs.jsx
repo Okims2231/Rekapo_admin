@@ -12,6 +12,7 @@ import '../index.css';
 export default function AdminLogs() {
   const { logout } = useAuth();
   const audioRef = useRef(null);
+  const [stats, setStats] = useState(null);
   const [recentErrors, setRecentErrors] = useState(null);
   const [logFiles, setLogFiles] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -21,6 +22,10 @@ export default function AdminLogs() {
   const [filterLevel, setFilterLevel] = useState('');
   const [filterHours, setFilterHours] = useState(24);
   const [filterDate, setFilterDate] = useState('');
+  const [userSearch, setUserSearch] = useState('');
+  const [searchType, setSearchType] = useState('email');
+  const [searchResults, setSearchResults] = useState(null);
+  const [searchMode, setSearchMode] = useState(false);
   const [popup, setPopup] = useState({ isOpen: false, message: '', type: 'success' });
   const [showLorePopup, setShowLorePopup] = useState(false);
   const [showFlytrapPopup, setShowFlytrapPopup] = useState(false);
@@ -80,6 +85,15 @@ export default function AdminLogs() {
     };
   }, []);
 
+  const fetchStats = async () => {
+    try {
+      const data = await logsService.getLogStats(filterHours);
+      setStats(data);
+    } catch (err) {
+      console.error('Error fetching stats:', err);
+    }
+  };
+
   const fetchRecentErrors = async () => {
     try {
       setLoading(true);
@@ -121,16 +135,57 @@ export default function AdminLogs() {
   };
 
   useEffect(() => {
+    fetchStats();
     fetchRecentErrors();
     fetchLogFiles();
     // Auto-refresh every 30 seconds
     const interval = setInterval(() => {
+      fetchStats();
       fetchRecentErrors();
       fetchLogFiles();
     }, 30000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterHours, filterDate]);
+
+  const handleUserSearch = async () => {
+    if (!userSearch.trim()) {
+      setPopup({ isOpen: true, message: 'Please enter a user email or ID', type: 'error' });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      let data;
+      
+      if (searchType === 'email') {
+        data = await logsService.searchLogsByEmail(userSearch, filterHours, filterLevel || null);
+      } else {
+        const userId = parseInt(userSearch);
+        if (isNaN(userId)) {
+          throw new Error('User ID must be a number');
+        }
+        data = await logsService.searchLogsByUserId(userId, filterHours, filterLevel || null);
+      }
+      
+      setSearchResults(data);
+      setSearchMode(true);
+      setPopup({ isOpen: true, message: `Found ${data.count} logs`, type: 'success' });
+    } catch (err) {
+      setError(err.message);
+      setPopup({ isOpen: true, message: err.message, type: 'error' });
+      console.error('Error searching user logs:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearUserSearch = () => {
+    setSearchMode(false);
+    setUserSearch('');
+    setSearchResults(null);
+  };
 
   const handleLogout = async () => {
     try {
@@ -521,13 +576,33 @@ export default function AdminLogs() {
         </div>
 
         {/* Statistics Cards */}
-        {recentErrors && (
+        {stats && (
           <div style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
             gap: 16, 
             marginBottom: 16 
           }}>
+            <div style={cardStyles}>
+              <h3 style={{ 
+                margin: '0 0 8px 0', 
+                color: '#3b82f6',
+                fontSize: '32px',
+                fontWeight: 'bold',
+                fontFamily: 'Verdana, sans-serif',
+                textShadow: '0 2px 4px rgba(0,0,0,0.6)'
+              }}>
+                {stats.total_logs}
+              </h3>
+              <div style={{ 
+                color: '#cacacaff', 
+                fontSize: '14px',
+                fontFamily: 'Verdana, sans-serif'
+              }}>
+                Total Logs (Last {filterHours}h)
+              </div>
+            </div>
+
             <div style={cardStyles}>
               <h3 style={{ 
                 margin: '0 0 8px 0', 
@@ -537,38 +612,56 @@ export default function AdminLogs() {
                 fontFamily: 'Verdana, sans-serif',
                 textShadow: '0 2px 4px rgba(0,0,0,0.6)'
               }}>
-                {recentErrors.count}
+                {stats.errors}
               </h3>
               <div style={{ 
                 color: '#cacacaff', 
                 fontSize: '14px',
                 fontFamily: 'Verdana, sans-serif'
               }}>
-                Total Errors (Last {filterHours}h)
+                Errors (Last {filterHours}h)
               </div>
             </div>
 
-            {logFiles && (
-              <div style={cardStyles}>
-                <h3 style={{ 
-                  margin: '0 0 8px 0', 
-                  color: '#3b82f6',
-                  fontSize: '32px',
-                  fontWeight: 'bold',
-                  fontFamily: 'Verdana, sans-serif',
-                  textShadow: '0 2px 4px rgba(0,0,0,0.6)'
-                }}>
-                  {logFiles.count}
-                </h3>
-                <div style={{ 
-                  color: '#cacacaff', 
-                  fontSize: '14px',
-                  fontFamily: 'Verdana, sans-serif'
-                }}>
-                  Log Files
-                </div>
+            <div style={cardStyles}>
+              <h3 style={{ 
+                margin: '0 0 8px 0', 
+                color: '#f59e0b',
+                fontSize: '32px',
+                fontWeight: 'bold',
+                fontFamily: 'Verdana, sans-serif',
+                textShadow: '0 2px 4px rgba(0,0,0,0.6)'
+              }}>
+                {stats.warnings}
+              </h3>
+              <div style={{ 
+                color: '#cacacaff', 
+                fontSize: '14px',
+                fontFamily: 'Verdana, sans-serif'
+              }}>
+                Warnings (Last {filterHours}h)
               </div>
-            )}
+            </div>
+
+            <div style={cardStyles}>
+              <h3 style={{ 
+                margin: '0 0 8px 0', 
+                color: '#10b981',
+                fontSize: '32px',
+                fontWeight: 'bold',
+                fontFamily: 'Verdana, sans-serif',
+                textShadow: '0 2px 4px rgba(0,0,0,0.6)'
+              }}>
+                {stats.info}
+              </h3>
+              <div style={{ 
+                color: '#cacacaff', 
+                fontSize: '14px',
+                fontFamily: 'Verdana, sans-serif'
+              }}>
+                Info Logs (Last {filterHours}h)
+              </div>
+            </div>
           </div>
         )}
 
@@ -665,6 +758,7 @@ export default function AdminLogs() {
 
             <button
               onClick={() => {
+                fetchStats();
                 fetchRecentErrors();
                 fetchLogFiles();
               }}
@@ -684,6 +778,107 @@ export default function AdminLogs() {
           </div>
         </div>
 
+        {/* User Search */}
+        <div style={cardStyles}>
+          <h2 style={{ 
+            margin: '0 0 16px 0', 
+            color: '#ffffffff', 
+            textShadow: '0 2px 6px rgba(0,0,0,0.6)', 
+            fontFamily: 'Verdana, sans-serif' 
+          }}>Search Logs by User</h2>
+          
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+            <select
+              value={searchType}
+              onChange={(e) => setSearchType(e.target.value)}
+              style={{
+                padding: '8px 12px',
+                borderRadius: '12px',
+                border: '1px solid rgba(100, 150, 100, 0.3)',
+                background: 'rgba(40, 60, 40, 0.8)',
+                color: '#ffffff',
+                fontFamily: 'Verdana, sans-serif'
+              }}
+            >
+              <option value="email">Email</option>
+              <option value="id">User ID</option>
+            </select>
+
+            <input
+              type="text"
+              value={userSearch}
+              onChange={(e) => setUserSearch(e.target.value)}
+              placeholder={searchType === 'email' ? 'Enter user email' : 'Enter user ID'}
+              style={{
+                padding: '8px 12px',
+                borderRadius: '12px',
+                border: '1px solid rgba(100, 150, 100, 0.3)',
+                background: 'rgba(40, 60, 40, 0.8)',
+                color: '#ffffff',
+                fontFamily: 'Verdana, sans-serif',
+                minWidth: '250px'
+              }}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleUserSearch();
+                }
+              }}
+            />
+
+            <button
+              onClick={handleUserSearch}
+              style={{
+                padding: '8px 20px',
+                borderRadius: '12px',
+                border: 'none',
+                background: 'rgba(100, 180, 90, 0.8)',
+                color: '#ffffff',
+                cursor: 'pointer',
+                fontFamily: 'Verdana, sans-serif',
+                fontWeight: 500
+              }}
+            >
+              Search
+            </button>
+
+            {searchMode && (
+              <button
+                onClick={clearUserSearch}
+                style={{
+                  padding: '8px 20px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  background: 'rgba(239, 68, 68, 0.8)',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  fontFamily: 'Verdana, sans-serif',
+                  fontWeight: 500
+                }}
+              >
+                Clear Search
+              </button>
+            )}
+          </div>
+
+          {searchMode && searchResults && (
+            <div style={{ 
+              marginTop: '16px', 
+              padding: '12px', 
+              borderRadius: '12px',
+              background: 'rgba(100, 180, 90, 0.2)',
+              border: '1px solid rgba(100, 180, 90, 0.3)'
+            }}>
+              <div style={{ 
+                color: '#10b981', 
+                fontFamily: 'Verdana, sans-serif',
+                textShadow: '0 1px 2px rgba(0,0,0,0.4)'
+              }}>
+                ✓ Found {searchResults.count} logs {searchType === 'email' ? `for ${searchResults.email}` : `for User ID ${searchResults.user_id}`}
+              </div>
+            </div>
+          )}
+        </div>
+
         {error && (
           <div style={{ 
             color: '#ffffff', 
@@ -701,7 +896,7 @@ export default function AdminLogs() {
         )}
 
         {/* Recent Errors */}
-        {recentErrors && recentErrors.errors && recentErrors.errors.length > 0 && (
+        {recentErrors && recentErrors.errors && recentErrors.errors.length > 0 && !searchMode && (
           <div style={cardStyles}>
             <h2 style={{ 
               margin: '0 0 16px 0', 
@@ -762,8 +957,74 @@ export default function AdminLogs() {
           </div>
         )}
 
+        {/* User Search Results */}
+        {searchMode && searchResults && searchResults.logs && searchResults.logs.length > 0 && (
+          <div style={cardStyles}>
+            <h2 style={{ 
+              margin: '0 0 16px 0', 
+              color: '#ffffffff', 
+              textShadow: '0 2px 6px rgba(0,0,0,0.6)', 
+              fontFamily: 'Verdana, sans-serif' 
+            }}>
+              User Search Results - {searchResults.count} logs found
+            </h2>
+            
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Verdana, sans-serif' }}>
+                <thead>
+                  <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
+                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Time</th>
+                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Level</th>
+                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Message</th>
+                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>File</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {searchResults.logs.map((log, index) => (
+                    <tr
+                      key={index}
+                      style={{
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                        backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
+                      }}
+                    >
+                      <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
+                        {new Date(log.timestamp).toLocaleString()}
+                      </td>
+                      <td style={{ padding: '12px' }}>
+                        <span style={getLevelBadgeStyle(log.level)}>
+                          {log.level}
+                        </span>
+                      </td>
+                      <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px', maxWidth: '400px' }}>
+                        {log.message}
+                      </td>
+                      <td style={{ padding: '12px', fontSize: '12px' }}>
+                        <button
+                          onClick={() => viewLogFile(log.file)}
+                          style={{
+                            padding: '4px 12px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: 'rgba(100, 120, 180, 0.8)',
+                            color: '#ffffff',
+                            cursor: 'pointer',
+                            fontSize: '12px'
+                          }}
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         {/* Log Files List */}
-        {logFiles && logFiles.files && logFiles.files.length > 0 && (
+        {logFiles && logFiles.files && logFiles.files.length > 0 && !searchMode && (
           <div style={cardStyles}>
             <h2 style={{ 
               margin: '0 0 16px 0', 
@@ -886,6 +1147,106 @@ export default function AdminLogs() {
                       </td>
                       <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px' }}>
                         {log.message}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Top Errors */}
+        {stats && stats.top_errors && stats.top_errors.length > 0 && (
+          <div style={cardStyles}>
+            <h2 style={{ 
+              margin: '0 0 16px 0', 
+              color: '#ffffffff', 
+              textShadow: '0 2px 6px rgba(0,0,0,0.6)', 
+              fontFamily: 'Verdana, sans-serif' 
+            }}>Top Error Messages</h2>
+            
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Verdana, sans-serif' }}>
+                <thead>
+                  <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
+                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Error Message</th>
+                    <th style={{ padding: '12px', textAlign: 'right', color: '#ffffff', fontWeight: 600, width: '100px' }}>Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stats.top_errors.map((error, index) => (
+                    <tr
+                      key={index}
+                      style={{
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                        backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
+                      }}
+                    >
+                      <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px' }}>
+                        {error.message}
+                      </td>
+                      <td style={{ padding: '12px', textAlign: 'right' }}>
+                        <span style={{
+                          padding: '4px 12px',
+                          borderRadius: '12px',
+                          background: 'rgba(239, 68, 68, 0.3)',
+                          color: '#ef4444',
+                          fontSize: '14px',
+                          fontWeight: 'bold'
+                        }}>
+                          {error.count}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Top Error Users */}
+        {stats && stats.top_error_users && stats.top_error_users.length > 0 && (
+          <div style={cardStyles}>
+            <h2 style={{ 
+              margin: '0 0 16px 0', 
+              color: '#ffffffff', 
+              textShadow: '0 2px 6px rgba(0,0,0,0.6)', 
+              fontFamily: 'Verdana, sans-serif' 
+            }}>Users with Most Errors</h2>
+            
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Verdana, sans-serif' }}>
+                <thead>
+                  <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
+                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>User Email</th>
+                    <th style={{ padding: '12px', textAlign: 'right', color: '#ffffff', fontWeight: 600, width: '100px' }}>Errors</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stats.top_error_users.map((user, index) => (
+                    <tr
+                      key={index}
+                      style={{
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                        backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
+                      }}
+                    >
+                      <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px' }}>
+                        {user.email}
+                      </td>
+                      <td style={{ padding: '12px', textAlign: 'right' }}>
+                        <span style={{
+                          padding: '4px 12px',
+                          borderRadius: '12px',
+                          background: 'rgba(239, 68, 68, 0.3)',
+                          color: '#ef4444',
+                          fontSize: '14px',
+                          fontWeight: 'bold'
+                        }}>
+                          {user.count}
+                        </span>
                       </td>
                     </tr>
                   ))}

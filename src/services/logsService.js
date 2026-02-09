@@ -86,6 +86,52 @@ export const logsService = {
       throw new Error(`Failed to cleanup logs: ${errorMsg}`);
     }
   },
+
+  /**
+   * Get log statistics for dashboard widgets
+   */
+  async getLogStats(hours = 24) {
+    try {
+      const response = await axiosInstance.get(`/api/logs/stats?hours=${hours}`);
+      return response.data;
+    } catch (error) {
+      const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
+      console.error('Failed to fetch log stats:', errorMsg);
+      throw new Error(`Failed to fetch log stats: ${errorMsg}`);
+    }
+  },
+
+  /**
+   * Search logs by user ID
+   */
+  async searchLogsByUserId(userId, hours = 24, level = null) {
+    try {
+      const params = new URLSearchParams({ hours });
+      if (level) params.append('level', level);
+      const response = await axiosInstance.get(`/api/logs/user/${userId}?${params}`);
+      return response.data;
+    } catch (error) {
+      const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
+      console.error('Failed to search logs by user ID:', errorMsg);
+      throw new Error(`Failed to search logs by user ID: ${errorMsg}`);
+    }
+  },
+
+  /**
+   * Search logs by user email
+   */
+  async searchLogsByEmail(email, hours = 24, level = null) {
+    try {
+      const params = new URLSearchParams({ hours });
+      if (level) params.append('level', level);
+      const response = await axiosInstance.get(`/api/logs/user/email/${encodeURIComponent(email)}?${params}`);
+      return response.data;
+    } catch (error) {
+      const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
+      console.error('Failed to search logs by email:', errorMsg);
+      throw new Error(`Failed to search logs by email: ${errorMsg}`);
+    }
+  },
 };
 
 export default logsService;
