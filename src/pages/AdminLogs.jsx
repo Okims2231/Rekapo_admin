@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { logsService } from '../services/logsService';
 import { userService } from '../services/userService';
 import useAuth from '../hooks/useAuth';
-import backgroundImage from '../assets/images/lvl807.jpg';
-import backgroundAudio from '../assets/audio/lvl807.mp3';
+import backgroundImage from '../assets/images/the void.jpg';
+import backgroundAudio from '../assets/audio/the void.mp3';
 import CalculationPopup from '../components/popups/CalculationPopup';
 import Lvl807 from '../components/AdminFeatures/lvl807';
 import FlytrapHumanoid from '../components/AdminFeatures/FlytrapHumanoid';
@@ -245,23 +245,23 @@ export default function AdminLogs() {
     alignItems: 'center', 
     gap: 12, 
     marginBottom: 16,
-    backgroundColor: 'rgba(50, 70, 50, 0.25)',
+    backgroundColor: 'rgba(30, 20, 50, 0.25)',
     backdropFilter: 'blur(12px)',
     WebkitBackdropFilter: 'blur(12px)',
     padding: '20px',
     borderRadius: '20px',
-    border: '1px solid rgba(100, 150, 100, 0.2)'
+    border: '1px solid rgba(100, 80, 180, 0.2)'
   };
 
   const cardStyles = { 
-    backgroundColor: 'rgba(60, 80, 60, 0.2)',
+    backgroundColor: 'rgba(40, 30, 60, 0.2)',
     backdropFilter: 'blur(12px)',
     WebkitBackdropFilter: 'blur(12px)',
     borderRadius: '20px',
     padding: 20, 
     boxShadow: '0 6px 18px rgba(15,23,42,0.06)',
     marginBottom: 16,
-    border: '1px solid rgba(120, 160, 100, 0.15)'
+    border: '1px solid rgba(120, 100, 180, 0.15)'
   };
 
   const getLevelColor = (level) => {
@@ -527,8 +527,8 @@ export default function AdminLogs() {
               style={{ 
                 padding: '8px 14px', 
                 borderRadius: '25px', 
-                border: '2px solid rgba(100, 180, 90, 0.6)', 
-                background: 'linear-gradient(135deg, rgba(100, 180, 90, 0.9), rgba(80, 160, 70, 0.9))', 
+                border: '2px solid rgba(100, 120, 180, 0.6)', 
+                background: 'linear-gradient(135deg, rgba(100, 120, 180, 0.9), rgba(80, 100, 160, 0.9))', 
                 backdropFilter: 'blur(10px)',
                 WebkitBackdropFilter: 'blur(10px)',
                 cursor: 'default',
@@ -727,8 +727,8 @@ export default function AdminLogs() {
                 style={{
                   padding: '8px 12px',
                   borderRadius: '12px',
-                  border: '1px solid rgba(100, 150, 100, 0.3)',
-                  background: 'rgba(40, 60, 40, 0.8)',
+                  border: '1px solid rgba(100, 120, 180, 0.3)',
+                  background: 'rgba(30, 25, 50, 0.8)',
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif'
                 }}
@@ -755,8 +755,8 @@ export default function AdminLogs() {
                 style={{
                   padding: '8px 12px',
                   borderRadius: '12px',
-                  border: '1px solid rgba(100, 150, 100, 0.3)',
-                  background: 'rgba(40, 60, 40, 0.8)',
+                  border: '1px solid rgba(100, 120, 180, 0.3)',
+                  background: 'rgba(30, 25, 50, 0.8)',
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif'
                 }}
@@ -785,8 +785,8 @@ export default function AdminLogs() {
                 style={{
                   padding: '8px 12px',
                   borderRadius: '12px',
-                  border: '1px solid rgba(100, 150, 100, 0.3)',
-                  background: 'rgba(40, 60, 40, 0.8)',
+                  border: '1px solid rgba(100, 120, 180, 0.3)',
+                  background: 'rgba(30, 25, 50, 0.8)',
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif'
                 }}
@@ -803,7 +803,7 @@ export default function AdminLogs() {
                 padding: '8px 20px',
                 borderRadius: '12px',
                 border: 'none',
-                background: 'rgba(100, 180, 90, 0.8)',
+                background: 'rgba(100, 120, 180, 0.8)',
                 color: '#ffffff',
                 cursor: 'pointer',
                 fontFamily: 'Verdana, sans-serif',
@@ -831,8 +831,8 @@ export default function AdminLogs() {
               style={{
                 padding: '8px 12px',
                 borderRadius: '12px',
-                border: '1px solid rgba(100, 150, 100, 0.3)',
-                background: 'rgba(40, 60, 40, 0.8)',
+                border: '1px solid rgba(100, 120, 180, 0.3)',
+                background: 'rgba(30, 25, 50, 0.8)',
                 color: '#ffffff',
                 fontFamily: 'Verdana, sans-serif'
               }}
@@ -849,8 +849,8 @@ export default function AdminLogs() {
               style={{
                 padding: '8px 12px',
                 borderRadius: '12px',
-                border: '1px solid rgba(100, 150, 100, 0.3)',
-                background: 'rgba(40, 60, 40, 0.8)',
+                border: '1px solid rgba(100, 120, 180, 0.3)',
+                background: 'rgba(30, 25, 50, 0.8)',
                 color: '#ffffff',
                 fontFamily: 'Verdana, sans-serif',
                 minWidth: '250px'
@@ -868,7 +868,7 @@ export default function AdminLogs() {
                 padding: '8px 20px',
                 borderRadius: '12px',
                 border: 'none',
-                background: 'rgba(100, 180, 90, 0.8)',
+                background: 'rgba(100, 120, 180, 0.8)',
                 color: '#ffffff',
                 cursor: 'pointer',
                 fontFamily: 'Verdana, sans-serif',
@@ -885,7 +885,7 @@ export default function AdminLogs() {
                   padding: '8px 20px',
                   borderRadius: '12px',
                   border: 'none',
-                  background: 'rgba(239, 68, 68, 0.8)',
+                  background: 'rgba(180, 60, 100, 0.8)',
                   color: '#ffffff',
                   cursor: 'pointer',
                   fontFamily: 'Verdana, sans-serif',
@@ -902,11 +902,11 @@ export default function AdminLogs() {
               marginTop: '16px', 
               padding: '12px', 
               borderRadius: '12px',
-              background: 'rgba(100, 180, 90, 0.2)',
-              border: '1px solid rgba(100, 180, 90, 0.3)'
+              background: 'rgba(100, 120, 180, 0.2)',
+              border: '1px solid rgba(100, 120, 180, 0.3)'
             }}>
               <div style={{ 
-                color: '#10b981', 
+                color: '#64b5f6', 
                 fontFamily: 'Verdana, sans-serif',
                 textShadow: '0 1px 2px rgba(0,0,0,0.4)'
               }}>
@@ -1375,7 +1375,7 @@ export default function AdminLogs() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 style={{ marginTop: 0, color: '#90EE90' }}>Level 807 - "Blooms Creek"</h2>
+            <h2 style={{ marginTop: 0, color: '#b39ddb' }}>Level 807 - "Blooms Creek"</h2>
             <p>
               A serene yet eerie forest realm where bioluminescent flora illuminates the eternal twilight. 
               The air is thick with spores that induce vivid hallucinations after prolonged exposure.
@@ -1390,7 +1390,7 @@ export default function AdminLogs() {
                 padding: '10px 20px',
                 borderRadius: '12px',
                 border: 'none',
-                background: 'rgba(100, 180, 90, 0.8)',
+                background: 'rgba(100, 120, 180, 0.8)',
                 color: '#ffffff',
                 cursor: 'pointer',
                 fontFamily: 'Verdana, sans-serif'
