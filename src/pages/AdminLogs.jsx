@@ -138,6 +138,10 @@ export default function AdminLogs() {
     fetchStats();
     fetchRecentErrors();
     fetchLogFiles();
+    // Re-fetch selected file if filter level changes
+    if (selectedFile) {
+      viewLogFile(selectedFile);
+    }
     // Auto-refresh every 30 seconds
     const interval = setInterval(() => {
       fetchStats();
@@ -146,7 +150,7 @@ export default function AdminLogs() {
     }, 30000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterHours, filterDate]);
+  }, [filterHours, filterDate, filterLevel]);
 
   const handleUserSearch = async () => {
     if (!userSearch.trim()) {
@@ -928,7 +932,8 @@ export default function AdminLogs() {
                         {new Date(err.timestamp).toLocaleString()}
                       </td>
                       <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                        {err.user_email || `User ${err.user_id}`}
+                        {err.user_email || (err.user_id ? `User ${err.user_id}` : 'Unknown User')}
+                        <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {err.user_id || 'N/A'}</div>
                       </td>
                       <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px', maxWidth: '400px' }}>
                         {err.message}
@@ -993,8 +998,8 @@ export default function AdminLogs() {
                         {new Date(log.timestamp).toLocaleString()}
                       </td>
                       <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                        {log.user_email || `User ${log.user_id}`}
-                        <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {log.user_id}</div>
+                        {log.user_email || (log.user_id ? `User ${log.user_id}` : 'Unknown User')}
+                        <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {log.user_id || 'N/A'}</div>
                       </td>
                       <td style={{ padding: '12px' }}>
                         <span style={getLevelBadgeStyle(log.level)}>
@@ -1147,8 +1152,8 @@ export default function AdminLogs() {
                         {new Date(log.timestamp).toLocaleString()}
                       </td>
                       <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                        {log.user_email || `User ${log.user_id}`}
-                        <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {log.user_id}</div>
+                        {log.user_email || (log.user_id ? `User ${log.user_id}` : 'Unknown User')}
+                        <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {log.user_id || 'N/A'}</div>
                       </td>
                       <td style={{ padding: '12px' }}>
                         <span style={getLevelBadgeStyle(log.level)}>
