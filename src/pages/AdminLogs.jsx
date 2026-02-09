@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import { logsService } from '../services/logsService';
 import { userService } from '../services/userService';
 import useAuth from '../hooks/useAuth';
-import backgroundImage from '../assets/images/the void.jpg';
+import backgroundImage from '../assets/images/level 7232003.jpg';
 import backgroundAudio from '../assets/audio/the void.mp3';
 import CalculationPopup from '../components/popups/CalculationPopup';
 import Lvl807 from '../components/AdminFeatures/lvl807';
 import FlytrapHumanoid from '../components/AdminFeatures/FlytrapHumanoid';
+import Lvl7232003Entities from '../components/AdminFeatures/Lvl7232003Entities';
+import AstralBrineLore from '../components/AdminFeatures/AstralBrineLore';
 import '../index.css';
 
 export default function AdminLogs() {
@@ -30,6 +32,11 @@ export default function AdminLogs() {
   const [popup, setPopup] = useState({ isOpen: false, message: '', type: 'success' });
   const [showLorePopup, setShowLorePopup] = useState(false);
   const [showFlytrapPopup, setShowFlytrapPopup] = useState(false);
+  const [showLogFilesPopup, setShowLogFilesPopup] = useState(false);
+  const [showTopErrorsPopup, setShowTopErrorsPopup] = useState(false);
+  const [showTopUsersPopup, setShowTopUsersPopup] = useState(false);
+  const [showEntitiesPopup, setShowEntitiesPopup] = useState(false);
+  const [showAstralBrinePopup, setShowAstralBrinePopup] = useState(false);
   const [usersMap, setUsersMap] = useState({});
 
   // Auto-play background music
@@ -336,8 +343,6 @@ export default function AdminLogs() {
         right: 0,
         bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
         zIndex: 0
       }}></div>
 
@@ -350,6 +355,74 @@ export default function AdminLogs() {
       {/* Easter eggs */}
       <Lvl807 onActivate={() => setShowLorePopup(true)} />
       <FlytrapHumanoid onActivate={() => setShowFlytrapPopup(true)} />
+
+      {/* Entities Button - Upper Left */}
+      <button 
+        onClick={() => setShowEntitiesPopup(true)}
+        style={{ 
+          position: 'fixed',
+          top: '20px',
+          left: '20px',
+          zIndex: 1000,
+          padding: '10px 20px', 
+          borderRadius: '20px', 
+          border: '1px solid rgba(168, 85, 247, 0.4)', 
+          background: 'rgba(0, 0, 0, 0.4)', 
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          cursor: 'pointer',
+          color: '#c084fc',
+          fontFamily: 'Verdana, sans-serif',
+          fontWeight: 500,
+          fontSize: '14px',
+          textShadow: '0 1px 2px rgba(0,0,0,0.4)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'rgba(0, 0, 0, 0.6)';
+          e.target.style.borderColor = 'rgba(168, 85, 247, 0.6)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'rgba(0, 0, 0, 0.4)';
+          e.target.style.borderColor = 'rgba(168, 85, 247, 0.4)';
+        }}
+      >
+        ✦ Entity
+      </button>
+
+      {/* Level 7232003 Button - Upper Right */}
+      <button 
+        onClick={() => setShowAstralBrinePopup(true)}
+        style={{ 
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 1000,
+          padding: '10px 20px', 
+          borderRadius: '20px', 
+          border: '1px solid rgba(168, 85, 247, 0.4)', 
+          background: 'rgba(0, 0, 0, 0.4)', 
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          cursor: 'pointer',
+          color: '#c084fc',
+          fontFamily: 'Verdana, sans-serif',
+          fontWeight: 500,
+          fontSize: '14px',
+          textShadow: '0 1px 2px rgba(0,0,0,0.4)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'rgba(0, 0, 0, 0.6)';
+          e.target.style.borderColor = 'rgba(168, 85, 247, 0.6)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'rgba(0, 0, 0, 0.4)';
+          e.target.style.borderColor = 'rgba(168, 85, 247, 0.4)';
+        }}
+      >
+        ✦ Level 7,232,003
+      </button>
 
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 1, maxWidth: '1400px', margin: '0 auto' }}>
@@ -668,7 +741,7 @@ export default function AdminLogs() {
             <div style={cardStyles}>
               <h3 style={{ 
                 margin: '0 0 8px 0', 
-                color: '#10b981',
+                color: '#a855f7',
                 fontSize: '32px',
                 fontWeight: 'bold',
                 fontFamily: 'Verdana, sans-serif',
@@ -880,6 +953,56 @@ export default function AdminLogs() {
                 Clear Search
               </button>
             )}
+
+            <button
+              onClick={() => setShowLogFilesPopup(true)}
+              style={{
+                padding: '8px 20px',
+                borderRadius: '12px',
+                border: 'none',
+                background: 'rgba(168, 85, 247, 0.8)',
+                color: '#ffffff',
+                cursor: 'pointer',
+                fontFamily: 'Verdana, sans-serif',
+                fontWeight: 500
+              }}
+            >
+              📁 View Log Files
+            </button>
+
+            <button
+              onClick={() => setShowTopErrorsPopup(true)}
+              style={{
+                padding: '8px 20px',
+                borderRadius: '12px',
+                border: 'none',
+                background: 'rgba(239, 68, 68, 0.8)',
+                color: '#ffffff',
+                cursor: 'pointer',
+                fontFamily: 'Verdana, sans-serif',
+                fontWeight: 500
+              }}
+            >
+              ⚠️ Top Error Messages
+            </button>
+
+            <button
+              onClick={() => setShowTopUsersPopup(true)}
+              style={{
+                padding: '8px 20px',
+                borderRadius: '12px',
+                border: 'none',
+                background: 'rgba(156, 163, 175, 0.8)',
+                color: '#ffffff',
+                cursor: 'pointer',
+                fontFamily: 'Verdana, sans-serif',
+                fontWeight: 500
+              }}
+            >
+              👥 Users with Most Errors
+            </button>
+
+
           </div>
 
           {searchMode && searchResults && (
@@ -1051,82 +1174,7 @@ export default function AdminLogs() {
           </div>
         )}
 
-        {/* Log Files List */}
-        {logFiles && logFiles.files && logFiles.files.length > 0 && !searchMode && (
-          <div style={cardStyles}>
-            <h2 style={{ 
-              margin: '0 0 16px 0', 
-              color: '#ffffffff', 
-              textShadow: '0 2px 6px rgba(0,0,0,0.6)', 
-              fontFamily: 'Verdana, sans-serif' 
-            }}>Log Files</h2>
-            
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Verdana, sans-serif' }}>
-                <thead>
-                  <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
-                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>File</th>
-                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>User</th>
-                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Size</th>
-                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Last Modified</th>
-                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {logFiles.files.map((file, index) => (
-                    <tr
-                      key={index}
-                      style={{
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                        backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
-                      }}
-                    >
-                      <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                        {file.key.split('/').pop()}
-                      </td>
-                      <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                        {(() => {
-                          const fileName = file.key.split('/').pop();
-                          const userIdMatch = fileName.match(/user_(\d+)_/);
-                          const userId = userIdMatch ? parseInt(userIdMatch[1]) : null;
-                          const userEmail = userId ? usersMap[userId] : null;
-                          return (
-                            <>
-                              {userEmail || (userId ? `User ${userId}` : 'Unknown User')}
-                              <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {userId || 'N/A'}</div>
-                            </>
-                          );
-                        })()}
-                      </td>
-                      <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                        {(file.size / 1024).toFixed(2)} KB
-                      </td>
-                      <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                        {new Date(file.last_modified).toLocaleString()}
-                      </td>
-                      <td style={{ padding: '12px' }}>
-                        <button
-                          onClick={() => viewLogFile(file.key)}
-                          style={{
-                            padding: '4px 12px',
-                            borderRadius: '8px',
-                            border: 'none',
-                            background: 'rgba(100, 180, 90, 0.8)',
-                            color: '#ffffff',
-                            cursor: 'pointer',
-                            fontSize: '12px'
-                          }}
-                        >
-                          View Logs
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
+
 
         {/* Selected Log File Details */}
         {selectedLogs && selectedLogs.logs && (
@@ -1206,105 +1254,9 @@ export default function AdminLogs() {
           </div>
         )}
 
-        {/* Top Errors */}
-        {stats && stats.top_errors && stats.top_errors.length > 0 && (
-          <div style={cardStyles}>
-            <h2 style={{ 
-              margin: '0 0 16px 0', 
-              color: '#ffffffff', 
-              textShadow: '0 2px 6px rgba(0,0,0,0.6)', 
-              fontFamily: 'Verdana, sans-serif' 
-            }}>Top Error Messages</h2>
-            
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Verdana, sans-serif' }}>
-                <thead>
-                  <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
-                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Error Message</th>
-                    <th style={{ padding: '12px', textAlign: 'right', color: '#ffffff', fontWeight: 600, width: '100px' }}>Count</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stats.top_errors.map((error, index) => (
-                    <tr
-                      key={index}
-                      style={{
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                        backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
-                      }}
-                    >
-                      <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px' }}>
-                        {error.message}
-                      </td>
-                      <td style={{ padding: '12px', textAlign: 'right' }}>
-                        <span style={{
-                          padding: '4px 12px',
-                          borderRadius: '12px',
-                          background: 'rgba(239, 68, 68, 0.3)',
-                          color: '#ef4444',
-                          fontSize: '14px',
-                          fontWeight: 'bold'
-                        }}>
-                          {error.count}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
 
-        {/* Top Error Users */}
-        {stats && stats.top_error_users && stats.top_error_users.length > 0 && (
-          <div style={cardStyles}>
-            <h2 style={{ 
-              margin: '0 0 16px 0', 
-              color: '#ffffffff', 
-              textShadow: '0 2px 6px rgba(0,0,0,0.6)', 
-              fontFamily: 'Verdana, sans-serif' 
-            }}>Users with Most Errors</h2>
-            
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Verdana, sans-serif' }}>
-                <thead>
-                  <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
-                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>User Email</th>
-                    <th style={{ padding: '12px', textAlign: 'right', color: '#ffffff', fontWeight: 600, width: '100px' }}>Errors</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stats.top_error_users.map((user, index) => (
-                    <tr
-                      key={index}
-                      style={{
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                        backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
-                      }}
-                    >
-                      <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px' }}>
-                        {user.email}
-                      </td>
-                      <td style={{ padding: '12px', textAlign: 'right' }}>
-                        <span style={{
-                          padding: '4px 12px',
-                          borderRadius: '12px',
-                          background: 'rgba(239, 68, 68, 0.3)',
-                          color: '#ef4444',
-                          fontSize: '14px',
-                          fontWeight: 'bold'
-                        }}>
-                          {user.count}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
+
+
 
         {/* No data message */}
         {!loading && recentErrors && recentErrors.count === 0 && (
@@ -1330,6 +1282,360 @@ export default function AdminLogs() {
         />
       )}
 
+      {/* Log Files Popup */}
+      {showLogFilesPopup && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            padding: '40px'
+          }}
+          onClick={() => setShowLogFilesPopup(false)}
+        >
+          <div
+            className="log-files-popup"
+            style={{
+              maxWidth: '900px',
+              width: '100%',
+              maxHeight: '80vh',
+              backgroundColor: 'rgba(40, 30, 60, 0.95)',
+              padding: '30px',
+              borderRadius: '20px',
+              border: '2px solid rgba(168, 85, 247, 0.3)',
+              color: '#ffffff',
+              fontFamily: 'Verdana, sans-serif',
+              overflow: 'auto'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h2 style={{ margin: 0, color: '#c084fc' }}>📁 Log Files</h2>
+              <button
+                onClick={() => setShowLogFilesPopup(false)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  background: 'rgba(100, 100, 100, 0.8)',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  fontFamily: 'Verdana, sans-serif'
+                }}
+              >
+                Close
+              </button>
+            </div>
+            
+            {logFiles && logFiles.files && logFiles.files.length > 0 ? (
+              <>
+                <style>
+                  {`
+                    .log-files-popup::-webkit-scrollbar,
+                    .log-files-scroll::-webkit-scrollbar {
+                      width: 0;
+                      height: 0;
+                    }
+                    .log-files-popup::-webkit-scrollbar-track,
+                    .log-files-scroll::-webkit-scrollbar-track {
+                      background: transparent;
+                    }
+                    .log-files-popup::-webkit-scrollbar-thumb,
+                    .log-files-scroll::-webkit-scrollbar-thumb {
+                      background: transparent;
+                    }
+                    .log-files-popup,
+                    .log-files-scroll {
+                      -ms-overflow-style: none;
+                      scrollbar-width: none;
+                    }
+                  `}
+                </style>
+                <div 
+                  className="log-files-scroll"
+                  style={{ 
+                    overflowX: 'auto'
+                  }}
+                >
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Verdana, sans-serif' }}>
+                  <thead>
+                    <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
+                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>File</th>
+                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>User</th>
+                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Size</th>
+                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Last Modified</th>
+                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {logFiles.files.map((file, index) => (
+                      <tr
+                        key={index}
+                        style={{
+                          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                          backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
+                        }}
+                      >
+                        <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
+                          {file.key.split('/').pop()}
+                        </td>
+                        <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
+                          {(() => {
+                            const fileName = file.key.split('/').pop();
+                            const userIdMatch = fileName.match(/user_(\d+)_/);
+                            const userId = userIdMatch ? parseInt(userIdMatch[1]) : null;
+                            const userEmail = userId ? usersMap[userId] : null;
+                            return (
+                              <>
+                                {userEmail || (userId ? `User ${userId}` : 'Unknown User')}
+                                <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {userId || 'N/A'}</div>
+                              </>
+                            );
+                          })()}
+                        </td>
+                        <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
+                          {(file.size / 1024).toFixed(2)} KB
+                        </td>
+                        <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
+                          {new Date(file.last_modified).toLocaleString()}
+                        </td>
+                        <td style={{ padding: '12px' }}>
+                          <button
+                            onClick={() => {
+                              viewLogFile(file.key);
+                              setShowLogFilesPopup(false);
+                            }}
+                            style={{
+                              padding: '4px 12px',
+                              borderRadius: '8px',
+                              border: 'none',
+                              background: 'rgba(168, 85, 247, 0.8)',
+                              color: '#ffffff',
+                              cursor: 'pointer',
+                              fontSize: '12px'
+                            }}
+                          >
+                            View Logs
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '40px', color: '#cacacaff' }}>
+                No log files found
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Top Errors Popup */}
+      {showTopErrorsPopup && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            padding: '40px'
+          }}
+          onClick={() => setShowTopErrorsPopup(false)}
+        >
+          <div
+            style={{
+              maxWidth: '800px',
+              width: '100%',
+              maxHeight: '80vh',
+              backgroundColor: 'rgba(60, 20, 20, 0.95)',
+              padding: '30px',
+              borderRadius: '20px',
+              border: '2px solid rgba(239, 68, 68, 0.3)',
+              color: '#ffffff',
+              fontFamily: 'Verdana, sans-serif',
+              overflow: 'auto'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h2 style={{ margin: 0, color: '#ff6464' }}>⚠️ Top Error Messages</h2>
+              <button
+                onClick={() => setShowTopErrorsPopup(false)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  background: 'rgba(100, 100, 100, 0.8)',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  fontFamily: 'Verdana, sans-serif'
+                }}
+              >
+                Close
+              </button>
+            </div>
+            
+            {stats && stats.top_errors && stats.top_errors.length > 0 ? (
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Verdana, sans-serif' }}>
+                  <thead>
+                    <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
+                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Error Message</th>
+                      <th style={{ padding: '12px', textAlign: 'right', color: '#ffffff', fontWeight: 600, width: '100px' }}>Count</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {stats.top_errors.map((error, index) => (
+                      <tr
+                        key={index}
+                        style={{
+                          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                          backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
+                        }}
+                      >
+                        <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px' }}>
+                          {error.message}
+                        </td>
+                        <td style={{ padding: '12px', textAlign: 'right' }}>
+                          <span style={{
+                            padding: '4px 12px',
+                            borderRadius: '12px',
+                            background: 'rgba(239, 68, 68, 0.3)',
+                            color: '#ef4444',
+                            fontSize: '14px',
+                            fontWeight: 'bold'
+                          }}>
+                            {error.count}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '40px', color: '#cacacaff' }}>
+                No error data available
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Top Users Popup */}
+      {showTopUsersPopup && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            padding: '40px'
+          }}
+          onClick={() => setShowTopUsersPopup(false)}
+        >
+          <div
+            style={{
+              maxWidth: '700px',
+              width: '100%',
+              maxHeight: '80vh',
+              backgroundColor: 'rgba(50, 50, 50, 0.95)',
+              padding: '30px',
+              borderRadius: '20px',
+              border: '2px solid rgba(156, 163, 175, 0.3)',
+              color: '#ffffff',
+              fontFamily: 'Verdana, sans-serif',
+              overflow: 'auto'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h2 style={{ margin: 0, color: '#9ca3af' }}>👥 Users with Most Errors</h2>
+              <button
+                onClick={() => setShowTopUsersPopup(false)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  background: 'rgba(100, 100, 100, 0.8)',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  fontFamily: 'Verdana, sans-serif'
+                }}
+              >
+                Close
+              </button>
+            </div>
+            
+            {stats && stats.top_error_users && stats.top_error_users.length > 0 ? (
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Verdana, sans-serif' }}>
+                  <thead>
+                    <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
+                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>User Email</th>
+                      <th style={{ padding: '12px', textAlign: 'right', color: '#ffffff', fontWeight: 600, width: '100px' }}>Errors</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {stats.top_error_users.map((user, index) => (
+                      <tr
+                        key={index}
+                        style={{
+                          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                          backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
+                        }}
+                      >
+                        <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px' }}>
+                          {user.email}
+                        </td>
+                        <td style={{ padding: '12px', textAlign: 'right' }}>
+                          <span style={{
+                            padding: '4px 12px',
+                            borderRadius: '12px',
+                            background: 'rgba(239, 68, 68, 0.3)',
+                            color: '#ef4444',
+                            fontSize: '14px',
+                            fontWeight: 'bold'
+                          }}>
+                            {user.count}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '40px', color: '#cacacaff' }}>
+                No user error data available
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {showLorePopup && (
         <div
           style={{
@@ -1350,17 +1656,17 @@ export default function AdminLogs() {
           <div
             style={{
               maxWidth: '600px',
-              backgroundColor: 'rgba(30, 40, 30, 0.95)',
+              backgroundColor: 'rgba(88, 28, 135, 0.95)',
               padding: '30px',
               borderRadius: '20px',
-              border: '2px solid rgba(100, 150, 100, 0.3)',
+              border: '2px solid rgba(168, 85, 247, 0.3)',
               color: '#ffffff',
               fontFamily: 'Verdana, sans-serif',
               lineHeight: 1.6
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 style={{ marginTop: 0, color: '#b39ddb' }}>Level 807 - "Blooms Creek"</h2>
+            <h2 style={{ marginTop: 0, color: '#e9d5ff' }}>Level 807 - "Blooms Creek"</h2>
             <p>
               A serene yet eerie forest realm where bioluminescent flora illuminates the eternal twilight. 
               The air is thick with spores that induce vivid hallucinations after prolonged exposure.
@@ -1446,6 +1752,18 @@ export default function AdminLogs() {
           </div>
         </div>
       )}
+
+      {/* Entities Lore Popup */}
+      <Lvl7232003Entities 
+        isOpen={showEntitiesPopup}
+        onClose={() => setShowEntitiesPopup(false)}
+      />
+
+      {/* Astral Brine Lore Popup */}
+      <AstralBrineLore 
+        isOpen={showAstralBrinePopup}
+        onClose={() => setShowAstralBrinePopup(false)}
+      />
     </div>
   );
 }
