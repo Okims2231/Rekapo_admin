@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { logsService } from '../services/logsService';
+import { userService } from '../services/userService';
 import useAuth from '../hooks/useAuth';
 import backgroundImage from '../assets/images/lvl807.jpg';
 import backgroundAudio from '../assets/audio/lvl807.mp3';
@@ -29,6 +30,7 @@ export default function AdminLogs() {
   const [popup, setPopup] = useState({ isOpen: false, message: '', type: 'success' });
   const [showLorePopup, setShowLorePopup] = useState(false);
   const [showFlytrapPopup, setShowFlytrapPopup] = useState(false);
+  const [usersMap, setUsersMap] = useState({});
 
   // Ensure audio volume stays at 30%
   useEffect(() => {
@@ -133,6 +135,23 @@ export default function AdminLogs() {
       console.error('Error viewing log file:', err);
     }
   };
+
+  // Fetch users for email lookup
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const data = await userService.getUsers({ page: 1, pageSize: 1000 });
+        const map = {};
+        data.users.forEach(user => {
+          map[user.id] = user.email;
+        });
+        setUsersMap(map);
+      } catch (err) {
+        console.error('Error fetching users:', err);
+      }
+    };
+    fetchUsers();
+  }, []);
 
   useEffect(() => {
     fetchStats();
@@ -1071,9 +1090,10 @@ export default function AdminLogs() {
                           const fileName = file.key.split('/').pop();
                           const userIdMatch = fileName.match(/user_(\d+)_/);
                           const userId = userIdMatch ? userIdMatch[1] : null;
+                          const userEmail = userId ? usersMap[userId] : null;
                           return (
                             <>
-                              {file.user_email || (userId ? `User ${userId}` : 'Unknown User')}
+                              {userEmail || (userId ? `User ${userId}` : 'Unknown User')}
                               <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {userId || 'N/A'}</div>
                             </>
                           );
