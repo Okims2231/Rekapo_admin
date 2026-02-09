@@ -32,63 +32,47 @@ export default function AdminLogs() {
   const [showFlytrapPopup, setShowFlytrapPopup] = useState(false);
   const [usersMap, setUsersMap] = useState({});
 
-  // Enforce 30% volume
-  const enforceVolume = () => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.30;
-    }
-  };
-
-  // Ensure audio volume stays at 30%
-  useEffect(() => {
-    enforceVolume();
-  }, [popup.isOpen, showLorePopup, showFlytrapPopup]);
-
   // Auto-play background music
   useEffect(() => {
-    const audioElement = audioRef.current;
-    if (!audioElement) return;
+    const audio = audioRef.current;
+    if (!audio) return;
 
-    // Set volume immediately and enforce it
-    audioElement.volume = 0.30;
-
-    const playAudio = async () => {
-      try {
-        audioElement.volume = 0.30;
-        await audioElement.play();
-      } catch (err) {
-        console.log('Auto-play prevented:', err);
+    // Force volume to always be 0.3
+    const forceVolume = () => {
+      if (audio.volume !== 0.3) {
+        audio.volume = 0.3;
       }
     };
 
-    // Try to play immediately
-    playAudio();
-    
-    // Enforce volume constantly
-    const volumeInterval = setInterval(() => {
-      if (audioElement) {
-        audioElement.volume = 0.30;
-      }
-    }, 500);
+    // Set initial volume
+    audio.volume = 0.3;
 
-    const handleLoadedData = () => {
-      audioElement.volume = 0.30;
-      playAudio();
+    // Add listener to prevent volume from changing
+    audio.addEventListener('volumechange', forceVolume);
+
+    // Play audio
+    audio.play().catch(err => {
+      console.log('Auto-play prevented:', err);
+    });
+
+    // Click handler fallback
+    const handleFirstClick = () => {
+      if (audio && audio.paused) {
+        audio.volume = 0.3;
+        audio.play().catch(err => {
+          console.log('Audio play failed:', err);
+        });
+      }
+      document.removeEventListener('click', handleFirstClick);
     };
 
-    audioElement.addEventListener('loadeddata', handleLoadedData);
-    audioElement.addEventListener('play', enforceVolume);
-    audioElement.addEventListener('playing', enforceVolume);
-    audioElement.addEventListener('timeupdate', enforceVolume);
+    document.addEventListener('click', handleFirstClick);
 
     return () => {
-      clearInterval(volumeInterval);
-      audioElement.removeEventListener('loadeddata', handleLoadedData);
-      audioElement.removeEventListener('play', enforceVolume);
-      audioElement.removeEventListener('playing', enforceVolume);
-      audioElement.removeEventListener('timeupdate', enforceVolume);
+      audio.removeEventListener('volumechange', forceVolume);
+      document.removeEventListener('click', handleFirstClick);
     };
-  }, []);
+  }, [loading]);
 
   const fetchStats = async () => {
     try {
@@ -358,13 +342,10 @@ export default function AdminLogs() {
       }}></div>
 
       {/* Background music */}
-      <audio 
-        ref={audioRef} 
-        src={backgroundAudio}
-        loop
-        autoPlay
-        style={{ display: 'none' }}
-      />
+      <audio ref={audioRef} loop>
+        <source src={backgroundAudio} type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
 
       {/* Easter eggs */}
       <Lvl807 onActivate={() => setShowLorePopup(true)} />
