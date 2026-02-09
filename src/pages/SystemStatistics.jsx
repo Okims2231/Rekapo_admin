@@ -99,25 +99,6 @@ export default function SystemStatistics() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  const handleCalculateToday = async () => {
-    try {
-      const today = new Date().toISOString().split('T')[0];
-      await statisticsService.calculateStatistics(today);
-      await fetchStatistics();
-      setPopup({ 
-        isOpen: true, 
-        message: 'Statistics calculated successfully for today!', 
-        type: 'success' 
-      });
-    } catch (err) {
-      setPopup({ 
-        isOpen: true, 
-        message: `Error calculating statistics: ${err.message}`, 
-        type: 'error' 
-      });
-    }
-  };
-
   const handleDeleteStatistic = async (statId) => {
     if (window.confirm('Are you sure you want to delete this statistic?')) {
       try {
@@ -536,62 +517,6 @@ export default function SystemStatistics() {
               }}
             >
               Logout
-            </button>
-          </div>
-        </div>
-
-        {/* Action Buttons Card */}
-        <div style={cardStyles}>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: 12
-          }}>
-            <div>
-              <h2 style={{ 
-                margin: 0, 
-                color: '#ffffffff', 
-                textShadow: '0 2px 6px rgba(0,0,0,0.6)', 
-                fontFamily: 'Verdana, sans-serif' 
-              }}>Actions</h2>
-              <div style={{ 
-                color: '#cacacaff', 
-                marginTop: 6, 
-                textShadow: '0 1px 3px rgba(0,0,0,0.4)', 
-                fontFamily: 'Verdana, sans-serif' 
-              }}>Calculate new statistics</div>
-            </div>
-
-            <button
-              onClick={handleCalculateToday}
-              style={{
-                padding: '10px 20px',
-                borderRadius: '20px',
-                border: 'none',
-                background: 'rgba(100, 180, 90, 0.8)',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                color: '#ffffff',
-                cursor: 'pointer',
-                fontFamily: 'Verdana, sans-serif',
-                fontWeight: 500,
-                textShadow: '0 1px 2px rgba(0,0,0,0.3)',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(100, 180, 90, 1)';
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 4px 12px rgba(100, 180, 90, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(100, 180, 90, 0.8)';
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = 'none';
-              }}
-            >
-              Calculate Today's Statistics
             </button>
           </div>
         </div>

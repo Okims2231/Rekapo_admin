@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import AuthCallback from './pages/AuthCallback';
 import AdminInterface from './pages/AdminInterface';
 import Stats from './pages/Stats';
+import AdminLogs from './pages/AdminLogs';
 import { AdminProvider } from './components/AdminProvider';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -65,6 +66,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <SystemStatistics />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/logs"
+              element={
+                <ProtectedRoute>
+                  <AdminLogs />
                 </ProtectedRoute>
               }
             />
