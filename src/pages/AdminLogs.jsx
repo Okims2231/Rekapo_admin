@@ -1089,7 +1089,7 @@ export default function AdminLogs() {
                         {(() => {
                           const fileName = file.key.split('/').pop();
                           const userIdMatch = fileName.match(/user_(\d+)_/);
-                          const userId = userIdMatch ? userIdMatch[1] : null;
+                          const userId = userIdMatch ? parseInt(userIdMatch[1]) : null;
                           const userEmail = userId ? usersMap[userId] : null;
                           return (
                             <>
