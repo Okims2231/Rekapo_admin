@@ -8,7 +8,7 @@ import backgroundAudio from '../assets/audio/the void.mp3';
 import CalculationPopup from '../components/popups/CalculationPopup';
 import Lvl807 from '../components/AdminFeatures/lvl807';
 import FlytrapHumanoid from '../components/AdminFeatures/FlytrapHumanoid';
-import Lvl7232003Entities from '../components/AdminFeatures/Lvl7232003Entities';
+import Lvl7232003Entities from '../components/AdminFeatures/lvl7232003entities';
 import AstralBrineLore from '../components/AdminFeatures/AstralBrineLore';
 import '../index.css';
 
