@@ -140,11 +140,25 @@ export default function AdminLogs() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const data = await userService.getUsers({ page: 1, pageSize: 1000 });
+        // Fetch multiple pages since API max is 100
         const map = {};
-        data.users.forEach(user => {
-          map[user.id] = user.email;
-        });
+        let page = 1;
+        let hasMore = true;
+        
+        while (hasMore) {
+          const data = await userService.getUsers({ page, pageSize: 100 });
+          data.users.forEach(user => {
+            map[user.id] = user.email;
+          });
+          
+          // Check if there are more pages
+          hasMore = data.users.length === 100;
+          page++;
+          
+          // Safety limit to avoid infinite loop
+          if (page > 10) break;
+        }
+        
         setUsersMap(map);
       } catch (err) {
         console.error('Error fetching users:', err);
