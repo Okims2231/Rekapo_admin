@@ -420,11 +420,11 @@ export default function UserAnalytics() {
               }}>View user activity and usage statistics</div>
             </div>
 
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               <Link to="/statistics">
                 <button
                   style={{
-                    padding: '10px 20px',
+                    padding: '8px 14px',
                     borderRadius: '25px',
                     border: '2px solid rgba(255, 255, 255, 0.2)',
                     background: 'rgba(0, 0, 0, 0.6)',
@@ -434,7 +434,7 @@ export default function UserAnalytics() {
                     color: '#ffffff',
                     fontFamily: 'Verdana, sans-serif',
                     fontWeight: 500,
-                    fontSize: '14px',
+                    fontSize: '13px',
                     textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                     transition: 'all 0.3s ease'
                   }}
@@ -458,7 +458,7 @@ export default function UserAnalytics() {
               <Link to="/users">
                 <button
                   style={{
-                    padding: '10px 20px',
+                    padding: '8px 14px',
                     borderRadius: '25px',
                     border: '2px solid rgba(255, 255, 255, 0.2)',
                     background: 'rgba(0, 0, 0, 0.6)',
@@ -468,7 +468,7 @@ export default function UserAnalytics() {
                     color: '#ffffff',
                     fontFamily: 'Verdana, sans-serif',
                     fontWeight: 500,
-                    fontSize: '14px',
+                    fontSize: '13px',
                     textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                     transition: 'all 0.3s ease'
                   }}
@@ -491,7 +491,7 @@ export default function UserAnalytics() {
 
               <button
                 style={{
-                  padding: '10px 20px',
+                  padding: '8px 14px',
                   borderRadius: '25px',
                   border: '2px solid rgba(13, 71, 161, 0.6)',
                   background: 'linear-gradient(135deg, rgba(13, 71, 161, 0.9), rgba(21, 101, 192, 0.9))',
@@ -501,7 +501,7 @@ export default function UserAnalytics() {
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 600,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   textShadow: '0 2px 4px rgba(0,0,0,0.4)',
                   boxShadow: '0 4px 15px rgba(13, 71, 161, 0.4)',
                   transition: 'all 0.3s ease'
@@ -513,7 +513,7 @@ export default function UserAnalytics() {
               <Link to="/sessions">
                 <button
                   style={{
-                    padding: '10px 20px',
+                    padding: '8px 14px',
                     borderRadius: '25px',
                     border: '2px solid rgba(255, 255, 255, 0.2)',
                     background: 'rgba(0, 0, 0, 0.6)',
@@ -523,7 +523,7 @@ export default function UserAnalytics() {
                     color: '#ffffff',
                     fontFamily: 'Verdana, sans-serif',
                     fontWeight: 500,
-                    fontSize: '14px',
+                    fontSize: '13px',
                     textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                     transition: 'all 0.3s ease'
                   }}
@@ -547,7 +547,7 @@ export default function UserAnalytics() {
               <Link to="/logs">
                 <button
                   style={{
-                    padding: '10px 20px',
+                    padding: '8px 14px',
                     borderRadius: '25px',
                     border: '2px solid rgba(255, 255, 255, 0.2)',
                     background: 'rgba(0, 0, 0, 0.6)',
@@ -557,7 +557,7 @@ export default function UserAnalytics() {
                     color: '#ffffff',
                     fontFamily: 'Verdana, sans-serif',
                     fontWeight: 500,
-                    fontSize: '14px',
+                    fontSize: '13px',
                     textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                     transition: 'all 0.3s ease'
                   }}
@@ -581,7 +581,7 @@ export default function UserAnalytics() {
               <Link to="/">
                 <button
                   style={{
-                    padding: '10px 20px',
+                    padding: '8px 14px',
                     borderRadius: '25px',
                     border: '2px solid rgba(255, 255, 255, 0.2)',
                     background: 'rgba(0, 0, 0, 0.6)',
@@ -591,7 +591,7 @@ export default function UserAnalytics() {
                     color: '#ffffff',
                     fontFamily: 'Verdana, sans-serif',
                     fontWeight: 500,
-                    fontSize: '14px',
+                    fontSize: '13px',
                     textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                     transition: 'all 0.3s ease'
                   }}
@@ -615,7 +615,7 @@ export default function UserAnalytics() {
               <button
                 onClick={handleLogout}
                 style={{
-                  padding: '10px 20px',
+                  padding: '8px 14px',
                   borderRadius: '25px',
                   border: '2px solid rgba(244, 67, 54, 0.5)',
                   background: 'rgba(0, 0, 0, 0.6)',
@@ -625,7 +625,7 @@ export default function UserAnalytics() {
                   color: '#ff5252',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 600,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}

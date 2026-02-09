@@ -303,10 +303,10 @@ export default function SystemStatistics() {
             }}>View and manage system statistics</div>
           </div>
 
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             <button 
               style={{ 
-                padding: '10px 20px', 
+                padding: '8px 14px', 
                 borderRadius: '25px', 
                 border: '2px solid rgba(100, 180, 90, 0.6)', 
                 background: 'linear-gradient(135deg, rgba(100, 180, 90, 0.9), rgba(80, 160, 70, 0.9))', 
@@ -316,7 +316,7 @@ export default function SystemStatistics() {
                 color: '#ffffff',
                 fontFamily: 'Verdana, sans-serif',
                 fontWeight: 600,
-                fontSize: '14px',
+                fontSize: '13px',
                 textShadow: '0 2px 4px rgba(0,0,0,0.4)',
                 boxShadow: '0 4px 15px rgba(100, 180, 90, 0.4)',
                 transition: 'all 0.3s ease'
@@ -328,7 +328,7 @@ export default function SystemStatistics() {
             <Link to="/users">
               <button 
                 style={{ 
-                  padding: '10px 20px', 
+                  padding: '8px 14px', 
                   borderRadius: '25px', 
                   border: '2px solid rgba(255, 255, 255, 0.2)', 
                   background: 'rgba(255, 255, 255, 0.1)', 
@@ -338,7 +338,7 @@ export default function SystemStatistics() {
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
@@ -362,7 +362,7 @@ export default function SystemStatistics() {
             <Link to="/user-analytics">
               <button 
                 style={{ 
-                  padding: '10px 20px', 
+                  padding: '8px 14px', 
                   borderRadius: '25px', 
                   border: '2px solid rgba(255, 255, 255, 0.2)', 
                   background: 'rgba(255, 255, 255, 0.1)', 
@@ -372,7 +372,7 @@ export default function SystemStatistics() {
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
@@ -396,7 +396,7 @@ export default function SystemStatistics() {
             <Link to="/sessions">
               <button 
                 style={{ 
-                  padding: '10px 20px', 
+                  padding: '8px 14px', 
                   borderRadius: '25px', 
                   border: '2px solid rgba(255, 255, 255, 0.2)', 
                   background: 'rgba(255, 255, 255, 0.1)', 
@@ -406,7 +406,7 @@ export default function SystemStatistics() {
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
@@ -430,7 +430,7 @@ export default function SystemStatistics() {
             <Link to="/logs">
               <button 
                 style={{ 
-                  padding: '10px 20px', 
+                  padding: '8px 14px', 
                   borderRadius: '25px', 
                   border: '2px solid rgba(255, 255, 255, 0.2)', 
                   background: 'rgba(255, 255, 255, 0.1)', 
@@ -440,7 +440,7 @@ export default function SystemStatistics() {
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
@@ -464,7 +464,7 @@ export default function SystemStatistics() {
             <Link to="/">
               <button 
                 style={{ 
-                  padding: '10px 20px', 
+                  padding: '8px 14px', 
                   borderRadius: '25px', 
                   border: '2px solid rgba(255, 255, 255, 0.2)', 
                   background: 'rgba(255, 255, 255, 0.1)', 
@@ -474,7 +474,7 @@ export default function SystemStatistics() {
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
@@ -498,7 +498,7 @@ export default function SystemStatistics() {
             <button 
               onClick={handleLogout}
               style={{ 
-                padding: '10px 20px', 
+                padding: '8px 14px', 
                 borderRadius: '25px', 
                 border: '2px solid rgba(239, 68, 68, 0.6)', 
                 background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9))', 
@@ -508,7 +508,7 @@ export default function SystemStatistics() {
                 color: '#ffffff',
                 fontFamily: 'Verdana, sans-serif',
                 fontWeight: 600,
-                fontSize: '14px',
+                fontSize: '13px',
                 textShadow: '0 2px 4px rgba(0,0,0,0.4)',
                 boxShadow: '0 4px 15px rgba(239, 68, 68, 0.4)',
                 transition: 'all 0.3s ease'

@@ -343,11 +343,11 @@ export default function UserManagement() {
             }}>Manage users and permissions</div>
           </div>
 
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             <Link to="/statistics">
               <button
                 style={{
-                  padding: '10px 20px',
+                  padding: '8px 14px',
                   borderRadius: '25px',
                   border: '2px solid rgba(255, 255, 255, 0.2)',
                   background: 'rgba(0, 0, 0, 0.6)',
@@ -357,7 +357,7 @@ export default function UserManagement() {
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
@@ -380,7 +380,7 @@ export default function UserManagement() {
 
             <button
               style={{
-                padding: '10px 20px',
+                padding: '8px 14px',
                 borderRadius: '25px',
                 border: '2px solid rgba(13, 71, 161, 0.6)',
                 background: 'linear-gradient(135deg, rgba(13, 71, 161, 0.9), rgba(21, 101, 192, 0.9))',
@@ -390,7 +390,7 @@ export default function UserManagement() {
                 color: '#ffffff',
                 fontFamily: 'Verdana, sans-serif',
                 fontWeight: 600,
-                fontSize: '14px',
+                fontSize: '13px',
                 textShadow: '0 2px 4px rgba(0,0,0,0.4)',
                 boxShadow: '0 4px 15px rgba(13, 71, 161, 0.4)',
                 transition: 'all 0.3s ease'
@@ -402,7 +402,7 @@ export default function UserManagement() {
             <Link to="/user-analytics">
               <button
                 style={{
-                  padding: '10px 20px',
+                  padding: '8px 14px',
                   borderRadius: '25px',
                   border: '2px solid rgba(255, 255, 255, 0.2)',
                   background: 'rgba(0, 0, 0, 0.6)',
@@ -412,7 +412,7 @@ export default function UserManagement() {
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
@@ -436,7 +436,7 @@ export default function UserManagement() {
             <Link to="/sessions">
               <button
                 style={{
-                  padding: '10px 20px',
+                  padding: '8px 14px',
                   borderRadius: '25px',
                   border: '2px solid rgba(255, 255, 255, 0.2)',
                   background: 'rgba(0, 0, 0, 0.6)',
@@ -446,7 +446,7 @@ export default function UserManagement() {
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
@@ -470,7 +470,7 @@ export default function UserManagement() {
             <Link to="/logs">
               <button
                 style={{
-                  padding: '10px 20px',
+                  padding: '8px 14px',
                   borderRadius: '25px',
                   border: '2px solid rgba(255, 255, 255, 0.2)',
                   background: 'rgba(0, 0, 0, 0.6)',
@@ -480,7 +480,7 @@ export default function UserManagement() {
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
@@ -504,7 +504,7 @@ export default function UserManagement() {
             <Link to="/">
               <button
                 style={{
-                  padding: '10px 20px',
+                  padding: '8px 14px',
                   borderRadius: '25px',
                   border: '2px solid rgba(255, 255, 255, 0.2)',
                   background: 'rgba(0, 0, 0, 0.6)',
@@ -514,7 +514,7 @@ export default function UserManagement() {
                   color: '#ffffff',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
-                  fontSize: '14px',
+                  fontSize: '13px',
                   textShadow: '0 1px 3px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
@@ -538,7 +538,7 @@ export default function UserManagement() {
             <button
               onClick={handleLogout}
               style={{
-                padding: '10px 20px',
+                padding: '8px 14px',
                 borderRadius: '25px',
                 border: '2px solid rgba(239, 68, 68, 0.6)',
                 background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9))',
@@ -548,7 +548,7 @@ export default function UserManagement() {
                 color: '#ffffff',
                 fontFamily: 'Verdana, sans-serif',
                 fontWeight: 600,
-                fontSize: '14px',
+                fontSize: '13px',
                 textShadow: '0 2px 4px rgba(0,0,0,0.4)',
                 boxShadow: '0 4px 15px rgba(239, 68, 68, 0.4)',
                 transition: 'all 0.3s ease'
