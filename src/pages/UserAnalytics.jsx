@@ -544,6 +544,40 @@ export default function UserAnalytics() {
                 </button>
               </Link>
 
+              <Link to="/logs">
+                <button
+                  style={{
+                    padding: '10px 20px',
+                    borderRadius: '25px',
+                    border: '2px solid rgba(255, 255, 255, 0.2)',
+                    background: 'rgba(0, 0, 0, 0.6)',
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
+                    cursor: 'pointer',
+                    color: '#ffffff',
+                    fontFamily: 'Verdana, sans-serif',
+                    fontWeight: 500,
+                    fontSize: '14px',
+                    textShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                    e.target.style.transform = 'translateY(-3px)';
+                    e.target.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
+                    e.target.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = 'rgba(0, 0, 0, 0.6)';
+                    e.target.style.transform = 'translateY(0)';
+                    e.target.style.boxShadow = 'none';
+                    e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                  }}
+                >
+                  App Logs
+                </button>
+              </Link>
+
               <Link to="/">
                 <button
                   style={{
