@@ -58,31 +58,20 @@ export default function AdminLogs() {
       }
     };
 
-    const timer = setTimeout(playAudio, 100);
-
-    const handleFirstClick = () => {
-      if (audioRef.current && audioRef.current.paused) {
-        audioRef.current.volume = 0.30;
-        audioRef.current.play().catch(err => {
-          console.log('Audio play failed:', err);
-        });
-      }
-      document.removeEventListener('click', handleFirstClick);
-    };
-
-    document.addEventListener('click', handleFirstClick);
+    // Try to play immediately
+    playAudio();
     
     const audioElement = audioRef.current;
     
     if (audioElement) {
       audioElement.addEventListener('volumechange', maintainVolume);
+      audioElement.addEventListener('loadeddata', playAudio);
     }
 
     return () => {
-      clearTimeout(timer);
-      document.removeEventListener('click', handleFirstClick);
       if (audioElement) {
         audioElement.removeEventListener('volumechange', maintainVolume);
+        audioElement.removeEventListener('loadeddata', playAudio);
       }
     };
   }, []);
@@ -359,6 +348,7 @@ export default function AdminLogs() {
         ref={audioRef} 
         src={backgroundAudio}
         loop
+        autoPlay
         style={{ display: 'none' }}
       />
 
