@@ -1188,31 +1188,38 @@ export default function AdminLogs() {
                   </tr>
                 </thead>
                 <tbody>
-                  {selectedLogs.logs.map((log, index) => (
-                    <tr
-                      key={index}
-                      style={{
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                        backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
-                      }}
-                    >
-                      <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                        {new Date(log.timestamp).toLocaleString()}
-                      </td>
-                      <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                        {log.user_email || (log.user_id ? `User ${log.user_id}` : 'Unknown User')}
-                        <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {log.user_id || 'N/A'}</div>
-                      </td>
-                      <td style={{ padding: '12px' }}>
-                        <span style={getLevelBadgeStyle(log.level)}>
-                          {log.level}
-                        </span>
-                      </td>
-                      <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px' }}>
-                        {log.message}
-                      </td>
-                    </tr>
-                  ))}
+                  {selectedLogs.logs.map((log, index) => {
+                    // Extract user ID from filename
+                    const fileName = selectedFile ? selectedFile.split('/').pop() : '';
+                    const userIdMatch = fileName.match(/user_(\d+)_/);
+                    const userId = userIdMatch ? parseInt(userIdMatch[1]) : null;
+                    
+                    return (
+                      <tr
+                        key={index}
+                        style={{
+                          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                          backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
+                        }}
+                      >
+                        <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
+                          {new Date(log.timestamp).toLocaleString()}
+                        </td>
+                        <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
+                          {selectedLogs.user_email || (userId ? `User ${userId}` : 'Unknown User')}
+                          <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {userId || 'N/A'}</div>
+                        </td>
+                        <td style={{ padding: '12px' }}>
+                          <span style={getLevelBadgeStyle(log.level)}>
+                            {log.level}
+                          </span>
+                        </td>
+                        <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px' }}>
+                          {log.message}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
