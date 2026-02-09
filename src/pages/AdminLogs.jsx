@@ -32,47 +32,61 @@ export default function AdminLogs() {
   const [showFlytrapPopup, setShowFlytrapPopup] = useState(false);
   const [usersMap, setUsersMap] = useState({});
 
-  // Ensure audio volume stays at 30%
-  useEffect(() => {
+  // Enforce 30% volume
+  const enforceVolume = () => {
     if (audioRef.current) {
       audioRef.current.volume = 0.30;
     }
+  };
+
+  // Ensure audio volume stays at 30%
+  useEffect(() => {
+    enforceVolume();
   }, [popup.isOpen, showLorePopup, showFlytrapPopup]);
 
   // Auto-play background music
   useEffect(() => {
+    const audioElement = audioRef.current;
+    if (!audioElement) return;
+
+    // Set volume immediately and enforce it
+    audioElement.volume = 0.30;
+
     const playAudio = async () => {
       try {
-        if (audioRef.current) {
-          audioRef.current.volume = 0.30;
-          await audioRef.current.play();
-        }
+        audioElement.volume = 0.30;
+        await audioElement.play();
       } catch (err) {
         console.log('Auto-play prevented:', err);
-      }
-    };
-
-    const maintainVolume = () => {
-      if (audioRef.current) {
-        audioRef.current.volume = 0.30;
       }
     };
 
     // Try to play immediately
     playAudio();
     
-    const audioElement = audioRef.current;
-    
-    if (audioElement) {
-      audioElement.addEventListener('volumechange', maintainVolume);
-      audioElement.addEventListener('loadeddata', playAudio);
-    }
+    // Enforce volume constantly
+    const volumeInterval = setInterval(() => {
+      if (audioElement) {
+        audioElement.volume = 0.30;
+      }
+    }, 500);
+
+    const handleLoadedData = () => {
+      audioElement.volume = 0.30;
+      playAudio();
+    };
+
+    audioElement.addEventListener('loadeddata', handleLoadedData);
+    audioElement.addEventListener('play', enforceVolume);
+    audioElement.addEventListener('playing', enforceVolume);
+    audioElement.addEventListener('timeupdate', enforceVolume);
 
     return () => {
-      if (audioElement) {
-        audioElement.removeEventListener('volumechange', maintainVolume);
-        audioElement.removeEventListener('loadeddata', playAudio);
-      }
+      clearInterval(volumeInterval);
+      audioElement.removeEventListener('loadeddata', handleLoadedData);
+      audioElement.removeEventListener('play', enforceVolume);
+      audioElement.removeEventListener('playing', enforceVolume);
+      audioElement.removeEventListener('timeupdate', enforceVolume);
     };
   }, []);
 
