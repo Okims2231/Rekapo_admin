@@ -112,7 +112,7 @@ export default function AdminLogs() {
     try {
       setLoading(true);
       setError(null);
-      const data = await logsService.getLogFiles(filterDate || null);
+      const data = await logsService.getLogFiles(filterDate || null, filterLevel || null);
       setLogFiles(data);
     } catch (err) {
       setError(err.message);
@@ -1048,6 +1048,7 @@ export default function AdminLogs() {
                 <thead>
                   <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>File</th>
+                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>User</th>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Size</th>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Last Modified</th>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Action</th>
@@ -1064,6 +1065,19 @@ export default function AdminLogs() {
                     >
                       <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
                         {file.key.split('/').pop()}
+                      </td>
+                      <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
+                        {(() => {
+                          const fileName = file.key.split('/').pop();
+                          const userIdMatch = fileName.match(/user_(\d+)_/);
+                          const userId = userIdMatch ? userIdMatch[1] : null;
+                          return (
+                            <>
+                              {file.user_email || (userId ? `User ${userId}` : 'Unknown User')}
+                              <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {userId || 'N/A'}</div>
+                            </>
+                          );
+                        })()}
                       </td>
                       <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
                         {(file.size / 1024).toFixed(2)} KB
