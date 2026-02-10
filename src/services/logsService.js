@@ -30,32 +30,33 @@ axiosInstance.interceptors.response.use(
 
 export const logsService = {
   /**
-   * List all log files, optionally filtered by date
+   * Get daily log summary from database
    */
-  async getLogFiles(date = null) {
+  async getLogSummary(date = null) {
     try {
       const params = date ? `?date=${date}` : '';
-      const response = await axiosInstance.get(`/api/logs/files${params}`);
+      const response = await axiosInstance.get(`/admin/logs/summary${params}`);
       return response.data;
     } catch (error) {
       const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
-      console.error('Failed to fetch log files:', errorMsg);
-      throw new Error(`Failed to fetch log files: ${errorMsg}`);
+      console.error('Failed to fetch log summary:', errorMsg);
+      throw new Error(`Failed to fetch log summary: ${errorMsg}`);
     }
   },
 
   /**
-   * View contents of a specific log file, optionally filter by level
+   * Get recent logs from database, optionally filter by level
    */
-  async viewLogFile(filePath, level = null) {
+  async getRecentLogs(limit = 100, level = null) {
     try {
-      const params = level ? `?level=${level}` : '';
-      const response = await axiosInstance.get(`/api/logs/view/${filePath}${params}`);
+      const params = new URLSearchParams({ limit });
+      if (level) params.append('level', level);
+      const response = await axiosInstance.get(`/admin/logs/recent?${params}`);
       return response.data;
     } catch (error) {
       const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
-      console.error('Failed to view log file:', errorMsg);
-      throw new Error(`Failed to view log file: ${errorMsg}`);
+      console.error('Failed to fetch recent logs:', errorMsg);
+      throw new Error(`Failed to fetch recent logs: ${errorMsg}`);
     }
   },
 
@@ -64,7 +65,7 @@ export const logsService = {
    */
   async getRecentErrors(hours = 24) {
     try {
-      const response = await axiosInstance.get(`/api/logs/errors/recent?hours=${hours}`);
+      const response = await axiosInstance.get(`/admin/logs/errors/recent?hours=${hours}`);
       return response.data;
     } catch (error) {
       const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
@@ -78,7 +79,7 @@ export const logsService = {
    */
   async cleanupOldLogs(days = 30) {
     try {
-      const response = await axiosInstance.delete(`/api/logs/cleanup?days=${days}`);
+      const response = await axiosInstance.delete(`/admin/logs/cleanup?days=${days}`);
       return response.data;
     } catch (error) {
       const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
@@ -92,7 +93,7 @@ export const logsService = {
    */
   async getLogStats(hours = 24) {
     try {
-      const response = await axiosInstance.get(`/api/logs/stats?hours=${hours}`);
+      const response = await axiosInstance.get(`/admin/logs/stats?hours=${hours}`);
       return response.data;
     } catch (error) {
       const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
@@ -108,7 +109,7 @@ export const logsService = {
     try {
       const params = new URLSearchParams({ hours });
       if (level) params.append('level', level);
-      const response = await axiosInstance.get(`/api/logs/user/${userId}?${params}`);
+      const response = await axiosInstance.get(`/admin/logs/user/${userId}?${params}`);
       return response.data;
     } catch (error) {
       const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
@@ -124,7 +125,7 @@ export const logsService = {
     try {
       const params = new URLSearchParams({ hours });
       if (level) params.append('level', level);
-      const response = await axiosInstance.get(`/api/logs/user/email/${encodeURIComponent(email)}?${params}`);
+      const response = await axiosInstance.get(`/admin/logs/user/email/${encodeURIComponent(email)}?${params}`);
       return response.data;
     } catch (error) {
       const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
