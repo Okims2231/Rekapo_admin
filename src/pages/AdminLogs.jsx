@@ -29,12 +29,11 @@ export default function AdminLogs() {
   const [popup, setPopup] = useState({ isOpen: false, message: '', type: 'success' });
   const [showLorePopup, setShowLorePopup] = useState(false);
   const [showFlytrapPopup, setShowFlytrapPopup] = useState(false);
-  const [showLogFilesPopup, setShowLogFilesPopup] = useState(false);
+  const [showRecentLogsPopup, setShowRecentLogsPopup] = useState(false);
   const [showTopErrorsPopup, setShowTopErrorsPopup] = useState(false);
   const [showTopUsersPopup, setShowTopUsersPopup] = useState(false);
   const [showEntitiesPopup, setShowEntitiesPopup] = useState(false);
   const [showAstralBrinePopup, setShowAstralBrinePopup] = useState(false);
-  const [usersMap, setUsersMap] = useState({});
 
   // Auto-play background music
   useEffect(() => {
@@ -909,7 +908,7 @@ export default function AdminLogs() {
             )}
 
             <button
-              onClick={() => setShowLogFilesPopup(true)}
+              onClick={() => setShowRecentLogsPopup(true)}
               style={{
                 padding: '8px 20px',
                 borderRadius: '12px',
@@ -1106,8 +1105,8 @@ export default function AdminLogs() {
 
 
 
-        {/* Selected Log File Details */}
-        {selectedLogs && selectedLogs.logs && (
+        {/* Recent Logs Section - migrated to database */}
+        {recentLogs && recentLogs.logs && recentLogs.logs.length > 0 && !searchMode && (
           <div style={cardStyles}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <div>
@@ -1116,28 +1115,11 @@ export default function AdminLogs() {
                   color: '#ffffffff', 
                   textShadow: '0 2px 6px rgba(0,0,0,0.6)', 
                   fontFamily: 'Verdana, sans-serif' 
-                }}>Log Details</h2>
+                }}>Recent Logs</h2>
                 <div style={{ color: '#cacacaff', fontSize: '13px', fontFamily: 'Verdana, sans-serif' }}>
-                  File: {selectedFile} • User: {selectedLogs.user_email} • Count: {selectedLogs.count}
+                  Showing {recentLogs.count} recent logs from database
                 </div>
               </div>
-              <button
-                onClick={() => {
-                  setSelectedLogs(null);
-                  setSelectedFile(null);
-                }}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '12px',
-                  border: 'none',
-                  background: 'rgba(100, 100, 100, 0.8)',
-                  color: '#ffffff',
-                  cursor: 'pointer',
-                  fontFamily: 'Verdana, sans-serif'
-                }}
-              >
-                Close
-              </button>
             </div>
             
             <div style={{ overflowX: 'auto' }}>
@@ -1145,39 +1127,42 @@ export default function AdminLogs() {
                 <thead>
                   <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Time</th>
+                    <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>User</th>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Level</th>
                     <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Message</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {selectedLogs.logs.map((log, index) => {
-                    // Extract user ID from filename
-                    const fileName = selectedFile ? selectedFile.split('/').pop() : '';
-                    const userIdMatch = fileName.match(/user_(\d+)_/);
-                    const userId = userIdMatch ? parseInt(userIdMatch[1]) : null;
-                    
-                    return (
-                      <tr
-                        key={index}
-                        style={{
-                          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                          backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
-                        }}
-                      >
-                        <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                          {new Date(log.timestamp).toLocaleString()}
-                        </td>
-                        <td style={{ padding: '12px' }}>
-                          <span style={getLevelBadgeStyle(log.level)}>
-                            {log.level}
-                          </span>
-                        </td>
-                        <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px' }}>
-                          {log.message}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {recentLogs.logs.map((log, index) => (
+                    <tr
+                      key={index}
+                      style={{
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                        backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
+                      }}
+                    >
+                      <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
+                        {new Date(log.timestamp).toLocaleString()}
+                      </td>
+                      <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
+                        {log.user_email || `User ${log.user_id}`}
+                        <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {log.user_id}</div>
+                      </td>
+                      <td style={{ padding: '12px' }}>
+                        <span style={getLevelBadgeStyle(log.level)}>
+                          {log.level}
+                        </span>
+                      </td>
+                      <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px', maxWidth: '400px' }}>
+                        {log.message}
+                        {log.app_version && (
+                          <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>
+                            App: {log.app_version} • Platform: {log.platform || 'N/A'}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -1212,8 +1197,8 @@ export default function AdminLogs() {
         />
       )}
 
-      {/* Log Files Popup */}
-      {showLogFilesPopup && (
+      {/* Recent Logs Popup */}
+      {showRecentLogsPopup && (
         <div
           style={{
             position: 'fixed',
@@ -1228,7 +1213,7 @@ export default function AdminLogs() {
             zIndex: 9999,
             padding: '40px'
           }}
-          onClick={() => setShowLogFilesPopup(false)}
+          onClick={() => setShowRecentLogsPopup(false)}
         >
           <div
             className="log-files-popup"
@@ -1247,9 +1232,9 @@ export default function AdminLogs() {
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h2 style={{ margin: 0, color: '#c084fc' }}>📁 Log Files</h2>
+              <h2 style={{ margin: 0, color: '#c084fc' }}>� Recent Logs</h2>
               <button
-                onClick={() => setShowLogFilesPopup(false)}
+                onClick={() => setShowRecentLogsPopup(false)}
                 style={{
                   padding: '8px 16px',
                   borderRadius: '12px',
@@ -1264,7 +1249,7 @@ export default function AdminLogs() {
               </button>
             </div>
             
-            {logFiles && logFiles.files && logFiles.files.length > 0 ? (
+            {recentLogs && recentLogs.logs && recentLogs.logs.length > 0 ? (
               <>
                 <style>
                   {`
@@ -1297,15 +1282,14 @@ export default function AdminLogs() {
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Verdana, sans-serif' }}>
                   <thead>
                     <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
-                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>File</th>
+                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Time</th>
                       <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>User</th>
-                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Size</th>
-                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Last Modified</th>
-                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Action</th>
+                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Level</th>
+                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Message</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {logFiles.files.map((file, index) => (
+                    {recentLogs.logs.map((log, index) => (
                       <tr
                         key={index}
                         style={{
@@ -1314,46 +1298,24 @@ export default function AdminLogs() {
                         }}
                       >
                         <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                          {file.key.split('/').pop()}
+                          {new Date(log.timestamp).toLocaleString()}
                         </td>
                         <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                          {(() => {
-                            const fileName = file.key.split('/').pop();
-                            const userIdMatch = fileName.match(/user_(\d+)_/);
-                            const userId = userIdMatch ? parseInt(userIdMatch[1]) : null;
-                            const userEmail = userId ? usersMap[userId] : null;
-                            return (
-                              <>
-                                {userEmail || (userId ? `User ${userId}` : 'Unknown User')}
-                                <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {userId || 'N/A'}</div>
-                              </>
-                            );
-                          })()}
-                        </td>
-                        <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                          {(file.size / 1024).toFixed(2)} KB
-                        </td>
-                        <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                          {new Date(file.last_modified).toLocaleString()}
+                          {log.user_email || `User ${log.user_id}`}
+                          <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {log.user_id}</div>
                         </td>
                         <td style={{ padding: '12px' }}>
-                          <button
-                            onClick={() => {
-                              viewLogFile(file.key);
-                              setShowLogFilesPopup(false);
-                            }}
-                            style={{
-                              padding: '4px 12px',
-                              borderRadius: '8px',
-                              border: 'none',
-                              background: 'rgba(168, 85, 247, 0.8)',
-                              color: '#ffffff',
-                              cursor: 'pointer',
-                              fontSize: '12px'
-                            }}
-                          >
-                            View Logs
-                          </button>
+                          <span style={getLevelBadgeStyle(log.level)}>
+                            {log.level}
+                          </span>
+                        </td>
+                        <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px' }}>
+                          {log.message}
+                          {log.app_version && (
+                            <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>
+                              App: {log.app_version} • Platform: {log.platform || 'N/A'}
+                            </div>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -1363,7 +1325,7 @@ export default function AdminLogs() {
             </>
             ) : (
               <div style={{ textAlign: 'center', padding: '40px', color: '#cacacaff' }}>
-                No log files found
+                No recent logs found
               </div>
             )}
           </div>
