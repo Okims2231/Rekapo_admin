@@ -29,7 +29,6 @@ export default function AdminLogs() {
   const [popup, setPopup] = useState({ isOpen: false, message: '', type: 'success' });
   const [showLorePopup, setShowLorePopup] = useState(false);
   const [showFlytrapPopup, setShowFlytrapPopup] = useState(false);
-  const [showRecentLogsPopup, setShowRecentLogsPopup] = useState(false);
   const [showTopErrorsPopup, setShowTopErrorsPopup] = useState(false);
   const [showTopUsersPopup, setShowTopUsersPopup] = useState(false);
   const [showEntitiesPopup, setShowEntitiesPopup] = useState(false);
@@ -907,21 +906,6 @@ export default function AdminLogs() {
               </button>
             )}
 
-            <button
-              onClick={() => setShowRecentLogsPopup(true)}
-              style={{
-                padding: '8px 20px',
-                borderRadius: '12px',
-                border: 'none',
-                background: 'rgba(168, 85, 247, 0.8)',
-                color: '#ffffff',
-                cursor: 'pointer',
-                fontFamily: 'Verdana, sans-serif',
-                fontWeight: 500
-              }}
-            >
-              📁 View Log Files
-            </button>
 
             <button
               onClick={() => setShowTopErrorsPopup(true)}
@@ -1197,140 +1181,6 @@ export default function AdminLogs() {
         />
       )}
 
-      {/* Recent Logs Popup */}
-      {showRecentLogsPopup && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.9)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-            padding: '40px'
-          }}
-          onClick={() => setShowRecentLogsPopup(false)}
-        >
-          <div
-            className="log-files-popup"
-            style={{
-              maxWidth: '900px',
-              width: '100%',
-              maxHeight: '80vh',
-              backgroundColor: 'rgba(40, 30, 60, 0.95)',
-              padding: '30px',
-              borderRadius: '20px',
-              border: '2px solid rgba(168, 85, 247, 0.3)',
-              color: '#ffffff',
-              fontFamily: 'Verdana, sans-serif',
-              overflow: 'auto'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h2 style={{ margin: 0, color: '#c084fc' }}>� Recent Logs</h2>
-              <button
-                onClick={() => setShowRecentLogsPopup(false)}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '12px',
-                  border: 'none',
-                  background: 'rgba(100, 100, 100, 0.8)',
-                  color: '#ffffff',
-                  cursor: 'pointer',
-                  fontFamily: 'Verdana, sans-serif'
-                }}
-              >
-                Close
-              </button>
-            </div>
-            
-            {recentLogs && recentLogs.logs && recentLogs.logs.length > 0 ? (
-              <>
-                <style>
-                  {`
-                    .log-files-popup::-webkit-scrollbar,
-                    .log-files-scroll::-webkit-scrollbar {
-                      width: 0;
-                      height: 0;
-                    }
-                    .log-files-popup::-webkit-scrollbar-track,
-                    .log-files-scroll::-webkit-scrollbar-track {
-                      background: transparent;
-                    }
-                    .log-files-popup::-webkit-scrollbar-thumb,
-                    .log-files-scroll::-webkit-scrollbar-thumb {
-                      background: transparent;
-                    }
-                    .log-files-popup,
-                    .log-files-scroll {
-                      -ms-overflow-style: none;
-                      scrollbar-width: none;
-                    }
-                  `}
-                </style>
-                <div 
-                  className="log-files-scroll"
-                  style={{ 
-                    overflowX: 'auto'
-                  }}
-                >
-                  <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Verdana, sans-serif' }}>
-                  <thead>
-                    <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(8px)' }}>
-                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Time</th>
-                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>User</th>
-                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Level</th>
-                      <th style={{ padding: '12px', textAlign: 'left', color: '#ffffff', fontWeight: 600 }}>Message</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {recentLogs.logs.map((log, index) => (
-                      <tr
-                        key={index}
-                        style={{
-                          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                          backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent'
-                        }}
-                      >
-                        <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                          {new Date(log.timestamp).toLocaleString()}
-                        </td>
-                        <td style={{ padding: '12px', color: '#cacacaff', fontSize: '13px' }}>
-                          {log.user_email || `User ${log.user_id}`}
-                          <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>ID: {log.user_id}</div>
-                        </td>
-                        <td style={{ padding: '12px' }}>
-                          <span style={getLevelBadgeStyle(log.level)}>
-                            {log.level}
-                          </span>
-                        </td>
-                        <td style={{ padding: '12px', color: '#ffffff', fontSize: '13px' }}>
-                          {log.message}
-                          {log.app_version && (
-                            <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>
-                              App: {log.app_version} • Platform: {log.platform || 'N/A'}
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </>
-            ) : (
-              <div style={{ textAlign: 'center', padding: '40px', color: '#cacacaff' }}>
-                No recent logs found
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Top Errors Popup */}
       {showTopErrorsPopup && (
