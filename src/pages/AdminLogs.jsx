@@ -167,15 +167,11 @@ export default function AdminLogs() {
     fetchStats();
     fetchRecentErrors();
     fetchRecentLogs();
-    fetchTopErrors();
-    fetchTopErrorUsers();
     // Auto-refresh every 30 seconds
     const interval = setInterval(() => {
       fetchStats();
       fetchRecentErrors();
       fetchRecentLogs();
-      fetchTopErrors();
-      fetchTopErrorUsers();
     }, 30000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -862,8 +858,6 @@ export default function AdminLogs() {
                 fetchStats();
                 fetchRecentErrors();
                 fetchRecentLogs();
-                fetchTopErrors();
-                fetchTopErrorUsers();
               }}
               style={{
                 padding: '8px 20px',
@@ -964,7 +958,10 @@ export default function AdminLogs() {
 
 
             <button
-              onClick={() => setShowTopErrorsPopup(true)}
+              onClick={() => {
+                fetchTopErrors();
+                setShowTopErrorsPopup(true);
+              }}
               style={{
                 padding: '8px 20px',
                 borderRadius: '12px',
@@ -980,7 +977,10 @@ export default function AdminLogs() {
             </button>
 
             <button
-              onClick={() => setShowTopUsersPopup(true)}
+              onClick={() => {
+                fetchTopErrorUsers();
+                setShowTopUsersPopup(true);
+              }}
               style={{
                 padding: '8px 20px',
                 borderRadius: '12px',
