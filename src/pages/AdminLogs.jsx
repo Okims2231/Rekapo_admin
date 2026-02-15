@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { logsService } from '../services/logsService';
 import useAuth from '../hooks/useAuth';
@@ -33,6 +33,34 @@ export default function AdminLogs() {
   const [showTopUsersPopup, setShowTopUsersPopup] = useState(false);
   const [showEntitiesPopup, setShowEntitiesPopup] = useState(false);
   const [showAstralBrinePopup, setShowAstralBrinePopup] = useState(false);
+
+  // Compute top error messages from recentErrors data
+  const topErrors = useMemo(() => {
+    if (!recentErrors?.errors?.length) return [];
+    const counts = {};
+    recentErrors.errors.forEach((err) => {
+      const msg = err.message || 'Unknown error';
+      counts[msg] = (counts[msg] || 0) + 1;
+    });
+    return Object.entries(counts)
+      .map(([message, count]) => ({ message, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 20);
+  }, [recentErrors]);
+
+  // Compute users with most errors from recentErrors data
+  const topErrorUsers = useMemo(() => {
+    if (!recentErrors?.errors?.length) return [];
+    const counts = {};
+    recentErrors.errors.forEach((err) => {
+      const email = err.user_email || (err.user_id ? `User ${err.user_id}` : 'Unknown');
+      counts[email] = (counts[email] || 0) + 1;
+    });
+    return Object.entries(counts)
+      .map(([email, count]) => ({ email, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 20);
+  }, [recentErrors]);
 
   // Auto-play background music
   useEffect(() => {
@@ -1233,7 +1261,7 @@ export default function AdminLogs() {
               </button>
             </div>
             
-            {stats && stats.top_errors && stats.top_errors.length > 0 ? (
+            {topErrors.length > 0 ? (
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Verdana, sans-serif' }}>
                   <thead>
@@ -1243,7 +1271,7 @@ export default function AdminLogs() {
                     </tr>
                   </thead>
                   <tbody>
-                    {stats.top_errors.map((error, index) => (
+                    {topErrors.map((error, index) => (
                       <tr
                         key={index}
                         style={{
@@ -1331,7 +1359,7 @@ export default function AdminLogs() {
               </button>
             </div>
             
-            {stats && stats.top_error_users && stats.top_error_users.length > 0 ? (
+            {topErrorUsers.length > 0 ? (
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Verdana, sans-serif' }}>
                   <thead>
@@ -1341,7 +1369,7 @@ export default function AdminLogs() {
                     </tr>
                   </thead>
                   <tbody>
-                    {stats.top_error_users.map((user, index) => (
+                    {topErrorUsers.map((user, index) => (
                       <tr
                         key={index}
                         style={{
