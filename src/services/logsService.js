@@ -134,35 +134,36 @@ export const logsService = {
   },
 
   /**
-   * Search logs by user ID
+   * Unified search logs by user ID or email
    */
-  async searchLogsByUserId(userId, hours = 24, level = null) {
+  async searchLogs(userId = null, email = null, hours = 24, level = null, limit = 100) {
     try {
-      const params = new URLSearchParams({ hours });
+      const params = new URLSearchParams({ hours, limit });
+      if (userId) params.append('user_id', userId);
+      if (email) params.append('email', email);
       if (level) params.append('level', level);
-      const response = await axiosInstance.get(`/admin/logs/user/${userId}?${params}`);
+      
+      const response = await axiosInstance.get(`/admin/logs/search?${params}`);
       return response.data;
     } catch (error) {
       const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
-      console.error('Failed to search logs by user ID:', errorMsg);
-      throw new Error(`Failed to search logs by user ID: ${errorMsg}`);
+      console.error('Failed to search logs:', errorMsg);
+      throw new Error(`Failed to search logs: ${errorMsg}`);
     }
   },
 
   /**
-   * Search logs by user email
+   * Search logs by user ID (convenience wrapper)
+   */
+  async searchLogsByUserId(userId, hours = 24, level = null) {
+    return this.searchLogs(userId, null, hours, level);
+  },
+
+  /**
+   * Search logs by user email (convenience wrapper)
    */
   async searchLogsByEmail(email, hours = 24, level = null) {
-    try {
-      const params = new URLSearchParams({ hours });
-      if (level) params.append('level', level);
-      const response = await axiosInstance.get(`/admin/logs/user/email/${encodeURIComponent(email)}?${params}`);
-      return response.data;
-    } catch (error) {
-      const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
-      console.error('Failed to search logs by email:', errorMsg);
-      throw new Error(`Failed to search logs by email: ${errorMsg}`);
-    }
+    return this.searchLogs(null, email, hours, level);
   },
 };
 
