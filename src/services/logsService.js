@@ -47,10 +47,11 @@ export const logsService = {
   /**
    * Get recent logs from database, optionally filter by level
    */
-  async getRecentLogs(limit = 100, level = null) {
+  async getRecentLogs(limit = 100, level = null, hours = 24, userEmail = null) {
     try {
-      const params = new URLSearchParams({ limit });
+      const params = new URLSearchParams({ limit, hours });
       if (level) params.append('level', level);
+      if (userEmail) params.append('user_email', userEmail);
       const response = await axiosInstance.get(`/admin/logs/recent?${params}`);
       return response.data;
     } catch (error) {
@@ -71,6 +72,36 @@ export const logsService = {
       const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
       console.error('Failed to fetch recent errors:', errorMsg);
       throw new Error(`Failed to fetch recent errors: ${errorMsg}`);
+    }
+  },
+
+  /**
+   * Get top error messages for the last N hours
+   */
+  async getTopErrors(hours = 24, limit = 10) {
+    try {
+      const params = new URLSearchParams({ hours, limit });
+      const response = await axiosInstance.get(`/admin/logs/top-errors?${params}`);
+      return response.data;
+    } catch (error) {
+      const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
+      console.error('Failed to fetch top errors:', errorMsg);
+      throw new Error(`Failed to fetch top errors: ${errorMsg}`);
+    }
+  },
+
+  /**
+   * Get users with most errors for the last N hours
+   */
+  async getTopErrorUsers(hours = 24, limit = 10) {
+    try {
+      const params = new URLSearchParams({ hours, limit });
+      const response = await axiosInstance.get(`/admin/logs/top-error-users?${params}`);
+      return response.data;
+    } catch (error) {
+      const errorMsg = error.response?.data?.detail || error.message || 'Unknown error';
+      console.error('Failed to fetch top error users:', errorMsg);
+      throw new Error(`Failed to fetch top error users: ${errorMsg}`);
     }
   },
 

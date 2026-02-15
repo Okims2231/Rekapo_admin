@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { logsService } from '../services/logsService';
 import useAuth from '../hooks/useAuth';
@@ -33,34 +33,8 @@ export default function AdminLogs() {
   const [showTopUsersPopup, setShowTopUsersPopup] = useState(false);
   const [showEntitiesPopup, setShowEntitiesPopup] = useState(false);
   const [showAstralBrinePopup, setShowAstralBrinePopup] = useState(false);
-
-  // Compute top error messages from recentErrors data
-  const topErrors = useMemo(() => {
-    if (!recentErrors?.errors?.length) return [];
-    const counts = {};
-    recentErrors.errors.forEach((err) => {
-      const msg = err.message || 'Unknown error';
-      counts[msg] = (counts[msg] || 0) + 1;
-    });
-    return Object.entries(counts)
-      .map(([message, count]) => ({ message, count }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 20);
-  }, [recentErrors]);
-
-  // Compute users with most errors from recentErrors data
-  const topErrorUsers = useMemo(() => {
-    if (!recentErrors?.errors?.length) return [];
-    const counts = {};
-    recentErrors.errors.forEach((err) => {
-      const email = err.user_email || (err.user_id ? `User ${err.user_id}` : 'Unknown');
-      counts[email] = (counts[email] || 0) + 1;
-    });
-    return Object.entries(counts)
-      .map(([email, count]) => ({ email, count }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 20);
-  }, [recentErrors]);
+  const [topErrors, setTopErrors] = useState([]);
+  const [topErrorUsers, setTopErrorUsers] = useState([]);
 
   // Auto-play background music
   useEffect(() => {
@@ -131,7 +105,11 @@ export default function AdminLogs() {
     try {
       setLoading(true);
       setError(null);
-      const data = await logsService.getRecentLogs(recentLogsLimit, filterLevel || null);
+      const data = await logsService.getRecentLogs(
+        recentLogsLimit,
+        filterLevel || null,
+        filterHours
+      );
       setRecentLogs(data);
     } catch (err) {
       setError(err.message);
@@ -141,15 +119,63 @@ export default function AdminLogs() {
     }
   };
 
+  const normalizeTopErrors = (data) => {
+    const items = Array.isArray(data)
+      ? data
+      : data?.errors || data?.items || data?.results || [];
+
+    return items
+      .map((item) => ({
+        message: item.message || item.error || item.text || 'Unknown error',
+        count: item.count ?? item.error_count ?? item.total ?? 0
+      }))
+      .filter((item) => item.count > 0);
+  };
+
+  const normalizeTopErrorUsers = (data) => {
+    const items = Array.isArray(data)
+      ? data
+      : data?.users || data?.items || data?.results || [];
+
+    return items
+      .map((item) => ({
+        email: item.email || item.user_email || (item.user_id ? `User ${item.user_id}` : 'Unknown'),
+        count: item.count ?? item.error_count ?? item.total ?? 0
+      }))
+      .filter((item) => item.count > 0);
+  };
+
+  const fetchTopErrors = async () => {
+    try {
+      const data = await logsService.getTopErrors(filterHours, 20);
+      setTopErrors(normalizeTopErrors(data));
+    } catch (err) {
+      console.error('Error fetching top errors:', err);
+    }
+  };
+
+  const fetchTopErrorUsers = async () => {
+    try {
+      const data = await logsService.getTopErrorUsers(filterHours, 20);
+      setTopErrorUsers(normalizeTopErrorUsers(data));
+    } catch (err) {
+      console.error('Error fetching top error users:', err);
+    }
+  };
+
   useEffect(() => {
     fetchStats();
     fetchRecentErrors();
     fetchRecentLogs();
+    fetchTopErrors();
+    fetchTopErrorUsers();
     // Auto-refresh every 30 seconds
     const interval = setInterval(() => {
       fetchStats();
       fetchRecentErrors();
       fetchRecentLogs();
+      fetchTopErrors();
+      fetchTopErrorUsers();
     }, 30000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -836,6 +862,8 @@ export default function AdminLogs() {
                 fetchStats();
                 fetchRecentErrors();
                 fetchRecentLogs();
+                fetchTopErrors();
+                fetchTopErrorUsers();
               }}
               style={{
                 padding: '8px 20px',
