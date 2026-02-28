@@ -48,8 +48,8 @@ export default function Login() {
       permissions: ['read', 'write', 'delete']
     }));
     
-    // Redirect to main admin panel
-    navigate('/');
+    // Instant redirect to main admin panel
+    window.location.href = '/';
   };
 
   return (
