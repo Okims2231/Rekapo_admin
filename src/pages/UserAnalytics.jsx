@@ -29,7 +29,6 @@ import {
   ButtonGroup,
 } from '@mui/material';
 import { Refresh, Block, CheckCircle, ArrowUpward, ArrowDownward } from '@mui/icons-material';
-import userService from '../services/userService';
 import { useAuth } from '../hooks/useAuth';
 import backgroundImage from '../assets/images/level heaven.jpg';
 import backgroundAudio from '../assets/audio/level heaven.mp3';
@@ -101,23 +100,26 @@ export default function UserAnalytics() {
   }, []);
 
   // Fetch users with analytics
-  const fetchUsersAnalytics = useCallback(async () => {
-    try {
-      setLoading(true);
+  const fetchUsersAnalytics = useCallback(() => {
+    setLoading(true);
+    setTimeout(() => {
       setError(null);
       
-      // Fetch analytics from the backend API
-      const data = await userService.getUsersAnalytics({
-        page,
-        pageSize,
-        timePeriod
-      });
+      // Dummy analytics data
+      const dummyAnalytics = [
+        { user_id: 1, email: 'user1@example.com', name: 'John Doe', username: 'johndoe', is_admin: false, is_disabled: false, created_at: new Date(Date.now() - 9000000000).toISOString(), total_sessions: 45, completed_sessions: 42, failed_sessions: 2, active_sessions: 1, average_session_duration: 32.5, total_recording_time: 1462.5, longest_session_duration: 87.3, total_recording_segments: 234, total_transcribed_words: 18450, days_since_last_session: 2, account_age_days: 256, deleted_sessions: 1 },
+        { user_id: 2, email: 'user2@example.com', name: 'Jane Smith', username: 'janesmith', is_admin: false, is_disabled: false, created_at: new Date(Date.now() - 8000000000).toISOString(), total_sessions: 28, completed_sessions: 27, failed_sessions: 1, active_sessions: 0, average_session_duration: 28.1, total_recording_time: 787.8, longest_session_duration: 65.2, total_recording_segments: 142, total_transcribed_words: 11320, days_since_last_session: 5, account_age_days: 184, deleted_sessions: 0 },
+        { user_id: 3, email: 'user3@example.com', name: 'Bob Johnson', username: 'bobjohnson', is_admin: false, is_disabled: false, created_at: new Date(Date.now() - 7000000000).toISOString(), total_sessions: 67, completed_sessions: 64, failed_sessions: 3, active_sessions: 0, average_session_duration: 35.8, total_recording_time: 2398.6, longest_session_duration: 92.5, total_recording_segments: 356, total_transcribed_words: 28560, days_since_last_session: 0, account_age_days: 412, deleted_sessions: 0 },
+        { user_id: 4, email: 'user4@example.com', name: 'Alice Williams', username: 'alicew', is_admin: false, is_disabled: true, created_at: new Date(Date.now() - 6000000000).toISOString(), total_sessions: 12, completed_sessions: 10, failed_sessions: 2, active_sessions: 0, average_session_duration: 25.3, total_recording_time: 303.6, longest_session_duration: 54.1, total_recording_segments: 68, total_transcribed_words: 5440, days_since_last_session: 45, account_age_days: 128, deleted_sessions: 0 },
+        { user_id: 5, email: 'user5@example.com', name: 'Charlie Brown', username: 'charlieb', is_admin: false, is_disabled: false, created_at: new Date(Date.now() - 5000000000).toISOString(), total_sessions: 53, completed_sessions: 51, failed_sessions: 2, active_sessions: 0, average_session_duration: 30.2, total_recording_time: 1600.6, longest_session_duration: 71.8, total_recording_segments: 267, total_transcribed_words: 21360, days_since_last_session: 1, account_age_days: 321, deleted_sessions: 2 },
+        { user_id: 6, email: 'user6@example.com', name: 'Diana Prince', username: 'dianap', is_admin: true, is_disabled: false, created_at: new Date(Date.now() - 4000000000).toISOString(), total_sessions: 89, completed_sessions: 87, failed_sessions: 2, active_sessions: 0, average_session_duration: 38.5, total_recording_time: 3427.5, longest_session_duration: 105.2, total_recording_segments: 456, total_transcribed_words: 36480, days_since_last_session: 0, account_age_days: 512, deleted_sessions: 0 },
+      ];
       
       // Extract analytics and create a map
       const analyticsMap = {};
       const usersList = [];
       
-      data.analytics.forEach(analytics => {
+      dummyAnalytics.forEach(analytics => {
         analyticsMap[analytics.user_id] = analytics;
         usersList.push({
           id: analytics.user_id,
@@ -202,36 +204,23 @@ export default function UserAnalytics() {
       });
       
       setUsers(filteredUsers);
-      setTotal(data.total);
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to load user analytics');
-    } finally {
+      setTotal(dummyAnalytics.length);
       setLoading(false);
-    }
-  }, [page, pageSize, timePeriod, search, sortConfig]);
+    }, 300);
+  }, [search, sortConfig]);
 
   // Handle disable user
-  const handleDisableUser = async () => {
-    try {
-      await userService.disableUser(disableDialog.user.id, disableDialog.reason);
-      setSuccess(`User ${disableDialog.user.email} has been disabled`);
-      setDisableDialog({ open: false, user: null, reason: '' });
-      fetchUsersAnalytics();
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to disable user');
-    }
+  const handleDisableUser = () => {
+    setSuccess(`User ${disableDialog.user.email} has been disabled`);
+    setDisableDialog({ open: false, user: null, reason: '' });
+    fetchUsersAnalytics();
   };
 
   // Handle enable user
-  const handleEnableUser = async () => {
-    try {
-      await userService.enableUser(enableDialog.user.id);
-      setSuccess(`User ${enableDialog.user.email} has been enabled`);
-      setEnableDialog({ open: false, user: null });
-      fetchUsersAnalytics();
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to enable user');
-    }
+  const handleEnableUser = () => {
+    setSuccess(`User ${enableDialog.user.email} has been enabled`);
+    setEnableDialog({ open: false, user: null });
+    fetchUsersAnalytics();
   };
 
   useEffect(() => {

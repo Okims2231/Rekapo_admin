@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { statisticsService } from '../services/statisticsService';
-import useAuth from '../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth';
 import backgroundImage from '../assets/images/lvl807.jpg';
 import backgroundAudio from '../assets/audio/lvl807.mp3';
 import CalculationPopup from '../components/popups/CalculationPopup';
@@ -12,8 +11,19 @@ import '../index.css';
 export default function SystemStatistics() {
   const { logout } = useAuth();
   const audioRef = useRef(null);
-  const [statistics, setStatistics] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [statisticsData, setStatisticsData] = useState([
+    { id: 1, stat_date: '2026-02-28', total_users: 1247, active_users: 389, total_sessions: 5621, average_session_duration: 34.56, calculated_at: '2026-02-28T14:30:00Z' },
+    { id: 2, stat_date: '2026-02-27', total_users: 1231, active_users: 376, total_sessions: 5489, average_session_duration: 33.21, calculated_at: '2026-02-27T14:30:00Z' },
+    { id: 3, stat_date: '2026-02-26', total_users: 1215, active_users: 362, total_sessions: 5312, average_session_duration: 32.87, calculated_at: '2026-02-26T14:30:00Z' },
+    { id: 4, stat_date: '2026-02-25', total_users: 1198, active_users: 348, total_sessions: 5156, average_session_duration: 31.45, calculated_at: '2026-02-25T14:30:00Z' },
+    { id: 5, stat_date: '2026-02-24', total_users: 1182, active_users: 334, total_sessions: 4987, average_session_duration: 30.12, calculated_at: '2026-02-24T14:30:00Z' },
+    { id: 6, stat_date: '2026-02-23', total_users: 1165, active_users: 321, total_sessions: 4823, average_session_duration: 29.78, calculated_at: '2026-02-23T14:30:00Z' },
+    { id: 7, stat_date: '2026-02-22', total_users: 1149, active_users: 307, total_sessions: 4656, average_session_duration: 28.34, calculated_at: '2026-02-22T14:30:00Z' },
+    { id: 8, stat_date: '2026-02-21', total_users: 1132, active_users: 293, total_sessions: 4512, average_session_duration: 27.91, calculated_at: '2026-02-21T14:30:00Z' },
+    { id: 9, stat_date: '2026-02-20', total_users: 1116, active_users: 279, total_sessions: 4389, average_session_duration: 26.56, calculated_at: '2026-02-20T14:30:00Z' },
+    { id: 10, stat_date: '2026-02-19', total_users: 1099, active_users: 265, total_sessions: 4234, average_session_duration: 25.23, calculated_at: '2026-02-19T14:30:00Z' },
+  ]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [popup, setPopup] = useState({ isOpen: false, message: '', type: 'success' });
@@ -63,42 +73,29 @@ export default function SystemStatistics() {
     };
   }, [loading]);
 
-  const fetchStatistics = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await statisticsService.getStatistics(page, pageSize);
-      setStatistics(data);
-    } catch (err) {
-      setError(err.message);
-      console.error('Error fetching statistics:', err);
-    } finally {
+  const fetchStatistics = () => {
+    setLoading(true);
+    setError(null);
+    
+    setTimeout(() => {
+      const start = (page - 1) * pageSize;
+      const paginatedStats = statisticsData.slice(start, start + pageSize);
       setLoading(false);
-    }
+    }, 300);
   };
 
   useEffect(() => {
     fetchStatistics();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  const handleDeleteStatistic = async (statId) => {
+  const handleDeleteStatistic = (statId) => {
     if (window.confirm('Are you sure you want to delete this statistic?')) {
-      try {
-        await statisticsService.deleteStatistics(statId);
-        await fetchStatistics();
-        setPopup({ 
-          isOpen: true, 
-          message: 'Statistic deleted successfully!', 
-          type: 'success' 
-        });
-      } catch (err) {
-        setPopup({ 
-          isOpen: true, 
-          message: `Error deleting statistic: ${err.message}`, 
-          type: 'error' 
-        });
-      }
+      setStatisticsData(statisticsData.filter(s => s.id !== statId));
+      setPopup({ 
+        isOpen: true, 
+        message: 'Statistic deleted successfully!', 
+        type: 'success' 
+      });
     }
   };
 
@@ -546,7 +543,7 @@ export default function SystemStatistics() {
         )}
 
         {/* Statistics Table Card */}
-        {statistics && statistics.statistics && statistics.statistics.length > 0 ? (
+        {statisticsData && statisticsData.length > 0 ? (
           <div style={cardStyles}>
             <h2 style={{ 
               margin: '0 0 16px 0', 
@@ -620,7 +617,7 @@ export default function SystemStatistics() {
                   </tr>
                 </thead>
                 <tbody>
-                  {statistics.statistics.map((stat, index) => (
+                  {statisticsData.slice((page - 1) * pageSize, page * pageSize).map((stat, index) => (
                     <tr 
                       key={stat.id} 
                       style={{ 
@@ -744,35 +741,35 @@ export default function SystemStatistics() {
                 fontFamily: 'Verdana, sans-serif',
                 textShadow: '0 1px 2px rgba(0,0,0,0.5)'
               }}>
-                Page {statistics.page} of {Math.ceil(statistics.total / pageSize)}
+                Page {page} of {Math.ceil(statisticsData.length / pageSize)}
               </span>
               
               <button
                 onClick={() => setPage(page + 1)}
-                disabled={statistics.page * pageSize >= statistics.total}
+                disabled={page * pageSize >= statisticsData.length}
                 style={{
                   padding: '8px 16px',
                   borderRadius: '12px',
                   border: 'none',
-                  background: statistics.page * pageSize >= statistics.total ? 'rgba(156, 163, 175, 0.5)' : 'rgba(34, 197, 94, 0.8)',
+                  background: page * pageSize >= statisticsData.length ? 'rgba(156, 163, 175, 0.5)' : 'rgba(34, 197, 94, 0.8)',
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                   color: '#ffffff',
-                  cursor: statistics.page * pageSize >= statistics.total ? 'not-allowed' : 'pointer',
+                  cursor: page * pageSize >= statisticsData.length ? 'not-allowed' : 'pointer',
                   fontFamily: 'Verdana, sans-serif',
                   fontWeight: 500,
                   textShadow: '0 1px 2px rgba(0,0,0,0.3)',
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  if (statistics.page * pageSize < statistics.total) {
+                  if (page * pageSize < statisticsData.length) {
                     e.target.style.background = 'rgba(34, 197, 94, 1)';
                     e.target.style.transform = 'translateY(-2px)';
                     e.target.style.boxShadow = '0 4px 12px rgba(34, 197, 94, 0.4)';
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (statistics.page * pageSize < statistics.total) {
+                  if (page * pageSize < statisticsData.length) {
                     e.target.style.background = 'rgba(34, 197, 94, 0.8)';
                     e.target.style.transform = 'translateY(0)';
                     e.target.style.boxShadow = 'none';

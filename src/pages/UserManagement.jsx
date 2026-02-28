@@ -36,7 +36,6 @@ import {
   KeyboardArrowDown,
   KeyboardArrowUp,
 } from '@mui/icons-material';
-import userService from '../services/userService';
 import { useAuth } from '../hooks/useAuth';
 import backgroundImage from '../assets/images/poolrooms1.jpg';
 import backgroundAudio from '../assets/audio/daisy bell.mp3';
@@ -109,33 +108,61 @@ export default function UserManagement() {
   const [enableDialog, setEnableDialog] = useState({ open: false, user: null });
   const [adminDialog, setAdminDialog] = useState({ open: false, user: null, isAdmin: false });
 
+  // Dummy users data
+  const dummyUsers = [
+    { id: 1, username: 'admin_user', name: 'Admin User', email: 'admin@meg.backrooms', is_admin: true, is_disabled: false },
+    { id: 2, username: 'john_doe', name: 'John Doe', email: 'john@meg.backrooms', is_admin: false, is_disabled: false },
+    { id: 3, username: 'jane_smith', name: 'Jane Smith', email: 'jane@meg.backrooms', is_admin: false, is_disabled: false },
+    { id: 4, username: 'disabled_user', name: 'Disabled User', email: 'disabled@meg.backrooms', is_admin: false, is_disabled: true },
+    { id: 5, username: 'mike_johnson', name: 'Mike Johnson', email: 'mike@meg.backrooms', is_admin: false, is_disabled: false },
+    { id: 6, username: 'sarah_williams', name: 'Sarah Williams', email: 'sarah@meg.backrooms', is_admin: false, is_disabled: false },
+    { id: 7, username: 'alex_brown', name: 'Alex Brown', email: 'alex@meg.backrooms', is_admin: true, is_disabled: false },
+    { id: 8, username: 'emily_davis', name: 'Emily Davis', email: 'emily@meg.backrooms', is_admin: false, is_disabled: false },
+    { id: 9, username: 'chris_wilson', name: 'Chris Wilson', email: 'chris@meg.backrooms', is_admin: false, is_disabled: false },
+    { id: 10, username: 'test_user', name: 'Test User', email: 'test@meg.backrooms', is_admin: false, is_disabled: false },
+  ];
+
   // Fetch users
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const params = {
-        page,
-        pageSize,
-        search: search.trim(),
-      };
+  const fetchUsers = () => {
+    setLoading(true);
+    setError(null);
+    
+    setTimeout(() => {
+      let filtered = [...dummyUsers];
       
-      if (isAdminFilter !== 'all') {
-        params.isAdmin = isAdminFilter === 'true';
+      // Apply search filter
+      if (search.trim()) {
+        const searchLower = search.toLowerCase();
+        filtered = filtered.filter(u => 
+          u.id.toString().includes(searchLower) ||
+          u.username.toLowerCase().includes(searchLower) ||
+          u.email.toLowerCase().includes(searchLower) ||
+          u.name.toLowerCase().includes(searchLower)
+        );
       }
       
-      if (isDisabledFilter !== 'all') {
-        params.isDisabled = isDisabledFilter === 'true';
+      // Apply admin filter
+      if (isAdminFilter === 'true') {
+        filtered = filtered.filter(u => u.is_admin === true);
+      } else if (isAdminFilter === 'false') {
+        filtered = filtered.filter(u => u.is_admin === false);
       }
       
-      const data = await userService.getUsers(params);
-      setUsers(data.users);
-      setTotal(data.total);
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to load users');
-    } finally {
+      // Apply disabled filter
+      if (isDisabledFilter === 'false') {
+        filtered = filtered.filter(u => u.is_disabled === false);
+      } else if (isDisabledFilter === 'true') {
+        filtered = filtered.filter(u => u.is_disabled === true);
+      }
+      
+      setTotal(filtered.length);
+      
+      // Apply pagination
+      const start = (page - 1) * pageSize;
+      const paginatedUsers = filtered.slice(start, start + pageSize);
+      setUsers(paginatedUsers);
       setLoading(false);
-    }
+    }, 300);
   };
 
   useEffect(() => {
@@ -144,46 +171,43 @@ export default function UserManagement() {
   }, [page, pageSize, search, isAdminFilter, isDisabledFilter]);
 
   // Handle disable user
-  const handleDisableUser = async () => {
-    try {
-      await userService.disableUser(disableDialog.user.id, disableDialog.reason);
-      setSuccess(`User ${disableDialog.user.email} has been disabled`);
-      setDisableDialog({ open: false, user: null, reason: '' });
-      fetchUsers();
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to disable user');
-    }
+  const handleDisableUser = () => {
+    setUsers(users.map(u => 
+      u.id === disableDialog.user.id 
+        ? { ...u, is_disabled: true }
+        : u
+    ));
+    setSuccess(`User ${disableDialog.user.email} has been disabled`);
+    setDisableDialog({ open: false, user: null, reason: '' });
   };
 
   // Handle enable user
-  const handleEnableUser = async () => {
-    try {
-      await userService.enableUser(enableDialog.user.id);
-      setSuccess(`User ${enableDialog.user.email} has been enabled`);
-      setEnableDialog({ open: false, user: null });
-      fetchUsers();
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to enable user');
-    }
+  const handleEnableUser = () => {
+    setUsers(users.map(u => 
+      u.id === enableDialog.user.id 
+        ? { ...u, is_disabled: false }
+        : u
+    ));
+    setSuccess(`User ${enableDialog.user.email} has been enabled`);
+    setEnableDialog({ open: false, user: null });
   };
 
 
 
   // Handle admin status update
-  const handleUpdateAdminStatus = async () => {
-    try {
-      await userService.updateAdminStatus(adminDialog.user.id, adminDialog.isAdmin);
-      const action = adminDialog.isAdmin ? 'promoted to admin' : 'demoted from admin';
-      setSuccess(`User ${adminDialog.user.email} has been ${action}`);
-      setAdminDialog({ open: false, user: null, isAdmin: false });
-      fetchUsers();
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to update admin status');
-    }
+  const handleUpdateAdminStatus = () => {
+    setUsers(users.map(u => 
+      u.id === adminDialog.user.id 
+        ? { ...u, is_admin: adminDialog.isAdmin }
+        : u
+    ));
+    const action = adminDialog.isAdmin ? 'promoted to admin' : 'demoted from admin';
+    setSuccess(`User ${adminDialog.user.email} has been ${action}`);
+    setAdminDialog({ open: false, user: null, isAdmin: false });
   };
 
   // Handle row expansion and fetch analytics
-  const handleExpandRow = async (userId) => {
+  const handleExpandRow = (userId) => {
     if (expandedUserId === userId) {
       setExpandedUserId(null);
       return;
@@ -194,14 +218,25 @@ export default function UserManagement() {
     // Fetch analytics if not already loaded
     if (!userAnalytics[userId]) {
       setLoadingAnalytics(prev => ({ ...prev, [userId]: true }));
-      try {
-        const analytics = await userService.getUserAnalytics(userId);
-        setUserAnalytics(prev => ({ ...prev, [userId]: analytics }));
-      } catch (err) {
-        setError(err.response?.data?.detail || 'Failed to load user analytics');
-      } finally {
+      
+      setTimeout(() => {
+        // Dummy analytics data
+        const dummyAnalytics = {
+          1: { total_sessions: 127, completed_sessions: 118, failed_sessions: 4, active_sessions: 5, average_session_duration: 38.5, total_recording_time: 4879.5, longest_session_duration: 156.3, total_recording_segments: 1289, total_transcribed_words: 289456, days_since_last_session: 0, account_age_days: 512, deleted_sessions: 12 },
+          2: { total_sessions: 45, completed_sessions: 42, failed_sessions: 2, active_sessions: 1, average_session_duration: 32.5, total_recording_time: 1462.5, longest_session_duration: 89.2, total_recording_segments: 456, total_transcribed_words: 98765, days_since_last_session: 2, account_age_days: 256, deleted_sessions: 3 },
+          3: { total_sessions: 67, completed_sessions: 64, failed_sessions: 2, active_sessions: 1, average_session_duration: 35.8, total_recording_time: 2398.6, longest_session_duration: 124.5, total_recording_segments: 712, total_transcribed_words: 156234, days_since_last_session: 1, account_age_days: 198, deleted_sessions: 5 },
+          4: { total_sessions: 12, completed_sessions: 8, failed_sessions: 3, active_sessions: 0, average_session_duration: 25.3, total_recording_time: 303.6, longest_session_duration: 67.8, total_recording_segments: 98, total_transcribed_words: 34567, days_since_last_session: 45, account_age_days: 128, deleted_sessions: 2 },
+          5: { total_sessions: 89, completed_sessions: 85, failed_sessions: 3, active_sessions: 1, average_session_duration: 37.2, total_recording_time: 3309.8, longest_session_duration: 142.1, total_recording_segments: 921, total_transcribed_words: 212543, days_since_last_session: 3, account_age_days: 384, deleted_sessions: 7 },
+          6: { total_sessions: 52, completed_sessions: 49, failed_sessions: 2, active_sessions: 1, average_session_duration: 31.4, total_recording_time: 1632.8, longest_session_duration: 98.6, total_recording_segments: 534, total_transcribed_words: 121876, days_since_last_session: 5, account_age_days: 276, deleted_sessions: 4 },
+          7: { total_sessions: 156, completed_sessions: 151, failed_sessions: 3, active_sessions: 2, average_session_duration: 39.1, total_recording_time: 6099.6, longest_session_duration: 167.8, total_recording_segments: 1567, total_transcribed_words: 345678, days_since_last_session: 0, account_age_days: 498, deleted_sessions: 15 },
+          8: { total_sessions: 38, completed_sessions: 35, failed_sessions: 2, active_sessions: 1, average_session_duration: 29.7, total_recording_time: 1128.6, longest_session_duration: 76.4, total_recording_segments: 378, total_transcribed_words: 87654, days_since_last_session: 6, account_age_days: 167, deleted_sessions: 2 },
+          9: { total_sessions: 73, completed_sessions: 70, failed_sessions: 2, active_sessions: 1, average_session_duration: 36.3, total_recording_time: 2649.9, longest_session_duration: 131.2, total_recording_segments: 756, total_transcribed_words: 178932, days_since_last_session: 4, account_age_days: 312, deleted_sessions: 6 },
+          10: { total_sessions: 29, completed_sessions: 26, failed_sessions: 2, active_sessions: 1, average_session_duration: 28.1, total_recording_time: 814.9, longest_session_duration: 84.3, total_recording_segments: 287, total_transcribed_words: 65432, days_since_last_session: 7, account_age_days: 143, deleted_sessions: 3 },
+        };
+        
+        setUserAnalytics(prev => ({ ...prev, [userId]: dummyAnalytics[userId] }));
         setLoadingAnalytics(prev => ({ ...prev, [userId]: false }));
-      }
+      }, 300);
     }
   };
 
