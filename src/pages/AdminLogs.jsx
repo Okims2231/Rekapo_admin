@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { logsService } from '../services/logsService';
 import useAuth from '../hooks/useAuth';
 import backgroundImage from '../assets/images/level 7232003.jpg';
 import backgroundAudio from '../assets/audio/the void.mp3';
@@ -78,45 +77,50 @@ export default function AdminLogs() {
     };
   }, [loading]);
 
-  const fetchStats = async () => {
-    try {
-      const data = await logsService.getLogStats(filterHours);
-      setStats(data);
-    } catch (err) {
-      console.error('Error fetching stats:', err);
-    }
+  const fetchStats = () => {
+    setStats({
+      total_logs: 2847 + Math.floor(Math.random() * 500),
+      errors: 234 + Math.floor(Math.random() * 100),
+      warnings: 567 + Math.floor(Math.random() * 200),
+      info: 2046 + Math.floor(Math.random() * 300)
+    });
   };
 
-  const fetchRecentErrors = async () => {
-    try {
-      setLoading(true);
+  const fetchRecentErrors = () => {
+    setLoading(true);
+    setTimeout(() => {
       setError(null);
-      const data = await logsService.getRecentErrors(filterHours);
-      setRecentErrors(data);
-    } catch (err) {
-      setError(err.message);
-      console.error('Error fetching recent errors:', err);
-    } finally {
+      setRecentErrors({
+        errors: [
+          { timestamp: new Date(Date.now() - 3600000).toISOString(), user_id: 1, user_email: 'user1@example.com', message: 'Connection timeout on POST /api/sessions', app_version: '1.2.3', platform: 'iOS' },
+          { timestamp: new Date(Date.now() - 7200000).toISOString(), user_id: 2, user_email: 'user2@example.com', message: 'Invalid token signature', app_version: '1.2.1', platform: 'Android' },
+          { timestamp: new Date(Date.now() - 10800000).toISOString(), user_id: 3, user_email: 'user3@example.com', message: 'Database connection refused', app_version: '1.2.3', platform: 'Web' },
+          { timestamp: new Date(Date.now() - 14400000).toISOString(), user_id: 4, user_email: 'user4@example.com', message: 'Memory limit exceeded in parsing', app_version: '1.2.2', platform: 'iOS' },
+          { timestamp: new Date(Date.now() - 18000000).toISOString(), user_id: 5, user_email: 'user5@example.com', message: 'Null pointer exception in handler', app_version: '1.2.3', platform: 'Android' },
+        ],
+        count: 5
+      });
       setLoading(false);
-    }
+    }, 300);
   };
 
-  const fetchRecentLogs = async () => {
-    try {
-      setLoading(true);
+  const fetchRecentLogs = () => {
+    setLoading(true);
+    setTimeout(() => {
       setError(null);
-      const data = await logsService.getRecentLogs(
-        recentLogsLimit,
-        filterLevel || null,
-        filterHours
-      );
-      setRecentLogs(data);
-    } catch (err) {
-      setError(err.message);
-      console.error('Error fetching recent logs:', err);
-    } finally {
+      setRecentLogs({
+        logs: [
+          { timestamp: new Date(Date.now() - 1800000).toISOString(), user_id: 1, user_email: 'user1@example.com', level: 'info', message: 'User logged in successfully', app_version: '1.2.3', platform: 'Web' },
+          { timestamp: new Date(Date.now() - 2700000).toISOString(), user_id: 2, user_email: 'user2@example.com', level: 'error', message: 'Failed to fetch user profile', app_version: '1.2.1', platform: 'iOS' },
+          { timestamp: new Date(Date.now() - 3600000).toISOString(), user_id: 3, user_email: 'user3@example.com', level: 'warn', message: 'High latency detected', app_version: '1.2.3', platform: 'Android' },
+          { timestamp: new Date(Date.now() - 5400000).toISOString(), user_id: 4, user_email: 'user4@example.com', level: 'info', message: 'Session created', app_version: '1.2.2', platform: 'Web' },
+          { timestamp: new Date(Date.now() - 7200000).toISOString(), user_id: 5, user_email: 'user5@example.com', level: 'error', message: 'Payment processing failed', app_version: '1.2.3', platform: 'iOS' },
+          { timestamp: new Date(Date.now() - 9000000).toISOString(), user_id: 1, user_email: 'user1@example.com', level: 'warn', message: 'API rate limit approaching', app_version: '1.2.3', platform: 'Web' },
+        ],
+        count: 6
+      });
       setLoading(false);
-    }
+    }, 300);
   };
 
   const normalizeTopErrors = (data) => {
@@ -145,22 +149,24 @@ export default function AdminLogs() {
       .filter((item) => item.count > 0);
   };
 
-  const fetchTopErrors = async () => {
-    try {
-      const data = await logsService.getTopErrors(filterHours, 20);
-      setTopErrors(normalizeTopErrors(data));
-    } catch (err) {
-      console.error('Error fetching top errors:', err);
-    }
+  const fetchTopErrors = () => {
+    setTopErrors([
+      { message: 'Connection timeout on POST /api/sessions', count: 156 },
+      { message: 'Invalid token signature', count: 89 },
+      { message: 'Database connection refused', count: 67 },
+      { message: 'Memory limit exceeded in parsing', count: 45 },
+      { message: 'Null pointer exception in handler', count: 38 },
+    ]);
   };
 
-  const fetchTopErrorUsers = async () => {
-    try {
-      const data = await logsService.getTopErrorUsers(filterHours, 20);
-      setTopErrorUsers(normalizeTopErrorUsers(data));
-    } catch (err) {
-      console.error('Error fetching top error users:', err);
-    }
+  const fetchTopErrorUsers = () => {
+    setTopErrorUsers([
+      { email: 'user1@example.com', count: 42 },
+      { email: 'user2@example.com', count: 38 },
+      { email: 'user3@example.com', count: 35 },
+      { email: 'user4@example.com', count: 28 },
+      { email: 'user5@example.com', count: 19 },
+    ]);
   };
 
   useEffect(() => {
@@ -177,37 +183,33 @@ export default function AdminLogs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterHours, filterLevel, recentLogsLimit]);
 
-  const handleUserSearch = async () => {
+  const handleUserSearch = () => {
     if (!userSearch.trim()) {
       setPopup({ isOpen: true, message: 'Please enter a user email or ID', type: 'error' });
       return;
     }
 
-    try {
-      setLoading(true);
+    setLoading(true);
+    setTimeout(() => {
       setError(null);
-      let data;
       
-      if (searchType === 'email') {
-        data = await logsService.searchLogsByEmail(userSearch, filterHours, filterLevel || null);
-      } else {
-        const userId = parseInt(userSearch);
-        if (isNaN(userId)) {
-          throw new Error('User ID must be a number');
-        }
-        data = await logsService.searchLogsByUserId(userId, filterHours, filterLevel || null);
-      }
+      const dummyLogs = [
+        { timestamp: new Date(Date.now() - 1800000).toISOString(), user_id: 1, user_email: userSearch, level: 'error', message: 'Payment processing failed', app_version: '1.2.3', platform: 'iOS' },
+        { timestamp: new Date(Date.now() - 3600000).toISOString(), user_id: 1, user_email: userSearch, level: 'warn', message: 'High latency detected', app_version: '1.2.3', platform: 'Web' },
+        { timestamp: new Date(Date.now() - 5400000).toISOString(), user_id: 1, user_email: userSearch, level: 'info', message: 'Session created', app_version: '1.2.3', platform: 'Android' },
+        { timestamp: new Date(Date.now() - 7200000).toISOString(), user_id: 1, user_email: userSearch, level: 'error', message: 'API request timeout', app_version: '1.2.3', platform: 'Web' },
+      ];
       
-      setSearchResults(data);
+      setSearchResults({
+        logs: dummyLogs,
+        count: dummyLogs.length,
+        email: userSearch,
+        user_id: searchType === 'id' ? parseInt(userSearch) : null
+      });
       setSearchMode(true);
-      setPopup({ isOpen: true, message: `Found ${data.count} logs`, type: 'success' });
-    } catch (err) {
-      setError(err.message);
-      setPopup({ isOpen: true, message: err.message, type: 'error' });
-      console.error('Error searching user logs:', err);
-    } finally {
+      setPopup({ isOpen: true, message: `Found ${dummyLogs.length} logs`, type: 'success' });
       setLoading(false);
-    }
+    }, 300);
   };
 
   const clearUserSearch = () => {
@@ -216,16 +218,11 @@ export default function AdminLogs() {
     setSearchResults(null);
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     try {
-      await logout();
-    } catch {
-      console.warn('Logout API failed; clearing token locally');
-      try {
-        localStorage.removeItem('adminToken');
-      } catch (ex) {
-        console.warn('Failed to clear token:', ex);
-      }
+      logout();
+    } catch (ex) {
+      console.warn('Logout failed:', ex);
     } finally {
       window.location.assign('/login');
     }
