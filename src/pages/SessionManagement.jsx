@@ -18,7 +18,6 @@ import {
   FormControl,
   InputLabel,
 } from '@mui/material';
-import { sessionService } from '../services/sessionService';
 import useAuth from '../hooks/useAuth';
 import backgroundImage from '../assets/images/lvl94.png';
 import backgroundAudio from '../assets/audio/King\'s Curfew.mp3';
@@ -91,25 +90,24 @@ export default function SessionManagement() {
   }, [page, query, statusFilter, trainingConsentFilter, deletedFilter]);
 
   const fetchSessions = async () => {
-    try {
-      setLoading(true);
+    setLoading(true);
+    setTimeout(() => {
       setError(null);
-      const data = await sessionService.getSessions(
-        page,
-        pageSize,
-        query || null,
-        statusFilter || null,
-        trainingConsentFilter || null,
-        deletedFilter || null
-      );
-      setSessions(data.sessions || []);
-      setTotalSessions(data.total || 0);
-    } catch (err) {
-      setError(err.message);
-      console.error('Error fetching sessions:', err);
-    } finally {
+      
+      // Generate dummy sessions data
+      const dummySessions = [
+        { id: 1, user: { id: 1, email: 'user1@example.com', name: 'John Doe', username: 'johndoe', data_usage_consent: true }, status: 'completed', session_title: 'Training Session 1', start_time: new Date(Date.now() - 604800000).toISOString(), end_time: new Date(Date.now() - 600000000).toISOString(), total_segments: 5, total_summaries: 2, is_deleted: false },
+        { id: 2, user: { id: 2, email: 'user2@example.com', name: 'Jane Smith', username: 'janesmith', data_usage_consent: false }, status: 'completed', session_title: 'Training Session 2', start_time: new Date(Date.now() - 518400000).toISOString(), end_time: new Date(Date.now() - 514800000).toISOString(), total_segments: 3, total_summaries: 1, is_deleted: false },
+        { id: 3, user: { id: 3, email: 'user3@example.com', name: 'Bob Johnson', username: 'bobjohnson', data_usage_consent: true }, status: 'recording', session_title: 'Training Session 3', start_time: new Date(Date.now() - 86400000).toISOString(), end_time: null, total_segments: 2, total_summaries: 0, is_deleted: false },
+        { id: 4, user: { id: 4, email: 'user4@example.com', name: 'Alice Williams', username: 'alicew', data_usage_consent: true }, status: 'completed', session_title: 'Training Session 4', start_time: new Date(Date.now() - 172800000).toISOString(), end_time: new Date(Date.now() - 169200000).toISOString(), total_segments: 4, total_summaries: 2, is_deleted: false },
+        { id: 5, user: { id: 5, email: 'user5@example.com', name: 'Charlie Brown', username: 'charlieb', data_usage_consent: false }, status: 'failed', session_title: 'Training Session 5', start_time: new Date(Date.now() - 259200000).toISOString(), end_time: new Date(Date.now() - 255600000).toISOString(), total_segments: 1, total_summaries: 0, is_deleted: false },
+        { id: 6, user: { id: 6, email: 'user6@example.com', name: 'Diana Prince', username: 'dianap', data_usage_consent: true }, status: 'completed', session_title: 'Training Session 6', start_time: new Date(Date.now() - 345600000).toISOString(), end_time: new Date(Date.now() - 342000000).toISOString(), total_segments: 6, total_summaries: 3, is_deleted: false },
+      ];
+      
+      setSessions(dummySessions);
+      setTotalSessions(dummySessions.length);
       setLoading(false);
-    }
+    }, 300);
   };
 
   const handleSearch = (e) => {
@@ -132,18 +130,12 @@ export default function SessionManagement() {
     setPage(1);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this session?')) {
-      try {
-        await sessionService.deleteSession(id, 'Deleted by admin');
-        setConfirmMsg('Session deleted successfully.');
-        fetchSessions();
-        setSelectedSession(null);
-        setTimeout(() => setConfirmMsg(''), 2000);
-      } catch (err) {
-        setConfirmMsg(`Error: ${err.message}`);
-        setTimeout(() => setConfirmMsg(''), 3000);
-      }
+      setConfirmMsg('Session deleted successfully.');
+      setSessions(sessions.filter(s => s.id !== id));
+      setSelectedSession(null);
+      setTimeout(() => setConfirmMsg(''), 2000);
     }
   };
 
@@ -612,7 +604,7 @@ export default function SessionManagement() {
             </Select>
           </FormControl>
 
-          <FormControl sx={{ minWidth: '150px' }}>
+          <FormControl sx={{ minWidth: '180px' }}>
             <InputLabel sx={{ color: '#ffffff' }}>Training Consent</InputLabel>
             <Select
               value={trainingConsentFilter}
@@ -627,7 +619,8 @@ export default function SessionManagement() {
                 '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.3)' },
                 '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.5)' },
                 '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.7)' },
-                '& .MuiSvgIcon-root': { color: '#ffffff' }
+                '& .MuiSvgIcon-root': { color: '#ffffff' },
+                '& .MuiSelect-select': { paddingRight: '40px' }
               }}
             >
               <MenuItem value="">All</MenuItem>

@@ -18,7 +18,6 @@ import {
   DialogActions,
 } from '@mui/material';
 import { ArrowBack, ExpandMore, Block } from '@mui/icons-material';
-import { sessionService } from '../services/sessionService';
 import { useAuth } from '../hooks/useAuth';
 import backgroundImage from '../assets/images/lvl youshouldnotbehere.jpg';
 import backgroundAudio from '../assets/audio/youshouldnotbehere.mp3';
@@ -76,23 +75,44 @@ export default function SessionDetails() {
     }
   };
 
-  const fetchSessionDetails = useCallback(async () => {
-    try {
-      setLoading(true);
+  const fetchSessionDetails = useCallback(() => {
+    setLoading(true);
+    setTimeout(() => {
+      // Dummy session data
+      const dummySession = {
+        id: parseInt(sessionId) || 1,
+        user: {
+          id: 1,
+          email: 'user@example.com',
+          name: 'Test User',
+          username: 'testuser',
+          data_usage_consent: true
+        },
+        status: 'completed',
+        session_title: `Training Session ${sessionId}`,
+        start_time: new Date(Date.now() - 604800000).toISOString(),
+        end_time: new Date(Date.now() - 600000000).toISOString(),
+        total_segments: 6,
+        total_summaries: 2,
+        session_duration_minutes: 45.5,
+        recording_segments: [
+          { id: 1, duration_seconds: 120.5, word_count: 180, transcript_text: 'This is the first segment of the training session.', audio_path: '#', created_at: new Date(Date.now() - 604800000).toISOString(), rating: 4 },
+          { id: 2, duration_seconds: 95.3, word_count: 142, transcript_text: 'Second segment with important information.', audio_path: '#', created_at: new Date(Date.now() - 604700000).toISOString(), rating: 5 },
+          { id: 3, duration_seconds: 110.8, word_count: 198, transcript_text: 'Third segment discussing key concepts.', audio_path: '#', created_at: new Date(Date.now() - 604600000).toISOString(), rating: 4 },
+          { id: 4, duration_seconds: 88.2, word_count: 125, transcript_text: 'Fourth segment with additional details.', audio_path: '#', created_at: new Date(Date.now() - 604500000).toISOString(), rating: null },
+          { id: 5, duration_seconds: 102.1, word_count: 167, transcript_text: 'Fifth segment summarizing main points.', audio_path: '#', created_at: new Date(Date.now() - 604400000).toISOString(), rating: 5 },
+          { id: 6, duration_seconds: 75.4, word_count: 98, transcript_text: 'Final segment wrapping up the session.', audio_path: '#', created_at: new Date(Date.now() - 604300000).toISOString(), rating: 4 },
+        ],
+        summaries: [
+          { id: 1, summary_text: 'This training session covered fundamental concepts in machine learning, including supervised and unsupervised learning techniques. Participants learned about various algorithms and their practical applications in real-world scenarios.', generated_at: new Date(Date.now() - 600000000).toISOString(), is_final_summary: true, chunk_range_start: 0, chunk_range_end: 6 },
+          { id: 2, summary_text: 'First half summary: Introduction to ML concepts.', generated_at: new Date(Date.now() - 602000000).toISOString(), is_final_summary: false, chunk_range_start: 0, chunk_range_end: 3 },
+          { id: 3, summary_text: 'Second half summary: Practical applications and implementation.', generated_at: new Date(Date.now() - 601000000).toISOString(), is_final_summary: false, chunk_range_start: 3, chunk_range_end: 6 },
+        ]
+      };
+      setSessionData(dummySession);
       setError(null);
-      const data = await sessionService.getTrainingData(sessionId);
-      setSessionData(data);
-    } catch (err) {
-      // Check if it's a 403 forbidden error (no consent)
-      if (err.message.includes('403') || err.message.toLowerCase().includes('consent')) {
-        setShowConsentDialog(true);
-      } else {
-        setError(err.message);
-      }
-      console.error('Error fetching session details:', err);
-    } finally {
       setLoading(false);
-    }
+    }, 300);
   }, [sessionId]);
 
   useEffect(() => {
