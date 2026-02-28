@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect, useCallback } from 'react';
-import authService from '../services/authService';
 
 const AuthContext = createContext(null);
 
@@ -8,18 +7,21 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Initialize auth state from stored token
+  // Initialize auth state from stored token and user data
   useEffect(() => {
-    const initializeAuth = async () => {
+    const initializeAuth = () => {
       try {
-        const token = authService.getToken();
+        const token = localStorage.getItem('adminToken');
         if (token) {
-          const authData = await authService.verifyToken(token);
-          setUser(authData.user);
+          const userData = localStorage.getItem('adminUser');
+          if (userData) {
+            setUser(JSON.parse(userData));
+          }
         }
       } catch (err) {
         console.error('Failed to initialize auth:', err);
-        authService.clearToken();
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
         setError(err.message);
       } finally {
         setLoading(false);
@@ -29,27 +31,25 @@ export function AuthProvider({ children }) {
     initializeAuth();
   }, []);
 
-  const handleLoginCallback = useCallback(async (token) => {
+  const handleLoginCallback = useCallback((userData) => {
     try {
       setLoading(true);
       setError(null);
-      authService.setToken(token);
-      const authData = await authService.verifyToken(token);
-      setUser(authData.user);
-      return authData.user;
+      setUser(userData);
+      return userData;
     } catch (err) {
       setError(err.message);
-      authService.clearToken();
       throw err;
     } finally {
       setLoading(false);
     }
   }, []);
 
-  const logout = useCallback(async () => {
+  const logout = useCallback(() => {
     try {
       setLoading(true);
-      await authService.logout();
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminUser');
       setUser(null);
       setError(null);
     } catch (err) {

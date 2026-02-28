@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-import { statisticsService } from '../services/statisticsService';
 import backgroundImage from '../assets/images/lvl fun!.jpg';
 import backgroundAudio from '../assets/audio/Escape The Backrooms OST - Fun (You Day!) (Filtered Version).mp3';
 import LevelFun from '../components/AdminFeatures/LevelFun';
@@ -40,36 +39,25 @@ export default function AdminInterface() {
     };
   }, []);
 
-  // Fetch latest statistics
+  // Use dummy statistics data
   useEffect(() => {
-    const fetchLatestStatistics = async () => {
-      try {
-        const data = await statisticsService.getStatistics(1, 1);
-        if (data.statistics && data.statistics.length > 0) {
-          setStatistics(data.statistics[0]);
-        }
-      } catch (err) {
-        console.error('Error fetching statistics:', err);
-      }
-    };
-
-    fetchLatestStatistics();
+    setStatistics({
+      stat_date: new Date().toISOString().split('T')[0],
+      total_users: 1247,
+      active_users: 389,
+      total_sessions: 5621,
+      average_session_duration: 34.56
+    });
   }, []);
 
   const handleLogout = async () => {
     try {
       await logout();
-    } catch {
-      // ensure token is cleared even if API logout fails
-      console.warn('Logout API failed; clearing token locally');
-      try {
-        // fallback: clear token directly
-        localStorage.removeItem('adminToken');
-      } catch (ex) {
-        console.warn('Failed to clear token:', ex);
-      }
-    } finally {
       // Force navigation to login so app re-evaluates auth state
+      window.location.assign('/login');
+    } catch (ex) {
+      console.warn('Logout failed:', ex);
+      // Ensure we still redirect to login
       window.location.assign('/login');
     }
   };

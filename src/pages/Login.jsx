@@ -1,8 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Box, Button, Card, CircularProgress, Typography, Alert } from '@mui/material';
-import useAuth from '../hooks/useAuth';
-import authService from '../services/authService';
+import { useNavigate } from 'react-router-dom';
+import { Box, Button, Card, Typography } from '@mui/material';
 import backgroundImage from '../assets/images/lvl0.jpg';
 import backgroundAudio from '../assets/audio/Fallen Down - Toby Fox.mp3';
 import TheBackrooms from '../components/AdminFeatures/TheBackrooms';
@@ -10,10 +8,6 @@ import MEG from '../components/AdminFeatures/MEG';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const { isAuthenticated, loading: authLoading } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const audioRef = useRef(null);
 
   // Auto-play background music
@@ -43,40 +37,20 @@ export default function Login() {
     };
   }, []);
 
-  // Check for error in URL params
-  useEffect(() => {
-    const errorParam = searchParams.get('error');
-    if (errorParam) {
-      setError(`Authentication failed: ${errorParam}`);
-    }
-  }, [searchParams]);
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated && !loading) {
-      navigate('/');
-    }
-  }, [isAuthenticated, loading, navigate]);
-
-  const handleGoogleLogin = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const { authorization_url } = await authService.initiateLogin();
-      window.location.href = authorization_url;
-    } catch (err) {
-      setError(err?.message || 'Failed to initiate login. Please try again.');
-      setLoading(false);
-    }
+  const handleLogin = () => {
+    // Simulate successful login with dummy data
+    localStorage.setItem('adminToken', 'dummy-admin-token-12345');
+    localStorage.setItem('adminUser', JSON.stringify({
+      id: 1,
+      name: 'Admin User',
+      email: 'admin@meg.backrooms',
+      role: 'admin',
+      permissions: ['read', 'write', 'delete']
+    }));
+    
+    // Redirect to main admin panel
+    navigate('/');
   };
-
-  if (authLoading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
 
   return (
     <Box
@@ -135,18 +109,11 @@ export default function Login() {
           M.E.G Admin
         </Typography>
 
-        {error && (
-          <Alert severity="error" sx={{ marginBottom: 2 }}>
-            {error}
-          </Alert>
-        )}
-
         <Button
           variant="contained"
           fullWidth
           size="large"
-          onClick={handleGoogleLogin}
-          disabled={loading}
+          onClick={handleLogin}
           sx={{
             backgroundColor: '#272b31ff',
             '&:hover': {
@@ -154,14 +121,14 @@ export default function Login() {
             },
           }}
         >
-          {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign in with Google'}
+          Enter Admin Panel
         </Button>
 
         <Typography
           variant="body2"
           sx={{ marginTop: 2, textAlign: 'center', color: '#ffffffff', fontFamily: 'Verdana, sans-serif' }}
         >
-          Only authorized M.E.G personel can access this admin panel.
+          Demo Mode - No authentication required.
         </Typography>
       </Card>
     </Box>
