@@ -575,6 +575,13 @@ export default function AdminInterface() {
                         borderRadius: '8px',
                         color: '#ffffff'
                       }}
+                      labelStyle={{ color: '#ffffff', fontWeight: 'bold' }}
+                      formatter={(value, name) => [
+                        <span style={{ color: name === 'Active Users' ? '#06b6d4' : '#6b7280', fontWeight: 'bold' }}>
+                          {name}: {value}
+                        </span>
+                      ]}
+                      cursor={{ fill: 'rgb(255, 255, 255)' }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
