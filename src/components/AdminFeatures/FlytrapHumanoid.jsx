@@ -1,6 +1,7 @@
 import flytraphuman from '../../assets/images/flytraphuman.jpg';
 import flytraphuman2 from '../../assets/images/flytraphuman2.jpg';
 import megLogo from '../../assets/images/M.E.G logo.jpg';
+import ImagePopup from './ImagePopup';
 
 export default function FlytrapHumanoid({ isOpen, onClose }) {
   const loreText = `The Flytrap Humanoid has the characteristic of being territorial since any element within their range can alarm them. It is rumored that it is "connected" with the environment and can "sense" any kind of movement at a far distance.
@@ -65,70 +66,76 @@ It is able to blend in with the environment. Because of this, it can be hard to 
             gap: '12px',
           }}
         >
-          <div
-            style={{
-              backgroundImage: `url(${flytraphuman})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              borderRadius: '6px',
-              width: '350px',
-              height: '200px',
-              minWidth: '300px',
-              position: 'relative',
-              overflow: 'hidden',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-            }}
-          >
+          <ImagePopup src={flytraphuman}>
             <div
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                backgroundImage: `url(${flytraphuman})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: '6px',
+                width: '350px',
+                height: '200px',
+                minWidth: '300px',
+                position: 'relative',
+                overflow: 'hidden',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
               }}
-            />
-          </div>
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                }}
+              />
+            </div>
+          </ImagePopup>
 
-          <div
-            style={{
-              backgroundImage: `url(${flytraphuman2})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              borderRadius: '6px',
-              width: '350px',
-              height: '200px',
-              minWidth: '300px',
-              position: 'relative',
-              overflow: 'hidden',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-            }}
-          >
+          <ImagePopup src={flytraphuman2}>
             <div
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                backgroundImage: `url(${flytraphuman2})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: '6px',
+                width: '350px',
+                height: '200px',
+                minWidth: '300px',
+                position: 'relative',
+                overflow: 'hidden',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                }}
+              />
+            </div>
+          </ImagePopup>
+
+          <ImagePopup src={megLogo}>
+            <div
+              style={{
+                backgroundImage: `url(${megLogo})`,
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                width: '350px',
+                height: '120px',
+                minWidth: '300px',
               }}
             />
-          </div>
-
-          <div
-            style={{
-              backgroundImage: `url(${megLogo})`,
-              backgroundSize: 'contain',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              width: '350px',
-              height: '120px',
-              minWidth: '300px',
-            }}
-          />
+          </ImagePopup>
         </div>
       </div>
     </div>

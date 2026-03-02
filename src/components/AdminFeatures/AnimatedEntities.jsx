@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Button, Dialog, DialogContent, Box, Typography } from '@mui/material';
+import ImagePopup from './ImagePopup';
 import animatedKingImage from '../../assets/images/animatedking.png';
 import animationsImage from '../../assets/images/animations.png';
 import smilerImage from '../../assets/images/Smiler.jpg';
@@ -88,18 +90,21 @@ export default function AnimatedEntities({ isOpen, onClose }) {
       >
         {/* Animated King */}
         <Box sx={{ display: 'flex', gap: '16px', alignItems: 'stretch' }}>
-          <Box
-            sx={{
-              width: 300,
-              minWidth: 300,
-              backgroundImage: `url(${animatedKingImage})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              flexShrink: 0
-            }}
-          />
+          <ImagePopup src={animatedKingImage}>
+            <Box
+              sx={{
+                width: 300,
+                minWidth: 300,
+                height: '100%',
+                backgroundImage: `url(${animatedKingImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                flexShrink: 0
+              }}
+            />
+          </ImagePopup>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <Typography variant="h6" sx={titleStyles}>
               Animated King
@@ -112,18 +117,21 @@ export default function AnimatedEntities({ isOpen, onClose }) {
 
         {/* Animations */}
         <Box sx={{ display: 'flex', gap: '16px', alignItems: 'stretch' }}>
-          <Box
-            sx={{
-              width: 300,
-              minWidth: 300,
-              backgroundImage: `url(${animationsImage})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              flexShrink: 0
-            }}
-          />
+          <ImagePopup src={animationsImage}>
+            <Box
+              sx={{
+                width: 300,
+                minWidth: 300,
+                height: '100%',
+                backgroundImage: `url(${animationsImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                flexShrink: 0
+              }}
+            />
+          </ImagePopup>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <Typography variant="h6" sx={titleStyles}>
               Animations
@@ -136,18 +144,21 @@ export default function AnimatedEntities({ isOpen, onClose }) {
 
         {/* Smilers */}
         <Box sx={{ display: 'flex', gap: '16px', alignItems: 'stretch' }}>
-          <Box
-            sx={{
-              width: 300,
-              minWidth: 300,
-              backgroundImage: `url(${smilerImage})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              flexShrink: 0
-            }}
-          />
+          <ImagePopup src={smilerImage}>
+            <Box
+              sx={{
+                width: 300,
+                minWidth: 300,
+                height: '100%',
+                backgroundImage: `url(${smilerImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                flexShrink: 0
+              }}
+            />
+          </ImagePopup>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <Typography variant="h6" sx={titleStyles}>
               Smilers

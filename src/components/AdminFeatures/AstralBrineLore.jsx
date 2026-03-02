@@ -1,4 +1,5 @@
 import { Dialog, DialogContent, Box, Typography } from '@mui/material';
+import ImagePopup from './ImagePopup';
 import nebulaImg1 from '../../assets/images/lvl nebula1.jpg';
 import nebulaImg2 from '../../assets/images/lvl nebula2.jpg';
 import nebulaImg3 from '../../assets/images/lvl nebula3.jpg';
@@ -104,49 +105,55 @@ export default function AstralBrineLore({ isOpen, onClose }) {
           }}
         >
           {/* Image 1 */}
-          <Box
-            sx={{
-              width: '350px',
-              height: '200px',
-              minWidth: '350px',
-              backgroundImage: `url(${nebulaImg1})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-            }}
-          />
+          <ImagePopup src={nebulaImg1}>
+            <Box
+              sx={{
+                width: '350px',
+                height: '200px',
+                minWidth: '350px',
+                backgroundImage: `url(${nebulaImg1})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+              }}
+            />
+          </ImagePopup>
 
           {/* Image 2 */}
-          <Box
-            sx={{
-              width: '350px',
-              height: '200px',
-              minWidth: '350px',
-              backgroundImage: `url(${nebulaImg2})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-            }}
-          />
+          <ImagePopup src={nebulaImg2}>
+            <Box
+              sx={{
+                width: '350px',
+                height: '200px',
+                minWidth: '350px',
+                backgroundImage: `url(${nebulaImg2})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+              }}
+            />
+          </ImagePopup>
 
           {/* Image 3 */}
-          <Box
-            sx={{
-              width: '350px',
-              height: '200px',
-              minWidth: '350px',
-              backgroundImage: `url(${nebulaImg3})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-            }}
-          />
+          <ImagePopup src={nebulaImg3}>
+            <Box
+              sx={{
+                width: '350px',
+                height: '200px',
+                minWidth: '350px',
+                backgroundImage: `url(${nebulaImg3})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+              }}
+            />
+          </ImagePopup>
         </Box>
       </DialogContent>
     </Dialog>

@@ -1,4 +1,5 @@
 import { Dialog, DialogContent, Box, Typography } from '@mui/material';
+import ImagePopup from './ImagePopup';
 import heavenEntity from '../../assets/images/heaven entity.png';
 import noonEffigy from '../../assets/images/The Noon Effigy.jpg';
 import penumbraPatient from '../../assets/images/The Penumbra Patent.png';
@@ -90,19 +91,21 @@ export default function BeastOfLevelHeaven({ onClose }) {
         <Box sx={{ paddingBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
           <Box sx={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
-              <Box
-                sx={{
-                  width: 300,
-                  height: 400,
-                  minWidth: 300,
-                  backgroundImage: `url(${heavenEntity})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  borderRadius: '4px',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
-                }}
-              />
+              <ImagePopup src={heavenEntity}>
+                <Box
+                  sx={{
+                    width: 300,
+                    height: 400,
+                    minWidth: 300,
+                    backgroundImage: `url(${heavenEntity})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    borderRadius: '4px',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
+                  }}
+                />
+              </ImagePopup>
             </Box>
 
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -118,19 +121,21 @@ export default function BeastOfLevelHeaven({ onClose }) {
         <Box sx={{ paddingBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
           <Box sx={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
-              <Box
-                sx={{
-                  width: 300,
-                  height: 400,
-                  minWidth: 300,
-                  backgroundImage: `url(${noonEffigy})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  borderRadius: '4px',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
-                }}
-              />
+              <ImagePopup src={noonEffigy}>
+                <Box
+                  sx={{
+                    width: 300,
+                    height: 400,
+                    minWidth: 300,
+                    backgroundImage: `url(${noonEffigy})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    borderRadius: '4px',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
+                  }}
+                />
+              </ImagePopup>
             </Box>
 
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -146,19 +151,21 @@ export default function BeastOfLevelHeaven({ onClose }) {
         <Box>
           <Box sx={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
-              <Box
-                sx={{
-                  width: 300,
-                  height: 400,
-                  minWidth: 300,
-                  backgroundImage: `url(${penumbraPatient})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  borderRadius: '4px',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
-                }}
-              />
+              <ImagePopup src={penumbraPatient}>
+                <Box
+                  sx={{
+                    width: 300,
+                    height: 400,
+                    minWidth: 300,
+                    backgroundImage: `url(${penumbraPatient})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    borderRadius: '4px',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
+                  }}
+                />
+              </ImagePopup>
             </Box>
 
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>

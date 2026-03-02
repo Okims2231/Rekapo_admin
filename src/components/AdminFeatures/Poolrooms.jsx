@@ -1,6 +1,7 @@
 import plore from '../../assets/images/plore.png';
 import plore1 from '../../assets/images/plore1.jpg';
 import plore2 from '../../assets/images/plore2.jpg';
+import ImagePopup from './ImagePopup';
 
 export default function Poolrooms({ isOpen, onClose }) {
   const loreText = `  Level 37, commonly referred to as the Poolrooms, is an expansive complex of interconnected rooms and corridors submerged in undulating, lukewarm water. Each area of the level varies greatly in size and structure, ranging from uniform pools and hallways to more open, abnormally shaped areas. The majority of surfaces in the level are composed of white, ceramic tiling, with the only deviation from this color being the blue-green hue of the water. The tiles are eerily pristine in condition, all identical to one another, without a single hint of damage on their shiny surfaces.
@@ -62,83 +63,89 @@ export default function Poolrooms({ isOpen, onClose }) {
             gap: '12px',
           }}
         >
-          <div
-            style={{
-              backgroundImage: `url(${plore})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              borderRadius: '6px',
-              width: '350px',
-              height: '200px',
-              minWidth: '300px',
-              position: 'relative',
-              overflow: 'hidden',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-            }}
-          >
+          <ImagePopup src={plore}>
             <div
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                backgroundImage: `url(${plore})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: '6px',
+                width: '350px',
+                height: '200px',
+                minWidth: '300px',
+                position: 'relative',
+                overflow: 'hidden',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
               }}
-            />
-          </div>
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                }}
+              />
+            </div>
+          </ImagePopup>
 
-          <div
-            style={{
-              backgroundImage: `url(${plore1})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              borderRadius: '6px',
-              width: '350px',
-              height: '200px',
-              minWidth: '300px',
-              position: 'relative',
-              overflow: 'hidden',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-            }}
-          >
+          <ImagePopup src={plore1}>
             <div
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                backgroundImage: `url(${plore1})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: '6px',
+                width: '350px',
+                height: '200px',
+                minWidth: '300px',
+                position: 'relative',
+                overflow: 'hidden',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
               }}
-            />
-          </div>
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                }}
+              />
+            </div>
+          </ImagePopup>
 
-          <div
-            style={{
-              backgroundImage: `url(${plore2})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              borderRadius: '6px',
-              width: '350px',
-              height: '200px',
-              minWidth: '300px',
-              position: 'relative',
-              overflow: 'hidden',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-            }}
-          >
+          <ImagePopup src={plore2}>
             <div
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                backgroundImage: `url(${plore2})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: '6px',
+                width: '350px',
+                height: '200px',
+                minWidth: '300px',
+                position: 'relative',
+                overflow: 'hidden',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
               }}
-            />
-          </div>
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                }}
+              />
+            </div>
+          </ImagePopup>
         </div>
       </div>
     </div>

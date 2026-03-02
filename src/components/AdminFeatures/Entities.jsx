@@ -1,6 +1,7 @@
 import toddImage from '../../assets/images/todd entity.jpg';
 import headlessImage from '../../assets/images/headless entity.jpg';
 import cautionSignImage from '../../assets/images/caution sign entity.jpg';
+import ImagePopup from './ImagePopup';
 
 export default function Entities({ isOpen, onClose }) {
   const entities = [
@@ -104,32 +105,34 @@ export default function Entities({ isOpen, onClose }) {
             }}
           >
             {/* Image */}
-            <div
-              style={{
-                backgroundImage: `url(${entity.image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                borderRadius: '6px',
-                width: '250px',
-                height: 'auto',
-                minWidth: '250px',
-                minHeight: '200px',
-                position: 'relative',
-                overflow: 'hidden',
-                flexShrink: 0
-              }}
-            >
+            <ImagePopup src={entity.image}>
               <div
                 style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                  backgroundImage: `url(${entity.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  borderRadius: '6px',
+                  width: '250px',
+                  height: 'auto',
+                  minWidth: '250px',
+                  minHeight: '200px',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  flexShrink: 0
                 }}
-              />
-            </div>
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                  }}
+                />
+              </div>
+            </ImagePopup>
 
             {/* Text */}
             <div style={{ flex: 1 }}>

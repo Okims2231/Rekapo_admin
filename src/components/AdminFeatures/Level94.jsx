@@ -1,4 +1,5 @@
 import { Button, Dialog, DialogContent, Box, Typography } from '@mui/material';
+import ImagePopup from './ImagePopup';
 import lvl94aImage from '../../assets/images/lvl 94a.png';
 import lvl94bImage from '../../assets/images/lvl 94b.png';
 import lvl94cImage from '../../assets/images/lvl 94c.png';
@@ -108,60 +109,68 @@ The grass hills of Level 94 usually go on forever, and is infinite, the only thi
 
         {/* Images Section */}
         <Box sx={{ flex: '0 0 55%', display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', maxHeight: '100%', paddingRight: '10px' }}>
-          <Box
-            sx={{
-              width: '100%',
-              height: 208,
-              backgroundImage: `url(${lvl94aImage})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              flexShrink: 0,
-            }}
-          />
+          <ImagePopup src={lvl94aImage}>
+            <Box
+              sx={{
+                width: '100%',
+                height: 208,
+                backgroundImage: `url(${lvl94aImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                flexShrink: 0,
+              }}
+            />
+          </ImagePopup>
 
-          <Box
-            sx={{
-              width: '100%',
-              height: 208,
-              backgroundImage: `url(${lvl94bImage})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              flexShrink: 0,
-            }}
-          />
+          <ImagePopup src={lvl94bImage}>
+            <Box
+              sx={{
+                width: '100%',
+                height: 208,
+                backgroundImage: `url(${lvl94bImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                flexShrink: 0,
+              }}
+            />
+          </ImagePopup>
 
-          <Box
-            sx={{
-              width: '100%',
-              height: 208,
-              backgroundImage: `url(${lvl94cImage})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              flexShrink: 0,
-            }}
-          />
+          <ImagePopup src={lvl94cImage}>
+            <Box
+              sx={{
+                width: '100%',
+                height: 208,
+                backgroundImage: `url(${lvl94cImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                flexShrink: 0,
+              }}
+            />
+          </ImagePopup>
 
-          <Box
-            sx={{
-              width: '100%',
-              height: 120,
-              backgroundImage: `url(${megLogo})`,
-              backgroundSize: 'contain',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              flexShrink: 0,
-            }}
-          />
+          <ImagePopup src={megLogo}>
+            <Box
+              sx={{
+                width: '100%',
+                height: 120,
+                backgroundImage: `url(${megLogo})`,
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                flexShrink: 0,
+              }}
+            />
+          </ImagePopup>
         </Box>
       </DialogContent>
     </Dialog>

@@ -1,4 +1,5 @@
 import { Dialog, DialogContent, Box, Typography } from '@mui/material';
+import ImagePopup from './ImagePopup';
 import lheaven from '../../assets/images/lheaven.jpg';
 import lheaven2 from '../../assets/images/lheaven2.jpg';
 import lvlheaven3 from '../../assets/images/lheaven3.jpg';
@@ -73,83 +74,89 @@ export default function LevelHeaven({ onClose }) {
             gap: '12px',
           }}
         >
-          <div
-            style={{
-              backgroundImage: `url(${lheaven})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              borderRadius: '6px',
-              width: '350px',
-              height: '200px',
-              minWidth: '300px',
-              position: 'relative',
-              overflow: 'hidden',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-            }}
-          >
+          <ImagePopup src={lheaven}>
             <div
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                backgroundImage: `url(${lheaven})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: '6px',
+                width: '350px',
+                height: '200px',
+                minWidth: '300px',
+                position: 'relative',
+                overflow: 'hidden',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
               }}
-            />
-          </div>
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                }}
+              />
+            </div>
+          </ImagePopup>
 
-          <div
-            style={{
-              backgroundImage: `url(${lheaven2})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              borderRadius: '6px',
-              width: '350px',
-              height: '200px',
-              minWidth: '300px',
-              position: 'relative',
-              overflow: 'hidden',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-            }}
-          >
+          <ImagePopup src={lheaven2}>
             <div
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                backgroundImage: `url(${lheaven2})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: '6px',
+                width: '350px',
+                height: '200px',
+                minWidth: '300px',
+                position: 'relative',
+                overflow: 'hidden',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
               }}
-            />
-          </div>
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                }}
+              />
+            </div>
+          </ImagePopup>
 
-          <div
-            style={{
-              backgroundImage: `url(${lvlheaven3})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              borderRadius: '6px',
-              width: '350px',
-              height: '200px',
-              minWidth: '300px',
-              position: 'relative',
-              overflow: 'hidden',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-            }}
-          >
+          <ImagePopup src={lvlheaven3}>
             <div
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                backgroundImage: `url(${lvlheaven3})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: '6px',
+                width: '350px',
+                height: '200px',
+                minWidth: '300px',
+                position: 'relative',
+                overflow: 'hidden',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
               }}
-            />
-          </div>
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                }}
+              />
+            </div>
+          </ImagePopup>
         </div>
       </div>
     </div>

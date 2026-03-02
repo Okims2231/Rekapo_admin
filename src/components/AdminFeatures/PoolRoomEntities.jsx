@@ -3,6 +3,7 @@ import { Button, Dialog, DialogContent, Box, Typography } from '@mui/material';
 import skinstealer from '../../assets/images/skinstealer1.jpg';
 import glitchton from '../../assets/images/glitchton.jpg';
 import weepingangel from '../../assets/images/weepingangel.png';
+import ImagePopup from './ImagePopup';
 
 export default function PoolRoomEntities({ isOpen, onClose }) {
   // Reusable styles
@@ -90,19 +91,21 @@ export default function PoolRoomEntities({ isOpen, onClose }) {
         {/* Skin Stealer Section */}
         <Box sx={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
           {/* Skin Stealer Image */}
-          <Box
-            sx={{
-              width: 350,
-              height: 320,
-              minWidth: 350,
-              backgroundImage: `url(${skinstealer})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-            }}
-          />
+          <ImagePopup src={skinstealer}>
+            <Box
+              sx={{
+                width: 350,
+                height: 320,
+                minWidth: 350,
+                backgroundImage: `url(${skinstealer})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+              }}
+            />
+          </ImagePopup>
 
           <Box sx={{ flex: 1 }}>
             <Typography
@@ -124,19 +127,21 @@ export default function PoolRoomEntities({ isOpen, onClose }) {
         {/* Glitchtons Section */}
         <Box sx={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
           {/* Glitchtons Image */}
-          <Box
-            sx={{
-              width: 350,
-              height: 320,
-              minWidth: 350,
-              backgroundImage: `url(${glitchton})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-            }}
-          />
+          <ImagePopup src={glitchton}>
+            <Box
+              sx={{
+                width: 350,
+                height: 320,
+                minWidth: 350,
+                backgroundImage: `url(${glitchton})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+              }}
+            />
+          </ImagePopup>
 
           <Box sx={{ flex: 1 }}>
             <Typography
@@ -158,19 +163,21 @@ export default function PoolRoomEntities({ isOpen, onClose }) {
         {/* Weeping Angels Section */}
         <Box sx={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
           {/* Weeping Angels Image */}
-          <Box
-            sx={{
-              width: 350,
-              height: 320,
-              minWidth: 350,
-              backgroundImage: `url(${weepingangel})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-            }}
-          />
+          <ImagePopup src={weepingangel}>
+            <Box
+              sx={{
+                width: 350,
+                height: 320,
+                minWidth: 350,
+                backgroundImage: `url(${weepingangel})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+              }}
+            />
+          </ImagePopup>
 
           <Box sx={{ flex: 1 }}>
             <Typography

@@ -3,6 +3,7 @@ import { Button, Dialog, DialogContent, Box, Typography } from '@mui/material';
 import megLogo from '../../assets/images/M.E.G logo.jpg';
 import partygoerImage from '../../assets/images/partygoer.jpg';
 import partypooperImage from '../../assets/images/partypooper.jpg';
+import ImagePopup from './ImagePopup';
 
 export default function PartyEntities() {
   const [open, setOpen] = useState(false);
@@ -129,19 +130,21 @@ export default function PartyEntities() {
             </Typography>
             
             {/* Party Goer Image */}
-            <Box
-              sx={{
-                width: '100%',
-                height: 300,
-                backgroundImage: `url(${partygoerImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                borderRadius: '6px',
-                marginBottom: '12px',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-              }}
-            />
+            <ImagePopup src={partygoerImage}>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: 300,
+                  backgroundImage: `url(${partygoerImage})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  borderRadius: '6px',
+                  marginBottom: '12px',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                }}
+              />
+            </ImagePopup>
 
             <Typography
               variant="body2"
@@ -161,19 +164,21 @@ export default function PartyEntities() {
             </Typography>
             
             {/* Party Pooper Image */}
-            <Box
-              sx={{
-                width: '100%',
-                height: 300,
-                backgroundImage: `url(${partypooperImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                borderRadius: '6px',
-                marginBottom: '12px',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-              }}
-            />
+            <ImagePopup src={partypooperImage}>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: 300,
+                  backgroundImage: `url(${partypooperImage})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  borderRadius: '6px',
+                  marginBottom: '12px',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                }}
+              />
+            </ImagePopup>
 
             <Typography
               variant="body2"
@@ -184,17 +189,19 @@ export default function PartyEntities() {
           </Box>
 
           {/* M.E.G Logo */}
-          <Box
-            sx={{
-              backgroundImage: `url(${megLogo})`,
-              backgroundSize: 'contain',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              width: '100%',
-              height: 150,
-              marginTop: '12px',
-            }}
-          />
+          <ImagePopup src={megLogo}>
+            <Box
+              sx={{
+                backgroundImage: `url(${megLogo})`,
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                width: '100%',
+                height: 150,
+                marginTop: '12px',
+              }}
+            />
+          </ImagePopup>
         </DialogContent>
       </Dialog>
     </>

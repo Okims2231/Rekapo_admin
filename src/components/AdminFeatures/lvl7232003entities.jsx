@@ -2,6 +2,7 @@ import { Dialog, DialogContent, Box, Typography } from '@mui/material';
 import astronautSwimmersGif from '../../assets/images/astronaut swimmer.gif';
 import astralForgerImg from '../../assets/images/astral forger.jpg';
 import parallaxShepherdImg from '../../assets/images/astral brine.jpg';
+import ImagePopup from './ImagePopup';
 
 export default function Lvl7232003Entities({ isOpen, onClose }) {
   // Reusable styles
@@ -102,19 +103,21 @@ export default function Lvl7232003Entities({ isOpen, onClose }) {
           </Box>
 
           {/* Astronaut Swimmers Image */}
-          <Box
-            sx={{
-              width: 350,
-              height: 340,
-              minWidth: 350,
-              backgroundImage: `url(${astronautSwimmersGif})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-            }}
-          />
+          <ImagePopup src={astronautSwimmersGif}>
+            <Box
+              sx={{
+                width: 350,
+                height: 340,
+                minWidth: 350,
+                backgroundImage: `url(${astronautSwimmersGif})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+              }}
+            />
+          </ImagePopup>
         </Box>
 
         {/* Astral Forger Section */}
@@ -136,19 +139,21 @@ export default function Lvl7232003Entities({ isOpen, onClose }) {
           </Box>
 
           {/* Astral Forger Image */}
-          <Box
-            sx={{
-              width: 350,
-              height: 320,
-              minWidth: 350,
-              backgroundImage: `url(${astralForgerImg})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-            }}
-          />
+          <ImagePopup src={astralForgerImg}>
+            <Box
+              sx={{
+                width: 350,
+                height: 320,
+                minWidth: 350,
+                backgroundImage: `url(${astralForgerImg})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+              }}
+            />
+          </ImagePopup>
         </Box>
 
         {/* Parallax Shepherd Section */}
@@ -170,19 +175,21 @@ export default function Lvl7232003Entities({ isOpen, onClose }) {
           </Box>
 
           {/* Parallax Shepherd Image */}
-          <Box
-            sx={{
-              width: 350,
-              height: 400,
-              minWidth: 350,
-              backgroundImage: `url(${parallaxShepherdImg})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '6px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-            }}
-          />
+          <ImagePopup src={parallaxShepherdImg}>
+            <Box
+              sx={{
+                width: 350,
+                height: 400,
+                minWidth: 350,
+                backgroundImage: `url(${parallaxShepherdImg})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+              }}
+            />
+          </ImagePopup>
         </Box>
       </DialogContent>
     </Dialog>

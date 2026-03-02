@@ -565,7 +565,7 @@ export default function AdminInterface() {
                       fill="#8884d8"
                       dataKey="value"
                       activeShape={{
-                        filter: 'brightness(1.3)'
+                        opacity: 0.8
                       }}
                     >
                       <Cell fill="#06b6d4" />

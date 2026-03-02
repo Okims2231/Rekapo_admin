@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, Dialog, DialogContent, DialogTitle, Box, Typography } from '@mui/material';
 import megImage from '../../assets/images/megpersonel.png';
 import megLogo from '../../assets/images/M.E.G logo.jpg';
+import ImagePopup from './ImagePopup';
 
 export default function MEG() {
   const [open, setOpen] = useState(false);
@@ -109,41 +110,45 @@ export default function MEG() {
               gap: '12px',
             }}
           >
-            <Box
-              sx={{
-                backgroundImage: `url(${megImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                borderRadius: '6px',
-                width: 350,
-                height: 250,
-                minWidth: 300,
-                position: 'relative',
-                overflow: 'hidden',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                '&::after': {
-                  content: '""',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                },
-              }}
-            />
+            <ImagePopup src={megImage}>
+              <Box
+                sx={{
+                  backgroundImage: `url(${megImage})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  borderRadius: '6px',
+                  width: 350,
+                  height: 250,
+                  minWidth: 300,
+                  position: 'relative',
+                  overflow: 'hidden',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                  },
+                }}
+              />
+            </ImagePopup>
 
-            <Box
-              sx={{
-                backgroundImage: `url(${megLogo})`,
-                backgroundSize: 'contain',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                width: 350,
-                height: 169,
-                minWidth: 300,
-              }}
-            />
+            <ImagePopup src={megLogo}>
+              <Box
+                sx={{
+                  backgroundImage: `url(${megLogo})`,
+                  backgroundSize: 'contain',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  width: 350,
+                  height: 169,
+                  minWidth: 300,
+                }}
+              />
+            </ImagePopup>
           </Box>
         </DialogContent>
       </Dialog>
