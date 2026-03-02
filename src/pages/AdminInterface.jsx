@@ -564,6 +564,9 @@ export default function AdminInterface() {
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
+                      activeShape={{
+                        filter: 'brightness(1.3)'
+                      }}
                     >
                       <Cell fill="#06b6d4" />
                       <Cell fill="#6b7280" />
